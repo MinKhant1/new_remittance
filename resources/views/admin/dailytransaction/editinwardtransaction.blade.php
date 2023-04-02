@@ -615,21 +615,59 @@
    )
 </script>
 
+{{-- Check Max Limit --}}
 <script>
+  var par_transaction=@json($par_transaction);
+  var par_month_transaction=@json($par_month_transaction);
+  var sum_usd_grouped_by_nrc=@json($sum_usd_grouped_by_nrc);
+   sender_nrc=document.getElementById('nrc_id').value;
   function disableSave(value)
   {
-    saveButton=document.getElementById('savebut');
-    if(value>1000)
-    {
-      saveButton.disabled = true;
-      // saveButton.style.background = 'red';
-    }
-    else
-    {
-      saveButton.disabled = false;
-    }
-    
-
-  }
-</script>
+     
+     saveButton=document.getElementById('savebut');
+     if(value>Number(par_transaction))
+     {
+       saveButton.disabled = true;
+      
+     }
+     else
+     {
+      var sender_nrc=document.getElementById('nrc_id').value;
+      
+    let total=Number(getUSDByNRC(sender_nrc))+Number(value);
+ 
+      if( Number(total)>Number(par_month_transaction))
+      {
+       saveButton.disabled = true;
+      }
+      else
+      {
+        saveButton.disabled = false;
+        
+      }
+     }
+     
+ 
+   }
+ 
+  
+ </script>
+ 
+ <script>
+    function getUSDByNRC(nrc)
+   {
+     let usdVal=0;
+     sum_usd_grouped_by_nrc.forEach(element => {
+      
+       if(element.id==nrc)
+       {
+         usdVal=element.usd;
+       }
+       
+       
+     });
+ 
+    return usdVal;
+   }
+ </script>
     @endsection
