@@ -883,7 +883,6 @@ session()->put('outwardexcel',collect($temp));
             'sender_phno' => 'required',
             'purpose_of_transaction' => 'required',
             'deposit_point' => 'required',
-            'remark_deposit_point' => 'required',
             'receiver_name' => 'required',
             'receiver_nrc_passport' => 'required',
             'receiver_country' => 'required',
@@ -929,7 +928,6 @@ session()->put('outwardexcel',collect($temp));
         $outwardtransaction->sender_address_ph = $request->input('sender_address') . '/' . $request->input('sender_phno');
         $outwardtransaction->purpose = $request->input('purpose_of_transaction');
         $outwardtransaction->deposit_point = $request->input('deposit_point');
-        $outwardtransaction->remark_for_deposit_point = $request->input('deposit_point');
         $outwardtransaction->receiver_name = $request->input('receiver_name');
         $outwardtransaction->receiver_nrc_passport = $request->input('receiver_nrc_passport');
         $outwardtransaction->receiver_country_code = $request->input('receiver_country');
