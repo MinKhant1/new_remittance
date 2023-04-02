@@ -328,7 +328,7 @@ class InwardTransactionController extends Controller
             $index=0;
 
 
- session()->put('query', $excel_query);
+
 
 
 
@@ -346,6 +346,7 @@ class InwardTransactionController extends Controller
                         array_push($total_currency_codes,$transaction->currency_code);
                     }
                 }
+               // dd($total_currency_codes);
 
 
                 foreach ($dated_transactions as $transaction) {
@@ -354,6 +355,7 @@ class InwardTransactionController extends Controller
                         array_push($currency_codes_in_date,$transaction->currency_code);
                     }
                 }
+            
 
                 $sub_total_collection=collect();
                 foreach ($currency_codes_in_date as $currency_code) {
@@ -377,113 +379,122 @@ class InwardTransactionController extends Controller
 
 
             }
-      
-            // foreach ($excel_query as $query => $collection)
-            // {
-            //     $subtotal_amount_array=array();
-            //     $subtotalamk=0;
-            //     $subtotalusd=0;
-            //     $subtotalmmk=0;
+            // dd($excel_query);
+            foreach ($excel_query as $query => $collection)
+            {
+                $subtotal_amount_array=array();
+                $subtotalamk=0;
+                $subtotalusd=0;
+                $subtotalmmk=0;
 
 
 
-            //     for ($i=0; $i <=count($collection) ; $i++) {
+                for ($i=0; $i <=count($collection) ; $i++) {
 
-            //         if($i==count($collection))
-            //         {
-            //             $collection->put($i,collect());
-            //             $collection[$i]->put('sr_id','');
-            //             $collection[$i]->put('receiver_name','SubTotal');
+                    
+                    if($i==count($collection))
+                    {
+                        $collection->put($i,collect());
+                        $collection[$i]->put('sr_id','');
+                        if(count($excel_query)>1)
+                        {
+                            $collection[$i]->put('receiver_name','SubTotal');
+                        }
+                        else
+                        {
+                            $collection[$i]->put('receiver_name','Total');
+                        }
+                      
 
-            //             $increment=0;
-            //             foreach ($subtotal_amount_array as $key => $value)
-            //             {
+                        $increment=0;
+                        foreach ($subtotal_amount_array as $key => $value)
+                        {
 
-            //                 $collection[$i]->put('key'.$increment++,$key);
-            //                 $collection[$i]->put($key,$value);
-            //             }
+                            $collection[$i]->put('key'.$increment++,$key);
+                            $collection[$i]->put($key,$value);
+                        }
 
-            //             $collection[$i]->put('a','Equivalent USD');
-            //             $collection[$i]->put('equivalent_usd',$subtotalusd);
-            //             $collection[$i]->put('b','MMK amount');
-            //             $collection[$i]->put('amount_mmk',$subtotalmmk);
-            //             $collection[$i]->put('exchange_rate','');
-            //             $collection[$i]->put('exchange_rate_usd','');
-            //             break;
-
-
-            //         }
-            //         else
-            //         {
-            //             if(!array_key_exists($collection[$i]->currency_code,$subtotal_amount_array))
-            //             {
-            //                 $subtotal_amount_array[$collection[$i]->currency_code]=$collection[$i]->amount;
-
-            //             }
-            //             else
-            //             {
-            //                 $subtotal_amount_array[$collection[$i]->currency_code]+=$collection[$i]->amount;
-            //             }
-            //             $subtotalamk+=$collection[$i]->amount;
-            //             $subtotalusd+=$collection[$i]->equivalent_usd;
-            //             $subtotalmmk+=$collection[$i]->amount_mmk;
-            //             $grandtotalmmk+=$collection[$i]->amount_mmk;
-            //             $grandtotalusd+=$collection[$i]->equivalent_usd;
-
-            //             unset($collection[$i]->created_at);
-            //             unset($collection[$i]->status);
-
-            //         }
+                        $collection[$i]->put('a','Equivalent USD');
+                        $collection[$i]->put('equivalent_usd',$subtotalusd);
+                        $collection[$i]->put('b','MMK amount');
+                        $collection[$i]->put('amount_mmk',$subtotalmmk);
+                        $collection[$i]->put('exchange_rate','');
+                        $collection[$i]->put('exchange_rate_usd','');
+                        break;
 
 
+                    }
+                    else
+                    {
+                        if(!array_key_exists($collection[$i]->currency_code,$subtotal_amount_array))
+                        {
+                            $subtotal_amount_array[$collection[$i]->currency_code]=$collection[$i]->amount;
 
-            //     }
-            //     $index++;
-            //     $sec_index=0;
-            //     if($index==count($excel_query))
-            //     {
+                        }
+                        else
+                        {
+                            $subtotal_amount_array[$collection[$i]->currency_code]+=$collection[$i]->amount;
+                        }
+                        $subtotalamk+=$collection[$i]->amount;
+                        $subtotalusd+=$collection[$i]->equivalent_usd;
+                        $subtotalmmk+=$collection[$i]->amount_mmk;
+                        $grandtotalmmk+=$collection[$i]->amount_mmk;
+                        $grandtotalusd+=$collection[$i]->equivalent_usd;
 
-            //       foreach ($total_collection as $key => $value) {
-            //         $sec_index++;
-            //         $collection->put($index+$sec_index,collect());
-            //         $collection[$index+$sec_index]->put('sr_id','');
-            //         $collection[$index+$sec_index]->put('receiver_name','GrandTotal '.$key);
+                        unset($collection[$i]->created_at);
+                        unset($collection[$i]->status);
 
-            //         $collection[$index+$sec_index]->put('a','Amount');
-            //         $collection[$index+$sec_index]->put('equivalent_usd',$value['amount']);
-            //         $collection[$index+$sec_index]->put('b','Equivalent USD');
-            //         $collection[$index+$sec_index]->put('usd',$value['equivalent_usd']);
-            //         $collection[$index+$sec_index]->put('c','MMK amount');
-            //         $collection[$index+$sec_index]->put('amount_mmk',$value['amount_mmk']);
-
-
-            //       }
-
-            //         $collection->put($index+$sec_index+1,collect());
-            //         $collection[$index+$sec_index+1]->put('sr_id','');
-            //         $collection[$index+$sec_index+1]->put('receiver_name','GrandTotal');
-            //         $collection[$index+$sec_index+1]->put('a','');
-            //         $collection[$index+$sec_index+1]->put('b','');
-            //         $collection[$index+$sec_index+1]->put('c','Equivalent USD');
-            //         $collection[$index+$sec_index+1]->put('equivalent_usd',$grandtotalusd);
-            //         $collection[$index+$sec_index+1]->put('d','MMK amount');
-            //         $collection[$index+$sec_index+1]->put('amount_mmk',$grandtotalmmk);
-            //         $collection[$index+$sec_index+1]->put('exchange_rate','');
-            //         $collection[$index+$sec_index+1]->put('exchange_rate_usd','');
-
-            //     }
+                    }
 
 
 
+                }
+                $index++;
+                $sec_index=0;
+                if($index==count($excel_query) && count($excel_query)>1)
+                {
+
+                  foreach ($total_collection as $key => $value) {
+                    $sec_index++;
+                    $collection->put($index+$sec_index,collect());
+                    $collection[$index+$sec_index]->put('sr_id','');
+                    $collection[$index+$sec_index]->put('receiver_name','GrandTotal '.$key);
+
+                    $collection[$index+$sec_index]->put('a','Amount');
+                    $collection[$index+$sec_index]->put('equivalent_usd',$value['amount']);
+                    $collection[$index+$sec_index]->put('b','Equivalent USD');
+                    $collection[$index+$sec_index]->put('usd',$value['equivalent_usd']);
+                    $collection[$index+$sec_index]->put('c','MMK amount');
+                    $collection[$index+$sec_index]->put('amount_mmk',$value['amount_mmk']);
 
 
-            // }
+                  }
+
+                    $collection->put($index+$sec_index+1,collect());
+                    $collection[$index+$sec_index+1]->put('sr_id','');
+                    $collection[$index+$sec_index+1]->put('receiver_name','GrandTotal');
+                    $collection[$index+$sec_index+1]->put('a','');
+                    $collection[$index+$sec_index+1]->put('b','');
+                    $collection[$index+$sec_index+1]->put('c','Equivalent USD');
+                    $collection[$index+$sec_index+1]->put('equivalent_usd',$grandtotalusd);
+                    $collection[$index+$sec_index+1]->put('d','MMK amount');
+                    $collection[$index+$sec_index+1]->put('amount_mmk',$grandtotalmmk);
+                    $collection[$index+$sec_index+1]->put('exchange_rate','');
+                    $collection[$index+$sec_index+1]->put('exchange_rate_usd','');
+
+                }
 
 
 
 
 
-           
+            }
+
+
+
+
+
+            session()->put('query', $excel_query);
 
             return view('admin.reports.inward')
                 ->with('inward_transactions', $inwardtransactions)
@@ -498,7 +509,6 @@ class InwardTransactionController extends Controller
         {
           return back()->with('status', 'You do not have access');
         }
-
     }
 
     public function inwardwithbranch(Request $request)
