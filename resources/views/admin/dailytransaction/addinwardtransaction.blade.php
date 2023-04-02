@@ -430,7 +430,8 @@
 
     }
     function changeRateFormValue(rate)
-    {console.log(rate);
+    {
+      console.log(rate);
       let input=document.getElementById('exchange_rate_input');
       input.value=rate;
     }
@@ -694,6 +695,8 @@
    )
 </script>
 
+
+{{-- Check Max Limit --}}
 <script>
   function disableSave(value)
   {
