@@ -1,0 +1,208 @@
+ // public function totalinward()
+    // {
+    //     $inwardtransactions = InwardTransaction::All();
+    //     $transcounts = DB::table('inward_transactions')->count();
+    //     return view('admin.reports.totalinward', compact('transcounts'))->with('inward_transactions',$inwardtransactions);
+    // }
+
+// $inwardtransaction=Inwards::All();
+        // $totalinward=new TotalInward();
+        // $totaltransaction=0;
+        // $totalusd=0;
+        // $totalmmkmillion=0;
+        // $totalusdorigin=0;
+        // $totalmmkmillionorigin=0;
+        // foreach($inwardtransaction as $transation)
+        // {
+        //  $totaltransaction++;
+        //  $totalusd+=$transation->equivalent_usd;
+        //  $totalmmkmillion+=$transation->mmk_amount;
+
+        //  $totalusdorigin+=$transation->equivalent_usd;
+        //  $totalmmkmillionorigin+=$transation->mmk_amount;
+
+        //  $transation->totaltrans=$totaltransaction;
+
+        // $currencyfrominward = DB::table('inwards')->groupby('currency_code')->sum('amount');
+        // $currencyfrominward = DB::select('select sum(amount) as amount from inwards group by currency_code');
+
+        // dd($currencyfrominward);
+
+
+ // public function totalinwardwithdate(Request $request)
+    // {
+    //     $inwardtransaction=Inwards::All();
+    //     $startdate=$request->input('startdate');
+    //     $enddate=$request->input('enddate');
+
+
+    //     echo $startdate;
+    //     echo $enddate;
+
+    //     $query=DB::table('inwards')->select()->where('created_at','>=',$startdate)->where('created_at','<=',$enddate)
+    //                                   ->get();
+
+
+    //     $totaltransaction=0;
+    //     $totalusd=0;
+    //     $totalmmkmillion=0;
+    //     $totalusdorigin=0;
+    //     $totalmmkmillionorigin=0;
+    //     foreach($query as $transation)
+    //     {
+    //      $totaltransaction++;
+    //      $totalusd+=$transation->equivalent_usd;
+    //      $totalmmkmillion+=$transation->mmk_amount;
+    //     }
+    //     foreach($inwardtransaction as $transation)
+    //     {
+    //         $totalusdorigin+=$transation->equivalent_usd;
+    //         $totalmmkmillionorigin+=$transation->mmk_amount;
+    //     }
+    //     return view('admin.reports.totalinward')->with('totaltransaction',$totaltransaction)->with('totalusd',$totalusd)->with('totalusdorigin',$totalusdorigin)->with('totalmmkmillion',$totalmmkmillion)->with('totalmmkmillionorigin',$totalmmkmillionorigin)->with('sd',$startdate)->with('ed',$enddate);
+    // }
+
+ // public function dashboardtotal()
+    // {
+    //     if(!Session::has('user'))
+    //     {
+    //         return redirect('/login')->with('status', 'Login First');
+    //     }
+    //     else
+    //     {
+    //     // daily
+    //     $dailyinward = InwardTransaction::select("*")
+    //             ->whereDate('created_at', Carbon::today())
+    //             ->count();
+
+    //     $dailyoutward = OutwardTransaction::select("*")
+    //             ->whereDate('created_at', Carbon::today())
+    //             ->count();
+
+    //     $dailytotal = $dailyinward + $dailyoutward;
+
+    //     // weekly
+
+    //     $weeklyinward = InwardTransaction::select("*")
+    //     ->whereBetween('created_at',
+    //     [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->count();
+
+    //     $weeklyoutward = OutwardTransaction::select("*")
+    //     ->whereBetween('created_at',
+    //     [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
+    //             ->count();
+
+    //     $weeklytotal = $weeklyinward + $weeklyoutward;
+
+    //     // monthly
+    //     $monthly = InwardTransaction::select("*")->whereMonth('created_at', Carbon::now()->month)->get();
+    //     $monthlyusd=0;
+    //     foreach($monthly as $transation)
+    //     {
+    //      $monthlyusd+=$transation->equivalent_usd;
+    //     }
+    //     $monthlyinward = InwardTransaction::select("*")
+    //             ->whereMonth('created_at', Carbon::now()->month)
+    //             ->count();
+
+    //     $monthlyoutward = OutwardTransaction::select("*")
+    //             ->whereMonth('created_at', Carbon::now()->month)
+    //             ->count();
+
+    //     $monthlytotal = $monthlyinward + $monthlyoutward;
+
+    //      // yearly
+    //     $yearly = InwardTransaction::select("*")
+    //     ->whereYear('created_at', date('Y'))->get();
+    //     $yearlyusd=0;
+    //     foreach($yearly as $transation)
+    //     {
+    //      $yearlyusd+=$transation->equivalent_usd;
+    //     }
+    //     $yearlyinward = InwardTransaction::select("*")
+    //             ->whereYear('created_at', date('Y'))
+    //             ->count();
+
+    //     $yearlyoutward = OutwardTransaction::select("*")
+    //             ->whereYear('created_at', date('Y'))
+    //             ->count();
+
+    //     $yearlytotal = $yearlyinward + $yearlyoutward;
+    //     // return dd($dailytotal, $weeklytotal);
+    //     return view('admin.dashboard')->with('dailytotal',$dailytotal)->with('weeklytotal', $weeklytotal)->with('monthlytotal',$monthlytotal)->with('yearlytotal', $yearlytotal);
+    //     }
+    // }
+
+      // $blacklist_user = blacklists::all()->pluck('nrc_passportno');
+
+        // if($blacklist_user)
+        // {
+        //     if(Hash::check($nrc, $blacklist_user))
+        //     {
+
+               //     }
+        //     else
+        //     {
+        //     return back()->with('status', 'Blacklisted');
+        //     }
+        // }
+
+
+        // public function searchwithdate(Request $request)
+    // {
+    //     if (request()->start_date || request()->end_date) {
+    //         $start_date = Carbon::parse(request()->start_date)->toDateTimeString();
+    //         $end_date = Carbon::parse(request()->end_date)->toDateTimeString();
+    //         $inwardtransactions = InwardTransaction::whereBetween('created_at',[$start_date,$end_date])->get();
+    //     }
+    //     else
+    //     {
+    //         $inwardtransactions = InwardTransaction::all();
+    //     }
+    //     return view('admin.reports.inward')->with('inward_transactions', $inwardtransactions);
+    // }
+
+     // $mmk_amount = DB::table('inwards') ->whereDate('created_at','>=',$startdate)
+        // ->whereDate('created_at','<=',$enddate)->where('currency_code', 'MMK')->sum('amount');
+        // $usd_amount = DB::table('inwards')->whereDate('created_at', '>=', $startdate)
+        //     ->whereDate('created_at', '<=', $enddate)->where('currency_code', 'USD')->sum('amount');
+        // $eur_amount = DB::table('inwards')->whereDate('created_at', '>=', $startdate)
+        //     ->whereDate('created_at', '<=', $enddate)->where('currency_code', 'EUR')->sum('amount');
+        // $jpy_amount = DB::table('inwards')->whereDate('created_at', '>=', $startdate)
+        //     ->whereDate('created_at', '<=', $enddate)->where('currency_code', 'JPY')->sum('amount');
+        // $krw_amount = DB::table('inwards')->whereDate('created_at', '>=', $startdate)
+        //     ->whereDate('created_at', '<=', $enddate)->where('currency_code', 'KRW')->sum('amount');
+        // $myr_amount = DB::table('inwards')->whereDate('created_at', '>=', $startdate)
+        //     ->whereDate('created_at', '<=', $enddate)->where('currency_code', 'MYR')->sum('amount');
+        // $sgd_amount = DB::table('inwards')->whereDate('created_at', '>=', $startdate)
+        //     ->whereDate('created_at', '<=', $enddate)->where('currency_code', 'SGD')->sum('amount');
+        // $thb_amount = DB::table('inwards')->whereDate('created_at', '>=', $startdate)
+        //     ->whereDate('created_at', '<=', $enddate)->where('currency_code', 'THB')->sum('amount');
+        // $aed_amount = DB::table('inwards')->whereDate('created_at', '>=', $startdate)
+        //     ->whereDate('created_at', '<=', $enddate)->where('currency_code', 'AED')->sum('amount');
+        // $qar_amount = DB::table('inwards')->whereDate('created_at', '>=', $startdate)
+        //     ->whereDate('created_at', '<=', $enddate)->where('currency_code', 'QAR')->sum('amount');\
+
+
+        
+// DB::connection('mysql2')->table('inwards')->insert(
+//     array(
+//            'user_id' => 4,
+//            'sr_id' => $request->input('sr_id'),
+//            'branch_id'     =>   $request->input('hidden_branch_id'), 
+//            'receiver_name'     =>   $request->input('receiver_name'),
+//            'receiver_nrc_passport'     =>   $nrc,
+//            'receiver_address_ph'     =>   $request->input('receiver_address').'/'.$request->input('receiver_phno'),
+//            'purpose'     =>    $request->input('purpose_of_transaction'),
+//            'withdraw_point'     =>    $request->input('withdraw_point'),
+//            'sender_name'     =>   $request->input('sender_name'),
+//            'sender_country_code'     =>   $request->input('sender_country'),
+//            'currency_code'     =>   $request->input('prefer_currency'),
+//            'amount'     =>   $request->input('amount'),
+//            'equivalent_usd'     =>   $request->input('equivalent_usd'),
+//            'txd_date_time'     =>   $request->input('date'),
+//            'amount_mmk'     =>   $request->input('mmk_amount'),
+
+//     )
+// );
+
