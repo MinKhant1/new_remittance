@@ -181,20 +181,9 @@
   <div class="col-4">
   </div>
 
-  <div class="col-3">
-    <label for="prefer_currency">Currency</label>
-  <select class="form-control" id="prefer_currency" name="prefer_currency">
-    <option value="blank"></option>
-     @foreach ($exchange_rates as $exchange_rate)
-    <option value="{{$exchange_rate->currency_code}}">{{$exchange_rate->currency_code}}</option>
-      @endforeach
-  </select>
-  </div>
+  
 
-  <div class="col-2">
-    <label for="thb_amount" class="mr-sm-2" style="margin-top: 9%"></label>
-    <input type="text" class="form-control mb-2 mr-sm-2" p id="thb" name="amount" value="" oninput="changecurrencyvalue({{$exchange_rates}}">
-  </div>
+ 
 
   <div class="col-2">
     <label for="mmk_amount" class="mr-sm-2">MMK</label>
@@ -202,7 +191,7 @@
   </div>
 
   <div class="col-2">
-    <label for="equivalent_usd" class="mr-sm-2">USD</label>
+    <label for="equivalent_usd" class="mr-sm-2" id="usdlabel">USD</label>
     <input type="text" class="form-control mb-2 mr-sm-2" id="usd" name="equivalent_usd" value="" oninput="changecurrencyvalueusd({{$exchange_rates}})">
   </div>
 
@@ -352,185 +341,108 @@
     }
     }
 
-    function changecurrencyvaluemmk(exchange_rates)
-    {
-
-      var currencyDropDown=document.getElementById('prefer_currency');
-
-      var mmk_input=document.getElementById("mmk");
-      var usd_input=document.getElementById("usd");
-      var amount_input=document.getElementById("amount");
+    function changecurrencyvaluemmk(exchange_rates) {
 
 
-      //mmk_input.value=0;
-      usd_input.value=0;
-      amount_input.value=0;
+    var mmk_input = document.getElementById("mmk");
+    var usd_input = document.getElementById("usd");
 
-      var mmk_to_usd;
-      var rate;
 
-      var amount_value;
-      var mmk_value;
-      var usd_value;
-      mmk_value= mmk_input.value;
+    //mmk_input.value=0;
+    usd_input.value = 0;
+
+
+    var mmk_to_usd;
+
+
+
+    var mmk_value;
+    var usd_value;
+    mmk_value = mmk_input.value;
 
 
 
 
-      //find usd rate
-      for(i=0;i<exchange_rates.length; i++)
-      {
+    //find usd rate
+    for (i = 0; i < exchange_rates.length; i++) {
 
-       if(exchange_rates[i].currency_code=='USD')
-       {
-        mmk_to_usd=exchange_rates[i].exchange_rate;
-        break;
-       }
-      }
-
-
-      //find rate
-      for(i=0;i<exchange_rates.length; i++)
-      {
-
-       if(exchange_rates[i].currency_code==currencyDropDown.value)
-       {
-        rate=exchange_rates[i].exchange_rate;
-        break;
-
-       }
-      }
-
-
-      amount_value=mmk_value*(1/rate);
-      amount_input.value=amount_value.toFixed(2);
-
-      usd_value=mmk_value*(1/mmk_to_usd);
-      usd_input.value=usd_value.toFixed(2);
-
-
-
-
+        if (exchange_rates[i].currency_code == 'USD') {
+            mmk_to_usd = exchange_rates[i].exchange_rate;
+            break;
+        }
     }
 
 
-    function changecurrencyvalueusd(exchange_rates)
-    {
+    usd_value = mmk_value * (1 / mmk_to_usd);
+    usd_input.value = usd_value.toFixed(2);
 
-      var currencyDropDown=document.getElementById('prefer_currency');
 
-      var mmk_input=document.getElementById("mmk");
-      var usd_input=document.getElementById("usd");
-      var amount_input=document.getElementById("amount");
 
-      mmk_input.value=0;
-    //  usd_input.value=0;
-      amount_input.value=0;
+
+}
+
+
+function changecurrencyvalueusd(exchange_rates) {
+
+
+
+      var mmk_input = document.getElementById("mmk");
+      var usd_input = document.getElementById("usd");
+
+
+      mmk_input.value = 0;
+      //  usd_input.value=0;
+
 
 
       var mmk_to_usd;
-      var rate;
 
-      var usd_value=usd_input.value;
+
+      var usd_value = usd_input.value;
       var mmk_value;
-      var amount_value;
+
 
       //find usd rate
-      for(i=0;i<exchange_rates.length; i++)
-      {
+      for (i = 0; i < exchange_rates.length; i++) {
 
-       if(exchange_rates[i].currency_code=='USD')
-       {
-        mmk_to_usd=exchange_rates[i].exchange_rate;
-        break;
-       }
+          if (exchange_rates[i].currency_code == 'USD') {
+              mmk_to_usd = exchange_rates[i].exchange_rate;
+              break;
+          }
       }
 
 
-      //find rate
-      for(i=0;i<exchange_rates.length; i++)
-      {
-
-       if(exchange_rates[i].currency_code==currencyDropDown.value)
-       {
-        rate=exchange_rates[i].exchange_rate;
-        break;
-
-       }
-      }
-
-      mmk_value= usd_value*mmk_to_usd;
-      mmk_input.value=mmk_value;
-
-      // usd_value=mmk_value*(1/mmk_to_usd);
-      // usd_input.value=usd_value;
-
-      amount_value=mmk_value* (1/rate);
-      amount_input.value=amount_value.toFixed(2);
 
 
 
-    }
+      mmk_value = usd_value * mmk_to_usd;
+      mmk_input.value = mmk_value;
 
 
 
 
 
 
-    function changecurrencyvalue(exchange_rates)
+
+}
+
+    function changeUSDFormValue()
     {
+        let exchange_rates=@json($exchange_rates);
+        let usdLabel=document.getElementById('usdlabel');
+      
+        let input=document.getElementById('exchange_rate_input_usd');
 
-      var currencyDropDown=document.getElementById('prefer_currency');
+                for (i = 0; i < exchange_rates.length; i++) {
 
-      var mmk_input=document.getElementById("mmk");
-      var usd_input=document.getElementById("usd");
-      var amount_input=document.getElementById("amount");
-
-      mmk_input.value=0;
-      usd_input.value=0;
-      //amount_input.value=0;
-
-
-      var mmk_to_usd;
-      var rate;
-
-      var mmk_value;
-      var usd_value;
-      var amount_value=amount_input.value;
-
-      //find usd rate
-      for(i=0;i<exchange_rates.length; i++)
-      {
-
-       if(exchange_rates[i].currency_code=='USD')
-       {
-        mmk_to_usd=exchange_rates[i].exchange_rate;
-        break;
-       }
-      }
-
-
-      //find rate
-      for(i=0;i<exchange_rates.length; i++)
-      {
-
-       if(exchange_rates[i].currency_code==currencyDropDown.value)
-       {
-        rate=exchange_rates[i].exchange_rate;
-        break;
-
-       }
-      }
-      console.log('mmk_to_usd'+mmk_to_usd);
-      console.log('rate:'+  rate);
-
-      mmk_value= amount_value*rate;
-      mmk_input.value=mmk_value;
-
-      usd_value=mmk_value*(1/mmk_to_usd);
-      usd_input.value=usd_value.toFixed(2);
-
-
+        if (exchange_rates[i].currency_code == 'USD') {
+            mmk_to_usd = exchange_rates[i].exchange_rate;
+            break;
+        }
+        }
+     
+        usdLabel.innerText="USD (Rate:"+mmk_to_usd+")";
+      input.value=mmk_to_usd;
 
 
     }
@@ -542,23 +454,24 @@
 
 
 <script>
-    jQuery(document).ready(function()
-    {
-      jQuery('#exampleFormControlSelect1').change(function()
+     jQuery(document).ready(function()
       {
-         let cid =jQuery(this).val();
-         let str = cid;
-         let makeStr = str.toString();
-         let splitStr = makeStr.split(',');
-         let country = document.getElementById('sender_country');
-         let currency = document.getElementById('prefer_currency');
-         country.value = splitStr[0];
-         currency.value = splitStr[1];
-         let hiddenbranchid=document.getElementById('hidden_branch_id');
-         hiddenbranchid.value=splitStr[2];
-
+        jQuery('#exampleFormControlSelect1').change(function()
+        {
+           let cid =jQuery(this).val();
+           let str = cid;
+           let makeStr = str.toString();
+           let splitStr = makeStr.split(',');
+          let country = document.getElementById('receiver_country');
+          //  let currency = document.getElementById('prefer_currency');
+            country.value = splitStr[0];
+          //  currency.value = splitStr[1];
+            let hiddenbranchid=document.getElementById('hidden_branch_id');
+          hiddenbranchid.value=splitStr[2];
+       
+    
+        });
       });
-    });
 </script>
 
 <script>
@@ -578,6 +491,9 @@
 
 
 
+</script>
+<script>
+  changeUSDFormValue();
 </script>
 
   @endsection
