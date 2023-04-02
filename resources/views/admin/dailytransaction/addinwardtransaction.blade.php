@@ -697,12 +697,6 @@
    )
 </script>
 
-<script>
-  
-   //
- 
-</script>
-
 
 {{-- Check Max Limit --}}
 <script>
@@ -725,7 +719,6 @@
      
    let total=Number(getUSDByNRC(sender_nrc))+Number(value);
 
-   //console.log(Number(par_month_transaction));
      if( Number(total)>Number(par_month_transaction))
      {
       saveButton.disabled = true;
@@ -748,12 +741,9 @@
   {
     let usdVal=0;
     sum_usd_grouped_by_nrc.forEach(element => {
-      // console.log(element.id+' '+nrc);
-      // console.log(element);
+     
       if(element.id==nrc)
       {
-
-        // console.log('hi');
         usdVal=element.usd;
       }
       
