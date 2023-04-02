@@ -161,6 +161,8 @@
       <input type="text" class="form-control mb-2 mr-sm-2" placeholder="" id="withdraw_point"  name="withdraw_point" value="{{$inward_transaction->withdraw_point}}">
     </div>
 
+    <input type="hidden" name="exchange_rate_input_usd" id="exchange_rate_input_usd" value="">
+    <input type="hidden" name="exchange_rate_input" id="exchange_rate_input" value="">
 
     <div class="col-6">
       <label for="remark_withdraw_point" class="mr-sm-2">Remark for Withdraw Point:</label>
@@ -198,7 +200,7 @@
 
      <div class="col-3">
       <label for="prefer_currency">Currency</label>
-    <select class="form-control" id="prefer_currency" name="prefer_currency">
+    <select class="form-control" id="prefer_currency" name="prefer_currency" onchange="changeRateField({{$exchange_rates}})">
       <option value="blank"></option>
        @foreach ($exchange_rates as $exchange_rate)
       <option value="{{$exchange_rate->currency_code}}">{{$exchange_rate->currency_code}}</option>
@@ -208,7 +210,7 @@
 
 
     <div class="col-2">
-      <label for="receiver_name" class="mr-sm-2" style="margin-top: 9%"></label>
+      <label for="amount" class="mr-sm-2" id="rate_amount"></label>
       <input type="text" class="form-control mb-2 mr-sm-2" p id="amount" name="amount" value="" oninput="changecurrencyvalue({{$exchange_rates}})">
     </div>
 
@@ -490,7 +492,60 @@
 
 
 
+    function changeRateField(exchange_rates)
+    {
+   
+      let rate_amount_field=document.getElementById("rate_amount");
+      let currencyDropDown=document.getElementById('prefer_currency');
 
+
+
+
+      let rate;
+      let usdRate;
+      for(i=0;i<exchange_rates.length; i++)
+      {
+
+       if(exchange_rates[i].currency_code==currencyDropDown.value)
+       {
+        rate=exchange_rates[i].exchange_rate;
+        break;
+
+       }
+      }
+
+      for(i=0;i<exchange_rates.length; i++)
+      {
+
+       if(exchange_rates[i].currency_code=='USD')
+       {
+        usdRate=exchange_rates[i].exchange_rate;
+        break;
+
+       }
+      }
+
+      rate_amount_field.innerHTML="Rate: "+rate+" MMK";
+
+      changeRateFormValue(rate);
+     changeUSDFormValue(usdRate);
+
+    }
+
+    function changeUSDFormValue(rate)
+    {
+      // console.log(rate);
+      let input=document.getElementById('exchange_rate_input_usd');
+      input.value=rate;
+
+
+    }
+    function changeRateFormValue(rate)
+    {
+      // console.log(rate);
+      let input=document.getElementById('exchange_rate_input');
+      input.value=rate;
+    }
 
 
     function changecurrencyvalue(exchange_rates)
@@ -572,7 +627,7 @@
          currency.value = splitStr[1];
          let hiddenbranchid=document.getElementById('hidden_branch_id');
          hiddenbranchid.value=splitStr[2];
-
+         changeRateField(@json($exchange_rates));
       });
     });
   </script>

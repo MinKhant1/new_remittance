@@ -72,6 +72,14 @@ class InwardTransactionController extends Controller
             ->value('exchange_rate');
 
             $tran_max_limit=TransMaxLimit::all();
+            $par_count=1000;
+            $par_month=5000;
+            if(count($tran_max_limit)>0)
+            {
+                $par_count=$tran_max_limit[0]->par_transaction;
+                $par_month=$tran_max_limit[0]->par_month;
+
+            }
 
          $trans_grouped_by_nrc=Inwards::all()->where(
             'created_at', '>=', Carbon::now()->subMonth()->toDateTimeString()
@@ -97,8 +105,8 @@ class InwardTransactionController extends Controller
             ->with('exchange_rates',$exhange_rates)
             ->with('inwardtransaction',$inwardtransaction)
             ->with('usd', $usd)->with('thb', $thb)
-            ->with('par_transaction',$tran_max_limit[0]->par_transaction)
-            ->with('par_month_transaction',$tran_max_limit[0]->par_month)
+            ->with('par_transaction',$par_count)
+            ->with('par_month_transaction',$par_month)
             ->with('sum_usd_grouped_by_nrc',$sum_usd_grouped_by_nrc);
 
          
@@ -214,7 +222,14 @@ class InwardTransactionController extends Controller
             ->value('exchange_rate');
 
             $tran_max_limit=TransMaxLimit::all();
+            $par_count=1000;
+            $par_month=5000;
+            if(count($tran_max_limit)>0)
+            {
+                $par_count=$tran_max_limit[0]->par_transaction;
+                $par_month=$tran_max_limit[0]->par_month;
 
+            }
             $trans_grouped_by_nrc=Inwards::all()->where(
                'created_at', '>=', Carbon::now()->subMonth()->toDateTimeString()
            )->groupBy('sender_nrc_passport');
@@ -236,8 +251,8 @@ class InwardTransactionController extends Controller
             ->with('inward_transaction', $inwardtransaction)
             ->with('usd', $usd)->with('thb', $thb)
             ->with('exchange_rates',$exchange_rates)
-            ->with('par_transaction',$tran_max_limit[0]->par_transaction)
-            ->with('par_month_transaction',$tran_max_limit[0]->par_month)
+            ->with('par_transaction',$par_count)
+            ->with('par_month_transaction',$par_month)
             ->with('sum_usd_grouped_by_nrc',$sum_usd_grouped_by_nrc);
 
     }
