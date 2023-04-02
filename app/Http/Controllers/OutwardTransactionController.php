@@ -12,6 +12,7 @@ use App\Models\Outwards;
 use App\Models\OutwardTransaction;
 use App\Models\PurposeOfTrans;
 use App\Models\TotalOutward;
+use App\Models\blacklists;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Http\Request;
@@ -32,7 +33,8 @@ class OutwardTransactionController extends Controller
             $outwardtransactions = Outwards::select("*")
             ->whereDate('created_at', Carbon::today())
             ->get();
-        return view('admin.dailytransaction.outwardtransaction')->with('outwardtransactions', $outwardtransactions);
+            $blacklists = blacklists::All();
+        return view('admin.dailytransaction.outwardtransaction')->with('outwardtransactions', $outwardtransactions)->with('blacklists', $blacklists);
         }
         else
         {
@@ -453,7 +455,9 @@ class OutwardTransactionController extends Controller
             ->whereDate('created_at', '<=', $enddate)->orderBy("txd_date_time", "desc")
             ->get();
 
-        return view('admin.dailytransaction.outwardtransaction')->with('outwardtransactions', $query);
+            $blacklists = blacklists::All();
+
+        return view('admin.dailytransaction.outwardtransaction')->with('outwardtransactions', $query)->with('blacklists', $blacklists);
     }
 
     public function totalinwardoutward()

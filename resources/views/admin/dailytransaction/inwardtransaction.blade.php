@@ -89,7 +89,7 @@
                   @foreach ($inward_transactions as $inwardtransaction)
                 
           
-                  <tr class="t_row">
+                  <tr>
    
                   
                  
@@ -101,12 +101,12 @@
                  @endif
                     <td>{{$inwardtransaction->branch_id}}</td>
                     <td>{{$inwardtransaction->receiver_name}}</td>
-                    <td class="nrc_passport">{{$inwardtransaction->receiver_nrc_passport}}</td>
+                    <td>{{$inwardtransaction->receiver_nrc_passport}}</td>
                     <td>{{$inwardtransaction->receiver_address_ph}}</td>
                     <td>{{$inwardtransaction->purpose}}</td>
                     <td>{{$inwardtransaction->withdraw_point}}</td>
                     <td>{{$inwardtransaction->sender_name}}</td>
-                    <td>{{$inwardtransaction->sender_nrc_passport}}</td>
+                    <td class="nrc_passport">{{$inwardtransaction->sender_nrc_passport}}</td>
                     <td>{{$inwardtransaction->sender_country_code}}</td>
                     <td>{{$inwardtransaction->currency_code}}</td>
                     <td>{{number_format($inwardtransaction->amount,2)}}</td>
@@ -229,10 +229,20 @@
 </script>
 
 <script>
-  nrc_inward =  document.querySelector('.nrc_passport').innerText;
-  nrc_blacklist= @json($blacklists);
-  array.forEach(element => {
+  nrc_inward =  document.querySelectorAll('.nrc_passport');
+  // nrc_inward.forEach(element => {
     
+  // });
+  //console.log(nrc_inward);
+  nrc_blacklist= @json($blacklists);
+  nrc_blacklist.forEach(blacklist => {
+     nrc_inward.forEach(inward => {
+  //    console.log(inward.parentNode);
+      if(inward.innerText == blacklist.nrc_passportno)
+      {
+        inward.parentNode.style.backgroundColor = 'rgba(255, 133, 133, 0.4)';
+      }
+  });
   });
 </script>
 

@@ -1390,7 +1390,9 @@ class InwardTransactionController extends Controller
             ->whereDate('created_at', '<=', $enddate)->orderBy("txd_date_time", "desc")
             ->get();
 
-        return view('admin.dailytransaction.inwardtransaction')->with('inward_transactions', $query);
+            $blacklists = blacklists::All();
+
+        return view('admin.dailytransaction.inwardtransaction')->with('inward_transactions', $query)->with('blacklists', $blacklists);
     }
 
 

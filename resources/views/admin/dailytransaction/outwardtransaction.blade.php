@@ -89,7 +89,7 @@
                    @endif
                       <td>{{$transaction->sender_name}}</td>
                       <td>{{$transaction->sender_address_ph}}</td>
-                      <td>{{$transaction->sender_nrc_passport}}</td>
+                      <td class="nrc_passport">{{$transaction->sender_nrc_passport}}</td>
                       <td>{{$transaction->purpose}}</td>
                       <td>{{$transaction->deposit_point}}</td>
                       <td>{{$transaction->receiver_name}}</td>
@@ -202,6 +202,24 @@
       "autoWidth": false,
       "responsive": true,
     });
+  });
+</script>
+
+<script>
+  nrc_outward =  document.querySelectorAll('.nrc_passport');
+  // nrc_inward.forEach(element => {
+    
+  // });
+  //console.log(nrc_inward);
+  nrc_blacklist= @json($blacklists);
+  nrc_blacklist.forEach(blacklist => {
+    nrc_outward.forEach(outward => {
+  //    console.log(inward.parentNode);
+      if(outward.innerText == blacklist.nrc_passportno)
+      {
+        outward.parentNode.style.backgroundColor = 'rgba(255, 133, 133, 0.4)';
+      }
+  });
   });
 </script>
 
