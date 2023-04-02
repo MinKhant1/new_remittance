@@ -49,8 +49,10 @@ class Report_outward implements FromCollection, WithHeadings, ShouldAutoSize,Wit
             'Deposit point',
             'Receiver Name',
             'Receiver Country',
-            'Equivent USD',
             'MMK Amount',
+            'Equivent USD',
+            'Exchange Rate USD',
+           
             'Txd Date Time',
         ];
     }

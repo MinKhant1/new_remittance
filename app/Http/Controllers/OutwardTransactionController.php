@@ -103,8 +103,20 @@ class OutwardTransactionController extends Controller
         if (auth()->user()->type == 'editor' && auth()->user()->outward == 1)
         {
             $outwardtransactions = Outwards::All();
+            $excel_query=Outwards::select('sr_id','branch_id','sender_name','sender_nrc_passport','sender_address_ph','purpose','deposit_point','receiver_name','receiver_country_code','amount_mmk','equivalent_usd','exchange_rate_usd','txd_date_time','status','created_at')->get()->where('status',1)->groupBy(function($data)
+            {
+                return $data->created_at->format('Y-m-d');
+            });
+
+            //dd($excel_query);
+            foreach ($excel_query as $query => $collection) {
+                for ($i=0; $i <count($collection) ; $i++) {
+                    unset($collection[$i]->created_at);
+               unset($collection[$i]->status);
+                }
+            }
             $branches = Branch::all();
-            session()->put('outwardexcel', $outwardtransactions);
+            session()->put('outwardexcel', $excel_query);
             return view('admin.reports.outward')
                 ->with('outwardtransactions', $outwardtransactions)
                 ->with('branches', $branches);
@@ -195,13 +207,21 @@ class OutwardTransactionController extends Controller
                  ->where('branch_id',$branch_id)
                 ->where('state_division',$state_division)
                 ->get();
-        $excel_query = DB::table('inwards')
-        ->select('sr_id', 'branch_id', 'sender_name', 'sender_nrc_passport', 'sender_address_ph', 'purpose', 'deposit_point', 'receiver_name', 'receiver_country_code', 'equivalent_usd', 'amount_mmk', 'txd_date_time')
+        $excel_query = DB::table('outwards')
+        ->select('sr_id', 'branch_id', 'sender_name', 'sender_nrc_passport', 'sender_address_ph', 'purpose', 'deposit_point', 'receiver_name', 'receiver_country_code', 'amount_mmk','equivalent_usd', 'exchange_rate_usd', 'txd_date_time','status')
+        ->where('status',1)
         ->whereDate('created_at', '>=', $startdate)
         ->whereDate('created_at', '<=', $enddate)
          ->where('branch_id',$branch_id)
         ->where('state_division',$state_division)
         ->get();
+        
+        foreach ($excel_query as $collection) {
+          
+            unset($collection->created_at);
+        unset($collection->status);
+        
+        }
 
     }else if(!is_null($branch_id) && is_null($state_division))
                 { $query = DB::table('outwards')->select()
@@ -210,14 +230,21 @@ class OutwardTransactionController extends Controller
                     ->where('branch_id',$branch_id)
                   //  ->where('state_division',$state_division)
                     ->get();
-            $excel_query = DB::table('outwards')
-            ->select('sr_id', 'branch_id', 'sender_name', 'sender_nrc_passport', 'sender_address_ph', 'purpose', 'deposit_point', 'receiver_name', 'receiver_country_code', 'equivalent_usd', 'amount_mmk', 'txd_date_time')
+                    $excel_query = DB::table('outwards')
+                    ->select('sr_id', 'branch_id', 'sender_name', 'sender_nrc_passport', 'sender_address_ph', 'purpose', 'deposit_point', 'receiver_name', 'receiver_country_code', 'amount_mmk','equivalent_usd', 'exchange_rate_usd', 'txd_date_time','status')
+            ->where('status',1)
             ->whereDate('created_at', '>=', $startdate)
             ->whereDate('created_at', '<=', $enddate)
             ->where('branch_id',$branch_id)
            // ->where('state_division',$state_division)
             ->get();
+  //dd($excel_query);
+  foreach ($excel_query as $collection) {
+          
+    unset($collection->created_at);
+unset($collection->status);
 
+}
     }
     else if( !is_null($state_division) && is_null($branch_id))
             {$query = DB::table('outwards')->select()
@@ -226,14 +253,21 @@ class OutwardTransactionController extends Controller
                 //->where('branch_id',$branch_id)
           ->where('state_division',$state_division)
                 ->get();
-        $excel_query = DB::table('outwards')
-        ->select('sr_id', 'branch_id', 'sender_name', 'sender_nrc_passport', 'sender_address_ph', 'purpose', 'deposit_point', 'receiver_name', 'receiver_country_code', 'equivalent_usd', 'amount_mmk', 'txd_date_time')
+                $excel_query = DB::table('outwards')
+                ->select('sr_id', 'branch_id', 'sender_name', 'sender_nrc_passport', 'sender_address_ph', 'purpose', 'deposit_point', 'receiver_name', 'receiver_country_code', 'amount_mmk','equivalent_usd', 'exchange_rate_usd', 'txd_date_time','status')
+        ->where('status',1)
         ->whereDate('created_at', '>=', $startdate)
         ->whereDate('created_at', '<=', $enddate)
         //->where('branch_id',$branch_id)
       ->where('state_division',$state_division)
         ->get();
+  //dd($excel_query);
+  foreach ($excel_query as $collection) {
+          
+    unset($collection->created_at);
+unset($collection->status);
 
+}
     }
     else
     {
@@ -243,13 +277,21 @@ class OutwardTransactionController extends Controller
                 //->where('branch_id',$branch_id)
        // ->where('state_division',$state_division)
                 ->get();
-        $excel_query = DB::table('outwards')
-        ->select('sr_id', 'branch_id', 'sender_name', 'sender_nrc_passport', 'sender_address_ph', 'purpose', 'deposit_point', 'receiver_name', 'receiver_country_code', 'equivalent_usd', 'amount_mmk', 'txd_date_time')
+                $excel_query = DB::table('outwards')
+                ->select('sr_id', 'branch_id', 'sender_name', 'sender_nrc_passport', 'sender_address_ph', 'purpose', 'deposit_point', 'receiver_name', 'receiver_country_code', 'amount_mmk','equivalent_usd', 'exchange_rate_usd', 'txd_date_time','status')
+        ->where('status',1)
         ->whereDate('created_at', '>=', $startdate)
         ->whereDate('created_at', '<=', $enddate)
         //->where('branch_id',$branch_id)
        // ->where('state_division',$state_division)
         ->get();
+          //dd($excel_query);
+          foreach ($excel_query as $collection) {
+          
+                unset($collection->created_at);
+           unset($collection->status);
+            
+        }
 
     }
   //  dd($excel_query);
