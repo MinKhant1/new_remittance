@@ -17,6 +17,7 @@ class UserMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
+      //  dd(Auth::guest());
         if(Auth::guest())
         {
             return redirect('/login');   
