@@ -224,7 +224,10 @@
     <label for="mmk" class="mr-sm-2">MMK</label>
     <input type="text" class="form-control mb-2 mr-sm-2" id="mmk" name="mmk_amount" oninput="changecurrencyvaluemmk({{$exchange_rates}})">
   </div>
-
+  <div class="col-2">
+    <label for="amount" class="mr-sm-2" id="rate_amount"></label>
+    <input type="text" class="form-control mb-2 mr-sm-2" p id="amount" name="amount" value="dwdwwd" oninput="changecurrencyvalue({{$exchange_rates}})">
+  </div>
   <div class="col-2">
     <label for="receiver_name" class="mr-sm-2">USD</label>
     <input type="text" class="form-control mb-2 mr-sm-2" id="usd" name="equivalent_usd" value="" oninput="changecurrencyvalueusd({{$exchange_rates}})">

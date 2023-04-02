@@ -207,22 +207,7 @@
         <div class="col-4">
         </div>
 
-        {{--
-  <div class="col-3">
-    <label for="prefer_currency">Currency</label>
-  <select class="form-control" id="prefer_currency" name="prefer_currency">
-    <option value="blank"></option>
-     @foreach ($exchange_rates as $exchange_rate)
-    <option value="{{$exchange_rate->currency_code}}">{{$exchange_rate->currency_code}}</option>
-      @endforeach
-  </select>
-  </div>
-
-
-  <div class="col-2">
-    <label for="amount" class="mr-sm-2">Amount</label>
-    <input type="text" class="form-control mb-2 mr-sm-2" p id="amount" name="amount" value="" oninput="changecurrencyvalue({{$exchange_rates}})">
-  </div> --}}
+ 
 
         <div class="col-3">
             <label for="mmk" class="mr-sm-2">MMK</label>
@@ -231,7 +216,7 @@
         </div>
 
         <div class="col-3">
-            <label for="equivalent_usd" class="mr-sm-2">USD</label>
+            <label for="equivalent_usd" class="mr-sm-2" id="usdlabel">USD </label>
             <input type="text" class="form-control mb-2 mr-sm-2" id="usd" name="equivalent_usd" value=""
                 oninput="changecurrencyvalueusd({{ $exchange_rates }})">
         </div>
@@ -390,9 +375,10 @@
             }
         }
 
+        
+
         function changecurrencyvaluemmk(exchange_rates) {
 
-            var currencyDropDown = document.getElementById('prefer_currency');
 
             var mmk_input = document.getElementById("mmk");
             var usd_input = document.getElementById("usd");
@@ -438,7 +424,7 @@
 
         function changecurrencyvalueusd(exchange_rates) {
 
-            var currencyDropDown = document.getElementById('prefer_currency');
+
 
             var mmk_input = document.getElementById("mmk");
             var usd_input = document.getElementById("usd");
@@ -485,56 +471,28 @@
 
 
 
-        function changecurrencyvalue(exchange_rates) {
+       
 
-            var currencyDropDown = document.getElementById('prefer_currency');
+    function changeUSDFormValue()
+    {
+        let exchange_rates=@json($exchange_rates);
+        let usdLabel=document.getElementById('usdlabel');
+      
+        let input=document.getElementById('exchange_rate_input_usd');
 
-            var mmk_input = document.getElementById("mmk");
-            var usd_input = document.getElementById("usd");
-            var amount_input = document.getElementById("amount");
+                for (i = 0; i < exchange_rates.length; i++) {
 
-            mmk_input.value = 0;
-            usd_input.value = 0;
-            //amount_input.value=0;
-
-
-            var mmk_to_usd;
-            var rate;
-
-            var mmk_value;
-            var usd_value;
-            var amount_value = amount_input.value;
-
-            //find usd rate
-            for (i = 0; i < exchange_rates.length; i++) {
-
-                if (exchange_rates[i].currency_code == 'USD') {
-                    mmk_to_usd = exchange_rates[i].exchange_rate;
-                    break;
-                }
-            }
-
-
-            //find rate
-            for (i = 0; i < exchange_rates.length; i++) {
-
-                if (exchange_rates[i].currency_code == currencyDropDown.value) {
-                    rate = exchange_rates[i].exchange_rate;
-                    break;
-
-                }
-            }
-
-            mmk_value = amount_value * rate;
-            mmk_input.value = mmk_value;
-
-            usd_value = mmk_value * (1 / mmk_to_usd);
-            usd_input.value = usd_value.toFixed(2);
-
-
-
-
+        if (exchange_rates[i].currency_code == 'USD') {
+            mmk_to_usd = exchange_rates[i].exchange_rate;
+            break;
         }
+        }
+     
+        usdLabel.innerText="USD (Rate:"+mmk_to_usd+")";
+      input.value=mmk_to_usd;
+
+
+    }
     </script>
 
     <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
@@ -581,5 +539,8 @@
                 populate(s1, s2);
             }
         )
+    </script>
+    <script>
+        changeUSDFormValue();
     </script>
 @endsection

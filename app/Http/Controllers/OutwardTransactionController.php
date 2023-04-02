@@ -59,6 +59,7 @@ class OutwardTransactionController extends Controller
         $branches = Branch::All();
         $purposeOfTrans = PurposeOfTrans::All();
         $exchange_rates = ExchangeRate::all();
+       
 
         $usd = DB::table('exchange_rates')->where('currency_code', 'USD')
             ->value('exchange_rate');
