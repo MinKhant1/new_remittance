@@ -31,7 +31,10 @@ class InwardTransactionController extends Controller
             $inwardtransactions = Inwards::select("*")
             ->whereDate('created_at', Carbon::today())
             ->get();
-        return view('admin.dailytransaction.inwardtransaction')->with('inward_transactions', $inwardtransactions);
+            $blacklists = blacklists::All();
+       
+           
+            return view('admin.dailytransaction.inwardtransaction')->with('inward_transactions', $inwardtransactions)->with('blacklists', $blacklists);
 
         }
         else

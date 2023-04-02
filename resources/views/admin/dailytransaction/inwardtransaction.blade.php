@@ -87,7 +87,12 @@
                   </thead>
                   <tbody>
                   @foreach ($inward_transactions as $inwardtransaction)
-                  <tr>
+                
+          
+                  <tr class="t_row">
+   
+                  
+                 
                     <td>{{$increment}}</td>
                     @if ($inwardtransaction->status == 1)
                     <td><i class="fa fa-check-square" style="color: green"> </i></td>
@@ -96,7 +101,7 @@
                  @endif
                     <td>{{$inwardtransaction->branch_id}}</td>
                     <td>{{$inwardtransaction->receiver_name}}</td>
-                    <td>{{$inwardtransaction->receiver_nrc_passport}}</td>
+                    <td class="nrc_passport">{{$inwardtransaction->receiver_nrc_passport}}</td>
                     <td>{{$inwardtransaction->receiver_address_ph}}</td>
                     <td>{{$inwardtransaction->purpose}}</td>
                     <td>{{$inwardtransaction->withdraw_point}}</td>
@@ -220,6 +225,14 @@
       "autoWidth": false,
       "responsive": true,
     });
+  });
+</script>
+
+<script>
+  nrc_inward =  document.querySelector('.nrc_passport').innerText;
+  nrc_blacklist= @json($blacklists);
+  array.forEach(element => {
+    
   });
 </script>
 

@@ -40,7 +40,7 @@ class BlacklistController extends Controller
     public function saveblacklist(Request $request)
     {
         $this->validate($request, ['nrc_passportno'=>'required|unique:blacklists',
-                                   'name'=>'required|unique:blacklists']);
+                                   'name'=>'required']);
 
         $blacklists = new blacklists();
         $blacklists->nrc_passportno = $request->input('nrc_passportno');
