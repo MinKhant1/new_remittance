@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Inwards;
 use App\Models\ExchangeRate;
+use App\Models\Company;
 use Session;
 
 class PdfController extends Controller
@@ -54,23 +55,31 @@ class PdfController extends Controller
       return substr($str, 0, 2).str_repeat('*', $len - 4).substr($str, $len - 2, 3);
   }
 
+  function get_image($img)
+  {
+    
+    $img_src = 'images/company/'.$img;
+    return $img_src;
+  }
+
     public function convert_orders_data_to_html(){
 
         $data_outputs = Inwards::where('id',Session::get('id'))->get();
         $rate = ExchangeRate::select('exchange_rate','currency_code')->get();
-
+        $company = Company::find(1);
         // $data_outputs_array = $data_outputs->toarray();
         // $data_array = $data->toarray();
 
         // $merge_array = array_merge($data_outputs_array,$data_array);
         // $merge_array_collection =  collect($merge_array);
         // dd($merge_array_collection);
-
+    
         foreach($data_outputs as $data)
         {
           $address_ph = $data->receiver_address_ph;
           $separator = '/';
           $add_ph = explode($separator, $address_ph);
+        //  dd($this->get_image($company->image));
         $output = '
         <!DOCTYPE html>
 <meta charset="UTF-8">
@@ -82,7 +91,7 @@ class PdfController extends Controller
     <title>Document</title>
 </head>
 <body>
-<img style="width:50%;height:20%;margin-left:25%" src="frontend/images/logo.jpg">
+<img style="width:50%;height:20%;margin-left:25%" src='.$this->get_image($company->image).'>
 
 <table style="border: 2px solid black;border-collapse:collapse;width:100%">
         <tr style="border: 2px solid black;">
@@ -127,7 +136,7 @@ class PdfController extends Controller
 
       $data_outputs = Inwards::where('id',Session::get('id'))->get();
       $rate = ExchangeRate::select('exchange_rate','currency_code')->get();
-
+      $company = Company::find(1);
       // $data_outputs_array = $data_outputs->toarray();
       // $data_array = $data->toarray();
 
@@ -141,6 +150,7 @@ class PdfController extends Controller
         $address_ph = $data->receiver_address_ph;
           $separator = '/';
           $add_ph = explode($separator, $address_ph);
+        //  dd($this->get_image($company->image));
         $output = '
         <!DOCTYPE html>
 <meta charset="UTF-8">
@@ -152,7 +162,7 @@ class PdfController extends Controller
     <title>Document</title>
 </head>
 <body>
-<img style="width:50%;height:20%;margin-left:25%" src="frontend/images/logo.jpg">
+<img style="width:50%;height:20%;margin-left:25%" src="'.$this->get_image($company->image).'">
 
 <table style="border: 2px solid black;border-collapse:collapse;width:100%">
         <tr style="border: 2px solid black;">

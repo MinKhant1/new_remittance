@@ -47,17 +47,23 @@ class CompanyController extends Controller
     $company = new Company();
 
     if ($request->hasFile('image')) {
-      $destination_path = 'public/image/company';
-      $image = $request->file('image');
+      $fileName = $request->file('image')->getClientOriginalName();
+
+      $ext = $request->file('image')->getClientOriginalExtension();
+
+      $fileName = pathinfo($fileName, PATHINFO_FILENAME);
+      $destinationPath = public_path().'/images/company' ;
+
+      $fileNameToStore = $fileName.'_'.time().'.'.$ext;   
+      
+      $path = $request->file('image')->move($destinationPath, $fileNameToStore);
+    }
 
     
-      $image_name = $image->getClientOriginalName();
-      $path = $request->file('image')->storeAs($destination_path, $image_name);
-    }
     
 
     $company->id=1;
-    $company->image = $image_name;
+    $company->image = $fileNameToStore;
     $company->company_code = $request->input('company_code');
     $company->company_name = $request->input('company_name');
     $company->company_address = $request->input('company_address');
@@ -94,17 +100,22 @@ class CompanyController extends Controller
 
     $company = Company::find($request->input('id'));
 
-    if ($request->hasFile('image'))
-     {
-      $destination_path = 'public/image/company';
-      $image = $request->file('image');
-       $image_name = $image->getClientOriginalName();
-     // $image_name = 'companyimage';
-      $path = $request->file('image')->storeAs($destination_path, $image_name);
+    if ($request->hasFile('image')) {
+
+      $fileName = $request->file('image')->getClientOriginalName();
+
+        $ext = $request->file('image')->getClientOriginalExtension();
+
+        $fileName = pathinfo($fileName, PATHINFO_FILENAME);
+        $destinationPath = public_path().'/images/company' ;
+
+        $fileNameToStore = $fileName.'_'.time().'.'.$ext;   
+        
+        $path = $request->file('image')->move($destinationPath, $fileNameToStore);
     }
 
   
-    $company->image = $image_name;
+    $company->image = $fileNameToStore;
     $company->company_code = $request->input('company_code');
     $company->company_name = $request->input('company_name');
     $company->company_address = $request->input('company_address');

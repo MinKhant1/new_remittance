@@ -53,12 +53,18 @@ class PdfController_2 extends Controller
       $len = strlen($str);
       return substr($str, 0, 2).str_repeat('*', $len - 4).substr($str, $len - 2, 3);
   }
+  function get_image($img)
+  {
+    
+    $img_src = 'images/company/'.$img;
+    return $img_src;
+  }
 
     public function convert_orders_data_to_html(){
 
         $data_outputs = Outwards::where('id',Session::get('id'))->get();
         $rate = ExchangeRate::select('exchange_rate','currency_code')->get();
-
+        $company = Company::find(1);
         // $data_outputs_array = $data_outputs->toarray();
         // $data_array = $data->toarray();
 
@@ -82,7 +88,7 @@ class PdfController_2 extends Controller
     <title>Document</title>
 </head>
 <body>
-
+<img style="width:50%;height:20%;margin-left:25%" src='.$this->get_image($company->image).'>
 
 <table style="border: 2px solid black;border-collapse:collapse;width:100%">
         <tr style="border: 2px solid black;">
@@ -127,7 +133,7 @@ class PdfController_2 extends Controller
 
       $data_outputs = Outwards::where('id',Session::get('id'))->get();
       $rate = ExchangeRate::select('exchange_rate','currency_code')->get();
-
+      $company = Company::find(1);
       // $data_outputs_array = $data_outputs->toarray();
       // $data_array = $data->toarray();
 
@@ -152,7 +158,7 @@ class PdfController_2 extends Controller
       <title>Document</title>
   </head>
   <body>
-
+  <img style="width:50%;height:20%;margin-left:25%" src='.$this->get_image($company->image).'>
   
   <table style="border: 2px solid black;border-collapse:collapse;width:100%">
           <tr style="border: 2px solid black;">
