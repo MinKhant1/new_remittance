@@ -24,8 +24,8 @@ class UserMiddleware
         }
         if(!Auth::user()->admin)
         {
-            return redirect('/');
+            return $next($request);
         }
-        return $next($request);
+       
     }
 }
