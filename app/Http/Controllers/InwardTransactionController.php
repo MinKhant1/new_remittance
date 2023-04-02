@@ -12,6 +12,7 @@ use App\Models\InwardTransaction;
 use App\Models\PurposeOfTrans;
 use App\Models\TotalInward;
 use App\Models\blacklists;
+use App\Models\TransMaxLimit;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Http\Request;
@@ -67,13 +68,35 @@ class InwardTransactionController extends Controller
         $thb = DB::table('exchange_rates')->where('currency_code', 'THB')
             ->value('exchange_rate');
 
+            $tran_max_limit=TransMaxLimit::all();
+
+         $trans_grouped_by_nrc=Inwards::all()->where(
+            'created_at', '>=', Carbon::now()->subMonth()->toDateTimeString()
+        )->groupBy('sender_nrc_passport');
+
+        $sum_usd_grouped_by_nrc=collect();
+
+        foreach ($trans_grouped_by_nrc as $key => $collection) {
+        
+            $usd_sum=0;
+            foreach ($collection as $transaction) {
+              $usd_sum+=$transaction->equivalent_usd;
+            }
+            $sum_usd_grouped_by_nrc->push(['id'=>$key,'usd'=>$usd_sum]);
+           
+        }
+  
+        //  dd($sum_usd_grouped_by_nrc);
            
 
         return view('admin.dailytransaction.addinwardtransaction')
             ->with('purposeOfTrans', $purposeOfTrans)->with('branches', $branches)
             ->with('exchange_rates',$exhange_rates)
             ->with('inwardtransaction',$inwardtransaction)
-            ->with('usd', $usd)->with('thb', $thb);
+            ->with('usd', $usd)->with('thb', $thb)
+            ->with('par_transaction',$tran_max_limit[0]->par_transaction)
+            ->with('par_month_transaction',$tran_max_limit[0]->par_month)
+            ->with('sum_usd_grouped_by_nrc',$sum_usd_grouped_by_nrc);
 
          
     }

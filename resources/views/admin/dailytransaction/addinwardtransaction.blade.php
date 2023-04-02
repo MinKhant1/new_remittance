@@ -423,7 +423,7 @@
 
     function changeUSDFormValue(rate)
     {
-      console.log(rate);
+      // console.log(rate);
       let input=document.getElementById('exchange_rate_input_usd');
       input.value=rate;
 
@@ -431,7 +431,7 @@
     }
     function changeRateFormValue(rate)
     {
-      console.log(rate);
+      // console.log(rate);
       let input=document.getElementById('exchange_rate_input');
       input.value=rate;
     }
@@ -606,8 +606,8 @@
 
        }
       }
-      console.log('mmk_to_usd'+mmk_to_usd);
-      console.log('rate:'+  rate);
+      // console.log('mmk_to_usd'+mmk_to_usd);
+      // console.log('rate:'+  rate);
 
       mmk_value= amount_value*rate;
       mmk_input.value=mmk_value;
@@ -673,6 +673,8 @@
      }
     populate(s1,s2);
   }
+
+  
  )
 </script>
 
@@ -695,27 +697,72 @@
    )
 </script>
 
+<script>
+  
+   //
+ 
+</script>
+
 
 {{-- Check Max Limit --}}
 <script>
-  function disableSave(value)
-  {
+ var par_transaction=@json($par_transaction);
+ var par_month_transaction=@json($par_month_transaction);
+ var sum_usd_grouped_by_nrc=@json($sum_usd_grouped_by_nrc);
+  sender_nrc=document.getElementById('nrc_id').value;
+ function disableSave(value)
+ {
+    
     saveButton=document.getElementById('savebut');
-    if(value>1000)
+    if(value>Number(par_transaction))
     {
       saveButton.disabled = true;
-      // saveButton.style.background = 'red';
+     
     }
     else
     {
-      saveButton.disabled = false;
+     var sender_nrc=document.getElementById('nrc_id').value;
+     
+   let total=Number(getUSDByNRC(sender_nrc))+Number(value);
+
+   //console.log(Number(par_month_transaction));
+     if( Number(total)>Number(par_month_transaction))
+     {
+      saveButton.disabled = true;
+     }
+     else
+     {
+       saveButton.disabled = false;
+       
+     }
     }
     
 
   }
+
+ 
 </script>
 
+<script>
+   function getUSDByNRC(nrc)
+  {
+    let usdVal=0;
+    sum_usd_grouped_by_nrc.forEach(element => {
+      // console.log(element.id+' '+nrc);
+      // console.log(element);
+      if(element.id==nrc)
+      {
 
+        // console.log('hi');
+        usdVal=element.usd;
+      }
+      
+      
+    });
+
+   return usdVal;
+  }
+</script>
 
 
   @endsection
