@@ -130,8 +130,8 @@
                                             <td style="font-weight: bold">{{$count}}</td>
                                             <td style="font-weight: bold">{{number_format($tusd,2)}}</td>
                                             <td style="font-weight: bold">{{number_format($mmk,5)}}</td>
-                                            <td style="font-weight: bold">{{number_format($tbusd,2)}}</td>
-                                            <td style="font-weight: bold">{{number_format($tbmmk,5)}}</td>
+                                            {{-- <td style="font-weight: bold">{{number_format($tbusd,2)}}</td>
+                                            <td style="font-weight: bold">{{number_format($tbmmk,5)}}</td> --}}
 
                                         </tr>
                                         @endif
