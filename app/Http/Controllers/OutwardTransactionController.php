@@ -102,7 +102,12 @@ class OutwardTransactionController extends Controller
     {
         if (auth()->user()->type == 'editor' && auth()->user()->outward == 1)
         {
-            $outwardtransactions = Outwards::All();
+            $outwardtransactions = Outwards::All()->where('status',1)->groupBy(function($data)
+            {
+                return $data->created_at->format('Y-m-d');
+            })->paginate(3);
+            
+          
             $excel_query=Outwards::select('sr_id','branch_id','sender_name','sender_nrc_passport','sender_address_ph','purpose','deposit_point','receiver_name','receiver_country_code','amount_mmk','equivalent_usd','exchange_rate_usd','txd_date_time','status','created_at')->get()->where('status',1)->groupBy(function($data)
             {
                 return $data->created_at->format('Y-m-d');
@@ -173,11 +178,27 @@ class OutwardTransactionController extends Controller
                 }
             }
 
+
+            foreach ($outwardtransactions as $key => $dated_transactions) {
+                $subtotal_usd=0;
+                $subtotal_mmk=0;
+
+                for ($i=0; $i < count($dated_transactions); $i++) { 
+                    $subtotal_usd+=$dated_transactions[$i]->equivalent_usd;
+                    $subtotal_mmk+=$dated_transactions[$i]->amount_mmk;
+                }
+                $dated_transactions->put('subtotal',['usd'=>$subtotal_usd,'mmk'=>$subtotal_mmk]);
+
+            }
+         //   dd($outwardtransactions);
+
            
             session()->put('outwardexcel', $excel_query);
             return view('admin.reports.outward')
                 ->with('outwardtransactions', $outwardtransactions)
-                ->with('branches', $branches);
+                ->with('branches', $branches)
+                ->with('grandtotalmmk',$grandtotalmmk)
+                ->with('grandtotalusd',$grandtotalusd);
         }
         else
         {

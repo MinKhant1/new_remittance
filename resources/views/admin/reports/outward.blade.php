@@ -117,98 +117,54 @@
                     @php
 
                 $last_date= Carbon\Carbon::now();
-                    // $last_date=new  \Carbon\Carbon('1900-01-23');
-                    $isNotFirst=false;
-                    $mmkAmount=0;
-                    $usdAmount=0;
-                    $totalMMKAmount=0;
-                    $totalUSDAmount=0;
+                  
 
                 @endphp
-                  @foreach ($outwardtransactions as $transaction)
+                  @foreach ($outwardtransactions as $dated_transaction=>$collection)
+                  @php
+                        $index=0;
+                    @endphp
+                       @foreach ($collection as $transaction)
+
+                       @if (++$index<count($collection))
                   <tr>
 
-                   @php
-                   if(!$isNotFirst)
-                         $last_date=$transaction->created_at;
-                   @endphp
-
-
-                    {{-- {{$last_date=$transaction[0]->txd_date_time;}} --}}
-
-
                     <td>{{$increment}}</td>
-
                     <td>{{$transaction->sender_name}}</td>
                     <td>{{$transaction->sender_address_ph}}</td>
-                    {{-- <td>{{$transaction->receiver_phno}}</td> --}}
                     <td>{{$transaction->sender_nrc_passport}}</td>
                     <td>{{$transaction->purpose}}</td>
                     <td>{{$transaction->deposit_point}}</td>
                     <td>{{$transaction->receiver_name}}</td>
                     <td>{{$transaction->receiver_country_code}}</td>
-                    {{-- <td>{{$transaction->currency}}</td> --}}
                     <td>{{number_format($transaction->amount_mmk,2)}}</td>
                     <td>{{number_format($transaction->equivalent_usd,2)}}</td>
                     <td>{{$transaction->txd_date_time}}</td>
-                   @php
-                       $isNotFirst=true;
-                   @endphp
-
-
                   </tr>
-
-                  @php
-                      $mmkAmount+=$transaction->amount_mmk;
-                      $usdAmount+=$transaction->equivalent_usd;
-                      $totalMMKAmount+=$transaction->amount_mmk;
-                    $totalUSDAmount+=$transaction->equivalent_usd;
-                  @endphp
-
-
-
-
-
-
-@if (!is_string($last_date) )
-               @if ( $last_date->toDateString('Y-m-d')===($transaction->created_at)->toDateString('Y-m-d'))
+                  @else
+               
                       <tr>
                         <td colspan="8" style="font-weight: bold; text-align: right">SubTotal</td>
-                        <td style="font-weight: bold">{{number_format($mmkAmount,2)}}</td>
-                        <td colspan="2" style="font-weight: bold">{{number_format($usdAmount,2)}}</td>
+                        <td style="font-weight: bold">{{$transaction['mmk']}}</td>
+                        <td style="font-weight: bold">{{$transaction['usd']}}</td>
                       </tr>
-                      @php
-                      $mmkAmount=0;
-                      $usdAmount=0;
-                  @endphp
-                  @endif
-                  @endif
+                   
+                      @endif
 
-
-
-
-             @php
-                 $last_date=$transaction->created_at;
-
-
-             @endphp
+        
+            
                   {{Form::hidden('', $increment = $increment + 1)}}
+                  @endforeach
                   @endforeach
                   <tr><td colspan="11"></td></tr>
                   <tr>
                     <td colspan="8" style="font-weight: bold; text-align: right">Total</td>
-                    <td style="font-weight: bold">{{number_format($totalMMKAmount,2)}}</td>
-                    <td colspan="2" style="font-weight: bold">{{number_format($totalUSDAmount,2)}}</td>
+                    <td style="font-weight: bold">{{number_format($grandtotalmmk,2)}}</td>
+                    <td colspan="2" style="font-weight: bold">{{number_format($grandtotalusd,2)}}</td>
                   </tr>
                   </tbody>
                   <tfoot>
-                  {{-- <tr>
-                    <th>Num.</th>
-                    <th>Country Code</th>
-                    <th>Country Name</th>
-                    <th>Update</th>
-                    <th>Delete</th>
-                  </tr> --}}
+               
                   </tfoot>
                 </table>
               </div>
