@@ -13,6 +13,7 @@ use App\Models\OutwardTransaction;
 use App\Models\PurposeOfTrans;
 use App\Models\TotalOutward;
 use App\Models\blacklists;
+use App\Models\TransMaxLimit;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Http\Request;
@@ -69,7 +70,30 @@ class OutwardTransactionController extends Controller
 
         $countryFromBranch = Branch::all();
 
+        $tran_max_limit=TransMaxLimit::all();
+        $par_count=1000;
+        $par_month=5000;
+        if(count($tran_max_limit)>0)
+        {
+            $par_count=$tran_max_limit[0]->par_transaction;
+            $par_month=$tran_max_limit[0]->par_month;
 
+        }
+        $trans_grouped_by_nrc=Outwards::all()->where(
+            'created_at', '>=', Carbon::now()->subMonth()->toDateTimeString()
+        )->groupBy('sender_nrc_passport');
+
+        $sum_usd_grouped_by_nrc=collect();
+
+        foreach ($trans_grouped_by_nrc as $key => $collection) {
+        
+            $usd_sum=0;
+            foreach ($collection as $transaction) {
+              $usd_sum+=$transaction->equivalent_usd;
+            }
+            $sum_usd_grouped_by_nrc->push(['id'=>$key,'usd'=>$usd_sum]);
+           
+        }
         $outwardtransactions = Outwards::all();
 
         return view('admin.dailytransaction.addoutwardtransaction')->with('purposeOfTrans', $purposeOfTrans)
@@ -77,7 +101,10 @@ class OutwardTransactionController extends Controller
             ->with('branches', $branches)
             ->with('usd', $usd)->with('thb', $thb)
             ->with('countryFromBranch', $countryFromBranch)
-            ->with('exchange_rates', $exchange_rates);
+            ->with('par_transaction',$par_count)
+            ->with('par_month_transaction',$par_month)
+            ->with('exchange_rates', $exchange_rates)
+            ->with('sum_usd_grouped_by_nrc',$sum_usd_grouped_by_nrc);;
 
     }
 
@@ -653,7 +680,7 @@ class OutwardTransactionController extends Controller
                     }
                     $collection[$i]->put('mmkamount',$subtotalmmk);
                     $collection[$i]->put('equivalent_usd',$subtotalusd);
-                    break;
+                break;
                 }
                 else
                 {
@@ -1437,10 +1464,39 @@ session()->put('outwardexcel',collect($temp));
         $thb = DB::table('exchange_rates')->where('currency_code', 'THB')
             ->value('exchange_rate');
 
+            $tran_max_limit=TransMaxLimit::all();
+            $par_count=1000;
+            $par_month=5000;
+            if(count($tran_max_limit)>0)
+            {
+                $par_count=$tran_max_limit[0]->par_transaction;
+                $par_month=$tran_max_limit[0]->par_month;
+    
+            }
+            $trans_grouped_by_nrc=Outwards::all()->where(
+                'created_at', '>=', Carbon::now()->subMonth()->toDateTimeString()
+            )->groupBy('sender_nrc_passport');
+    
+            $sum_usd_grouped_by_nrc=collect();
+    
+            foreach ($trans_grouped_by_nrc as $key => $collection) {
+            
+                $usd_sum=0;
+                foreach ($collection as $transaction) {
+                  $usd_sum+=$transaction->equivalent_usd;
+                }
+                $sum_usd_grouped_by_nrc->push(['id'=>$key,'usd'=>$usd_sum]);
+               
+            }
+            
+
         return view('admin.dailytransaction.editoutwardtransaction')
             ->with('outward_transaction', $outwardtransaction)->with('branches', $branches)->with('purposeOfTrans', $purposeOfTrans)
             ->with('usd', $usd)->with('thb', $thb)
-            ->with('exchange_rates', $exchange_rates);
+            ->with('exchange_rates', $exchange_rates)
+            ->with('par_transaction',$par_count)
+            ->with('par_month_transaction',$par_month)
+            ->with('sum_usd_grouped_by_nrc',$sum_usd_grouped_by_nrc);;
 
     }
 

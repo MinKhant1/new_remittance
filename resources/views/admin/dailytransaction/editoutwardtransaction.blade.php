@@ -116,17 +116,22 @@
 
   <div class="col-2">
     <label for="nrc_citizen" class="mr-sm-2" style="margin-top: 9%"></label>
-    <select class="form-control" name="nrc_citizen">
-      <option value="blank"></option>
-      <option value="N">N</option>
-      <option value="P">P</option>
-      <option value="E">E</option>
+    <select class="form-control" name="nrc_citizen" id="nrc_citizen" onchange="updatFullNrc()">
+        <option value=""></option>
+        <option value="C">C</option>
+        <option value="AC">AC</option>
+        <option value="NC">NC</option>
+        <option value="V">V</option>
+        <option value="M">M</option>
+        <option value="N">N</option>
+        <option value="P">P</option>
+        <option value="E">E</option>
     </select>
-  </div>
+</div>
 
   <div class="col-2">
     <label for="nrc_number" class="mr-sm-2"></label>
-    <input type="text" class="form-control mb-2 mr-sm-2" placeholder="" id="nrc_number" name="nrc_number">
+    <input type="text" class="form-control mb-2 mr-sm-2" placeholder="" id="nrc_number" name="nrc_number" onchange="updatFullNrc()">
   </div>
 
   <div class="" hidden>
@@ -206,7 +211,7 @@
   </div>
 
   <div class="col-12">
-    {!!Form::submit('Save', ['class' => 'btn btn-success'])!!}
+    {!!Form::submit('Save', ['class' => 'btn btn-success','id'=>'savebut'])!!}
   </div>
 
    </div>
@@ -500,5 +505,113 @@ function changecurrencyvalueusd(exchange_rates) {
 <script>
   changeUSDFormValue();
 </script>
+<script>
+  usdValue=0;
+  var daily_warning=document.getElementById('daily_max_warning');
+  var monthly_warning=document.getElementById('monthly_max_warning');
+   $(document).ready(function(){
+    $('#usd').change(function(){
+       usdValue=$('#usd').val();
+       disableSave(usdValue);
+    });
+    $('#mmk').change(function(){
+      usdValue=$('#usd').val();
+      disableSave(usdValue);
+    });
+   
+   }
+   )
+</script>
+ {{-- Check Max Limit --}}
+ <script>
+  var par_transaction=@json($par_transaction);
+  var par_month_transaction=@json($par_month_transaction);
+  var sum_usd_grouped_by_nrc=@json($sum_usd_grouped_by_nrc);
+  //console.log(sum_usd_grouped_by_nrc);
+  var fullNrc;
+ //  sender_nrc=document.getElementById('nrc_id').value;
+
+
+  function disableSave(value)
+  {
+  // console.log('dis');
+     
+     saveButton=document.getElementById('savebut');
+     if(value>Number(par_transaction))
+     {
+       saveButton.disabled = true;
+       daily_warning.hidden=false;
+      
+     }
+     else
+     {
+      var sender_nrc=fullNrc;
+       console.log('dis');
+    let total=Number(getUSDByNRC(sender_nrc))+Number(value);
+ 
+      if( Number(total)>Number(par_month_transaction))
+      {
+       saveButton.disabled = true;
+       monthly_warning.hidden=false;
+      }
+      else
+      {
+        saveButton.disabled = false;
+        daily_warning.hidden=true;
+        monthly_warning.hidden=true;
+        
+      }
+     }
+     
+ 
+   }
+ 
+  
+ </script>
+ 
+ <script>
+    function getUSDByNRC(nrc)
+   {
+     let usdVal=0;
+     console.log(sum_usd_grouped_by_nrc);
+     sum_usd_grouped_by_nrc.forEach(element => {
+     // console.log('called');
+       if(element.id==nrc)
+       {
+         usdVal=element.usd;
+         console.log(usdVal);
+       }
+       
+       
+     });
+
+ 
+    return usdVal;
+   }
+ </script>
+ 
+ <script>
+   function updatFullNrc()
+   {
+       nrc_code=document.getElementById('nrc_code').value;
+       nrc_city=document.getElementById('nrc_city').value;
+       nrc_citizen=document.getElementById('nrc_citizen').value;
+       nrc_number=document.getElementById('nrc_number').value;
+       // $nrc_code . '/' . $nrc_city . '(' . $nrc_citizen . ')' . $nrc_number;
+
+       if(!nrc_code||!nrc_city||!nrc_citizen)
+       {
+           fullNrc=nrc_number;
+           
+       }
+       else
+       {
+           fullNrc=nrc_code+'/'+nrc_city+'('+nrc_citizen+')'+nrc_number;
+       }
+       //console.log(fullNrc);
+
+   }
+ </script>
+ 
 
   @endsection
