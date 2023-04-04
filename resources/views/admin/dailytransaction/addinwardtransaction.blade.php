@@ -4,8 +4,14 @@
 <div class="alert alert-success" style="margin-left: 15rem;">
   {{Session::get('status')}}
 </div>
-@endif
 
+@endif
+<div class="alert alert-danger" style="margin-left: 15rem;" id="daily_max_warning" hidden>
+  Daily Transaction Max Limit Excedded
+</div>
+<div class="alert alert-danger" style="margin-left: 15rem;" id="monthly_max_warning" hidden>
+  Monthly Transaction Max Limit Excedded
+</div>
 @if (count($errors) > 0)
   <div class="alert alert-danger" style="margin-left: 15rem">
     <ul>
@@ -704,6 +710,8 @@
  var par_month_transaction=@json($par_month_transaction);
  var sum_usd_grouped_by_nrc=@json($sum_usd_grouped_by_nrc);
   sender_nrc=document.getElementById('nrc_id').value;
+  var daily_warning=document.getElementById('daily_max_warning');
+  var monthly_warning=document.getElementById('monthly_max_warning');
  function disableSave(value)
  {
     
@@ -711,6 +719,7 @@
     if(value>Number(par_transaction))
     {
       saveButton.disabled = true;
+      daily_warning.hidden=false;
      
     }
     else
@@ -722,10 +731,13 @@
      if( Number(total)>Number(par_month_transaction))
      {
       saveButton.disabled = true;
+      monthly_warning.hidden=false;
      }
      else
      {
        saveButton.disabled = false;
+       daily_warning.hidden=true;
+       monthly_warning.hidden=true;
        
      }
     }

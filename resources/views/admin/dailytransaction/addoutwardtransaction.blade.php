@@ -5,6 +5,12 @@
             {{ Session::get('status') }}
         </div>
     @endif
+    <div class="alert alert-danger" style="margin-left: 15rem;" id="daily_max_warning" hidden>
+        Daily Transaction Max Limit Excedded
+      </div>
+      <div class="alert alert-danger" style="margin-left: 15rem;" id="monthly_max_warning" hidden>
+        Monthly Transaction Max Limit Excedded
+      </div>
 
     @if (count($errors) > 0)
         <div class="alert alert-danger" style="margin-left: 15rem">
