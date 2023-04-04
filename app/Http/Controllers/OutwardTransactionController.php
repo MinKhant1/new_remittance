@@ -480,6 +480,18 @@ unset($collection->status);
            $index++;
 
         }
+        $tusd=0;
+        $tmmk=0;
+        $tcount=0;
+
+        foreach ($derived_array as $value) {
+           $tusd+=$value['tusd'];
+           $tmmk+=$value['tmmk'];
+           $tcount+=$value['count'];
+        }
+
+        array_push($temp,['1'=>'','2'=>'Total','3'=>$tcount,'4'=>$tusd,'5'=>$tmmk]);
+    //   dd($derived_array);
        // dd(collect($temp));
         session()->put('outwardexcel',collect($temp));
 
