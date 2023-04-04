@@ -389,10 +389,6 @@ class InwardTransactionController extends Controller
             $index=0;
 
 
-
-
-
-
             $total_currency_codes=array();
             $total_collection=collect();
 
@@ -407,9 +403,7 @@ class InwardTransactionController extends Controller
                         array_push($total_currency_codes,$transaction->currency_code);
                     }
                 }
-               // dd($total_currency_codes);
-
-
+          
                 foreach ($dated_transactions as $transaction) {
                     if(!in_array($transaction->currency_code,$currency_codes_in_date))
                     {
@@ -1461,8 +1455,6 @@ class InwardTransactionController extends Controller
          $aed_amounts = self::currencyCatcher('AED', 'aed_amounts', $startdate, $enddate);
          $qar_amounts = self::currencyCatcher('QAR', 'qar_amounts', $startdate, $enddate);
          $other_amounts = self::othercurrencyCatcher($currency_code_array, $startdate, $enddate);
-
-
          $Totaltransaction = self::TtransactionCatcher($startdate, $enddate);
          $T_amount = self::TCatcher($startdate, $enddate);
 
@@ -1604,11 +1596,18 @@ foreach($dategp_array as &$array)
 
    $index++;
 
-
-
+}
+$count=0;
+$tusd=0;
+$mmk=0;
+foreach ($dategp_array as $item) {
+    $count+= $item['count'];
+    $tusd+= $item['tusd'] ;
+    $mmk+=$item['tmmk'];
 }
 
-
+// dd($temp);
+array_push($temp,['1'=>'','2'=>'','3'=>'','4'=>'','5'=>'','6'=>'','7'=>'','8'=>'','9'=>'','10'=>'','11'=>'','l'=>'Total','12'=>$count,'13'=>$tusd,'14'=>$mmk]);
 
 session()->put('query',collect($temp));
 

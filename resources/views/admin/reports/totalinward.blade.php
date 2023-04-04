@@ -235,20 +235,6 @@
                         <td>0</td>
                     @endif
 
-
-                    {{-- <td>{{$total_data->counts}}</td>
-                   <td>{{$usd_amount}}</td>
-                    <td>{{$mmk->mmk_amounts}}</td>                                    --}}
-
-
-                    {{-- <td>{{$transaction->country_code}}</td>
-                    <td>{{$transaction->country_name}}</td>
-                    <td>
-                      <a href="{{url('/editcountry/' . $country->id)}}" class="btn btn-primary"><i class="nav-icon fas fa-edit"></i></a></td>
-                    <td>
-                      <a href="{{url('/deletecountry/'. $country->id)}}" id="delete" class="btn btn-danger" ><i class="nav-icon fas fa-trash"></i></a>
-                    </td> --}}
-
                   {{Form::hidden('', $increment = $increment + 1)}}
                 </tr>
 
@@ -265,8 +251,8 @@
                     <td style="font-weight: bold">{{$count}}</td>
                     <td style="font-weight: bold">{{number_format($tusd,2)}}</td>
                     <td style="font-weight: bold">{{number_format($mmk,5)}}</td>
-                    <td style="font-weight: bold">{{number_format($tbusd,2)}}</td>
-                    <td style="font-weight: bold">{{number_format($tbmmk,5)}}</td>
+                    {{-- <td style="font-weight: bold">{{number_format($tbusd,2)}}</td>
+                    <td style="font-weight: bold">{{number_format($tbmmk,5)}}</td> --}}
 
                 </tr>
 
