@@ -627,9 +627,9 @@ unset($collection->status);
 
 
      $excel_inoutward[0]=$temp_array;
-     session()->put('outwardexcel',collect($excel_inoutward));
     // dd(collect($excel_inoutward));
-        // dd($Net_usd);
+     session()->put('outwardexcel',collect($excel_inoutward));
+ 
         return view('admin.reports.totalinwardoutward')
             ->with('sd', $startdate)->with('ed', $enddate)
             ->with('T_Inamount', $T_Inamount)->with('T_Outamount', $T_Outamount)
@@ -808,14 +808,35 @@ foreach($T_amountArray as &$array)
 
 }
 
+$intrans=0;
+$inusd=0;
+$inmmk=0;
+$outtrans=0;
+$outusd=0;
+$outmmk=0;
+$nettrans=0;
+$netusd=0;
+$netmmk=0;
+foreach($temp as $key=>$collection)
+{  $intrans+=$collection['icount'];
+    $inusd+= $collection['itusd'] ;
+    $inmmk+=$collection['itmmk'] ;
+
+    $outtrans+=$collection['ocount'];
+    $outusd+= $collection['otusd'] ;
+    $outmmk+=$collection['otmmk'] ;
+
+    $nettrans+=$collection['netcount'];
+    $netusd+= $collection['netusd'] ;
+    $netmmk+=$collection['netmmk'] ;
+
+}
+array_push($temp,['1'=>'','2'=>'Total','3'=>$intrans,'4'=>$inusd,'5'=>$inmmk,'6'=>$outtrans,'7'=>$outusd,'8'=>$outmmk,'9'=>$nettrans,'10'=>$netusd,'11'=>$netmmk]);
+
 
 
 session()->put('outwardexcel',collect($temp));
 
-
-      //  dd($T_Inamount->toarray(),$T_Outamount->toarray(),$T_amountArray);
-        // $Amount = collect([$T_Inamount, $T_Outamount, $Net_array]);
-        //  dd($T_amount_array);
 
         return view('admin.reports.totalinwardoutward')
         ->with('sd', $startdate)->with('ed', $enddate)
