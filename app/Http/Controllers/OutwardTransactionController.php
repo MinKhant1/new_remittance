@@ -267,6 +267,9 @@ class OutwardTransactionController extends Controller
 
     public function searchoutward(Request $request)
     {
+        $grandtotalmmk=0;
+        $grandtotalusd=0;
+
         $branches=Branch::all();
         $startdate = $request->input('startdate');
         $enddate = $request->input('enddate');
@@ -280,96 +283,423 @@ class OutwardTransactionController extends Controller
 
     if(!is_null($branch_id) && !is_null($state_division))
     {
-        $query = DB::table('outwards')->select()
-                ->whereDate('created_at', '>=', $startdate)
-                ->whereDate('created_at', '<=', $enddate)
+        $query = Outwards::all()
+                ->where('created_at', '>=', $startdate)
+                ->where('created_at', '<=', $enddate)
                  ->where('branch_id',$branch_id)
                 ->where('state_division',$state_division)
-                ->get();
-        $excel_query = DB::table('outwards')
-        ->select('sr_id', 'branch_id', 'sender_name', 'sender_nrc_passport', 'sender_address_ph', 'purpose', 'deposit_point', 'receiver_name', 'receiver_country_code', 'amount_mmk','equivalent_usd', 'exchange_rate_usd', 'txd_date_time','status')
-        ->where('status',1)
-        ->whereDate('created_at', '>=', $startdate)
-        ->whereDate('created_at', '<=', $enddate)
-         ->where('branch_id',$branch_id)
+                ->where('status',1)
+                ->groupBy(function($data)
+                                {
+                                    return $data->created_at->format('Y-m-d');
+                                })->paginate(1000);
+                               // dd($query);
+        // $excel_query = DB::table('outwards')
+        // ->select('sr_id', 'branch_id', 'sender_name', 'sender_nrc_passport', 'sender_address_ph', 'purpose', 'deposit_point', 'receiver_name', 'receiver_country_code', 'amount_mmk','equivalent_usd', 'exchange_rate_usd', 'txd_date_time','status')
+        // ->where('status',1)
+        // ->whereDate('created_at', '>=', $startdate)
+        // ->whereDate('created_at', '<=', $enddate)
+        //  ->where('branch_id',$branch_id)
+        // ->where('state_division',$state_division)
+        // ->get();
+
+        $excel_query=Outwards::select('sr_id','branch_id','sender_name','sender_nrc_passport','state_division','sender_address_ph','purpose','deposit_point','receiver_name','receiver_country_code','amount_mmk','equivalent_usd','exchange_rate_usd','txd_date_time','status','created_at')->get()->where('status',1)
+        ->where('created_at', '>=', $startdate)
+        ->where('created_at', '<=', $enddate)
+        ->where('branch_id',$branch_id)
         ->where('state_division',$state_division)
-        ->get();
+        ->groupBy(function($data)
+        {
+            return $data->created_at->format('Y-m-d');
+        });
         
-        foreach ($excel_query as $collection) {
-          
-            unset($collection->created_at);
-        unset($collection->status);
-        
+        $index=0;
+        $gtotal_usd=0;
+        $gtotalmmk=0;
+        foreach ($excel_query as $equery => $collection) {
+
+            $subtotalusd=0;
+            $subtotalmmk=0;
+
+            for ($i=0; $i <=count($collection) ; $i++) {
+                if($i==count($collection))
+                {
+                    $collection->put($i,collect());
+                    $collection[$i]->put('1','');
+                    $collection[$i]->put('2','');
+                    $collection[$i]->put('3','');
+                    $collection[$i]->put('4','');
+                    $collection[$i]->put('5','');
+                    $collection[$i]->put('6','');
+                    $collection[$i]->put('7','');
+                    $collection[$i]->put('8','');
+                    if(count($excel_query)>1)
+                    {
+                        $collection[$i]->put('receiver_name','SubTotal');
+                    }
+                    else
+                    {
+                        $collection[$i]->put('receiver_name','Total');
+                    }
+                    $collection[$i]->put('mmkamount',$subtotalmmk);
+                    $collection[$i]->put('equivalent_usd',$subtotalusd);
+                    break;
+                }
+                else
+                {
+
+                    $subtotalusd+=$collection[$i]->equivalent_usd;
+                    $subtotalmmk+=$collection[$i]->amount_mmk;
+                    $gtotalmmk+=$collection[$i]->amount_mmk;
+                    $gtotal_usd+=$collection[$i]->equivalent_usd;
+                    unset($collection[$i]->created_at);
+                    unset($collection[$i]->status);
+                    unset($collection[$i]->state_division);
+                }
+
+            
+
+            }
+
+            $index++;
+            if($index==count($excel_query) && count($excel_query)>1)
+            {    $collection->put($index+1,collect());
+                $collection[$index+1]->put('1','');
+                $collection[$index+1]->put('2','');
+                $collection[$index+1]->put('3','');
+                $collection[$index+1]->put('4','');
+                $collection[$index+1]->put('5','');
+                $collection[$index+1]->put('6','');
+                $collection[$index+1]->put('7','');
+                $collection[$index+1]->put('8','');
+                $collection[$index+1]->put('Grand Total','Grand Total');
+                $collection[$index+1]->put('9',$gtotalmmk);
+                $collection[$index+1]->put('10',$gtotal_usd);
+
+            }
+        }
+
+        foreach ($query as $key => $dated_transactions) {
+            $subtotal_usd=0;
+            $subtotal_mmk=0;
+
+            for ($i=0; $i < count($dated_transactions); $i++) { 
+                $subtotal_usd+=$dated_transactions[$i]->equivalent_usd;
+                $subtotal_mmk+=$dated_transactions[$i]->amount_mmk;
+                $grandtotalmmk+=$dated_transactions[$i]->amount_mmk;
+                $grandtotalusd+=$dated_transactions[$i]->equivalent_usd;
+            }
+            $dated_transactions->put('subtotal',['usd'=>$subtotal_usd,'mmk'=>$subtotal_mmk]);
+
         }
 
     }else if(!is_null($branch_id) && is_null($state_division))
-                { $query = DB::table('outwards')->select()
-                    ->whereDate('created_at', '>=', $startdate)
-                    ->whereDate('created_at', '<=', $enddate)
-                    ->where('branch_id',$branch_id)
-                  //  ->where('state_division',$state_division)
-                    ->get();
-                    $excel_query = DB::table('outwards')
-                    ->select('sr_id', 'branch_id', 'sender_name', 'sender_nrc_passport', 'sender_address_ph', 'purpose', 'deposit_point', 'receiver_name', 'receiver_country_code', 'amount_mmk','equivalent_usd', 'exchange_rate_usd', 'txd_date_time','status')
-            ->where('status',1)
-            ->whereDate('created_at', '>=', $startdate)
-            ->whereDate('created_at', '<=', $enddate)
-            ->where('branch_id',$branch_id)
-           // ->where('state_division',$state_division)
-            ->get();
-  //dd($excel_query);
-  foreach ($excel_query as $collection) {
-          
-    unset($collection->created_at);
-unset($collection->status);
+                { 
+                    
+                    $query = Outwards::all()
+                ->where('created_at', '>=', $startdate)
+                ->where('created_at', '<=', $enddate)
+                 ->where('branch_id',$branch_id)
+                ->where('status',1)
+                ->groupBy(function($data)
+                                {
+                                    return $data->created_at->format('Y-m-d');
+                                })->paginate(1000);
 
-}
+            //         $excel_query = DB::table('outwards')
+            //         ->select('sr_id', 'branch_id', 'sender_name', 'sender_nrc_passport', 'sender_address_ph', 'purpose', 'deposit_point', 'receiver_name', 'receiver_country_code', 'amount_mmk','equivalent_usd', 'exchange_rate_usd', 'txd_date_time','status')
+            // ->where('status',1)
+            // ->whereDate('created_at', '>=', $startdate)
+            // ->whereDate('created_at', '<=', $enddate)
+            // ->where('branch_id',$branch_id)
+            // ->get();
+            $excel_query=Outwards::select('sr_id','branch_id','sender_name','sender_nrc_passport','state_division','sender_address_ph','purpose','deposit_point','receiver_name','receiver_country_code','amount_mmk','equivalent_usd','exchange_rate_usd','txd_date_time','status','created_at')->get()->where('status',1)
+        ->where('created_at', '>=', $startdate)
+        ->where('created_at', '<=', $enddate)
+        ->where('branch_id',$branch_id)
+        ->groupBy(function($data)
+        {
+            return $data->created_at->format('Y-m-d');
+        });
+
+            $index=0;
+            $gtotal_usd=0;
+            $gtotalmmk=0;
+            foreach ($excel_query as $equery => $collection) {
+
+                $subtotalusd=0;
+                $subtotalmmk=0;
+
+                for ($i=0; $i <=count($collection) ; $i++) {
+                    if($i==count($collection))
+                    {
+                        $collection->put($i,collect());
+                        $collection[$i]->put('1','');
+                        $collection[$i]->put('2','');
+                        $collection[$i]->put('3','');
+                        $collection[$i]->put('4','');
+                        $collection[$i]->put('5','');
+                        $collection[$i]->put('6','');
+                        $collection[$i]->put('7','');
+                        $collection[$i]->put('8','');
+                        if(count($excel_query)>1)
+                        {
+                            $collection[$i]->put('receiver_name','SubTotal');
+                        }
+                        else
+                        {
+                            $collection[$i]->put('receiver_name','Total');
+                        }
+                        $collection[$i]->put('mmkamount',$subtotalmmk);
+                        $collection[$i]->put('equivalent_usd',$subtotalusd);
+                        break;
+                    }
+                    else
+                    {
+
+                        $subtotalusd+=$collection[$i]->equivalent_usd;
+                        $subtotalmmk+=$collection[$i]->amount_mmk;
+                        $gtotalmmk+=$collection[$i]->amount_mmk;
+                        $gtotal_usd+=$collection[$i]->equivalent_usd;
+                        unset($collection[$i]->created_at);
+                        unset($collection[$i]->status);
+                        unset($collection[$i]->state_division);
+                    }
+
+                
+
+                }
+
+                $index++;
+                if($index==count($excel_query) && count($excel_query)>1)
+                {    $collection->put($index+1,collect());
+                    $collection[$index+1]->put('1','');
+                    $collection[$index+1]->put('2','');
+                    $collection[$index+1]->put('3','');
+                    $collection[$index+1]->put('4','');
+                    $collection[$index+1]->put('5','');
+                    $collection[$index+1]->put('6','');
+                    $collection[$index+1]->put('7','');
+                    $collection[$index+1]->put('8','');
+                    $collection[$index+1]->put('Grand Total','Grand Total');
+                    $collection[$index+1]->put('9',$gtotalmmk);
+                    $collection[$index+1]->put('10',$gtotal_usd);
+
+                }
+            }
+        foreach ($query as $key => $dated_transactions) {
+            $subtotal_usd=0;
+            $subtotal_mmk=0;
+
+            for ($i=0; $i < count($dated_transactions); $i++) { 
+                $subtotal_usd+=$dated_transactions[$i]->equivalent_usd;
+                $subtotal_mmk+=$dated_transactions[$i]->amount_mmk;
+                $grandtotalmmk+=$dated_transactions[$i]->amount_mmk;
+                $grandtotalusd+=$dated_transactions[$i]->equivalent_usd;
+            }
+            $dated_transactions->put('subtotal',['usd'=>$subtotal_usd,'mmk'=>$subtotal_mmk]);
+
+        }
     }
     else if( !is_null($state_division) && is_null($branch_id))
-            {$query = DB::table('outwards')->select()
-                ->whereDate('created_at', '>=', $startdate)
-                ->whereDate('created_at', '<=', $enddate)
-                //->where('branch_id',$branch_id)
-          ->where('state_division',$state_division)
-                ->get();
-                $excel_query = DB::table('outwards')
-                ->select('sr_id', 'branch_id', 'sender_name', 'sender_nrc_passport', 'sender_address_ph', 'purpose', 'deposit_point', 'receiver_name', 'receiver_country_code', 'amount_mmk','equivalent_usd', 'exchange_rate_usd', 'txd_date_time','status')
-        ->where('status',1)
-        ->whereDate('created_at', '>=', $startdate)
-        ->whereDate('created_at', '<=', $enddate)
-        //->where('branch_id',$branch_id)
-      ->where('state_division',$state_division)
-        ->get();
-  //dd($excel_query);
-  foreach ($excel_query as $collection) {
-          
-    unset($collection->created_at);
-unset($collection->status);
+            {
+                $query = Outwards::all()
+                ->where('created_at', '>=', $startdate)
+                ->where('created_at', '<=', $enddate)
+                ->where('state_division',$state_division)
+                ->where('status',1)
+                ->groupBy(function($data)
+                                {
+                                    return $data->created_at->format('Y-m-d');
+                                })->paginate(1000);
 
-}
+
+
+                                $excel_query=Outwards::select('sr_id','branch_id','sender_name','sender_nrc_passport','state_division','sender_address_ph','purpose','deposit_point','receiver_name','receiver_country_code','amount_mmk','equivalent_usd','exchange_rate_usd','txd_date_time','status','created_at')->get()->where('status',1)
+                                ->where('created_at', '>=', $startdate)
+                                ->where('created_at', '<=', $enddate)
+                                ->where('state_division',$state_division)
+                                ->groupBy(function($data)
+                                {
+                                    return $data->created_at->format('Y-m-d');
+                                });
+  //dd($excel_query);
+  $index=0;
+  $gtotal_usd=0;
+  $gtotalmmk=0;
+            foreach ($excel_query as $equery => $collection) {
+
+                $subtotalusd=0;
+                $subtotalmmk=0;
+
+                for ($i=0; $i <=count($collection) ; $i++) {
+                    if($i==count($collection))
+                    {
+                        $collection->put($i,collect());
+                        $collection[$i]->put('1','');
+                        $collection[$i]->put('2','');
+                        $collection[$i]->put('3','');
+                        $collection[$i]->put('4','');
+                        $collection[$i]->put('5','');
+                        $collection[$i]->put('6','');
+                        $collection[$i]->put('7','');
+                        $collection[$i]->put('8','');
+                        if(count($excel_query)>1)
+                        {
+                            $collection[$i]->put('receiver_name','SubTotal');
+                        }
+                        else
+                        {
+                            $collection[$i]->put('receiver_name','Total');
+                        }
+                        $collection[$i]->put('mmkamount',$subtotalmmk);
+                        $collection[$i]->put('equivalent_usd',$subtotalusd);
+                        break;
+                    }
+                    else
+                    {
+
+                        $subtotalusd+=$collection[$i]->equivalent_usd;
+                        $subtotalmmk+=$collection[$i]->amount_mmk;
+                        $grandtotalmmk+=$collection[$i]->amount_mmk;
+                        $grandtotalusd+=$collection[$i]->equivalent_usd;
+                        unset($collection[$i]->created_at);
+                        unset($collection[$i]->status);
+                        unset($collection[$i]->state_division);
+                    }
+
+                
+
+                }
+
+                $index++;
+                if($index==count($excel_query) && count($excel_query)>1)
+                {    $collection->put($index+1,collect());
+                    $collection[$index+1]->put('1','');
+                    $collection[$index+1]->put('2','');
+                    $collection[$index+1]->put('3','');
+                    $collection[$index+1]->put('4','');
+                    $collection[$index+1]->put('5','');
+                    $collection[$index+1]->put('6','');
+                    $collection[$index+1]->put('7','');
+                    $collection[$index+1]->put('8','');
+                    $collection[$index+1]->put('Grand Total','Grand Total');
+                    $collection[$index+1]->put('9',$grandtotalmmk);
+                    $collection[$index+1]->put('10',$grandtotalusd);
+
+                }
+            }
+        foreach ($query as $key => $dated_transactions) {
+            $subtotal_usd=0;
+            $subtotal_mmk=0;
+
+            for ($i=0; $i < count($dated_transactions); $i++) { 
+                $subtotal_usd+=$dated_transactions[$i]->equivalent_usd;
+                $subtotal_mmk+=$dated_transactions[$i]->amount_mmk;
+                $grandtotalmmk+=$dated_transactions[$i]->amount_mmk;
+                $grandtotalusd+=$dated_transactions[$i]->equivalent_usd;
+            }
+            $dated_transactions->put('subtotal',['usd'=>$subtotal_usd,'mmk'=>$subtotal_mmk]);
+
+        }
     }
     else
     {
-         $query = DB::table('outwards')->select()
-                ->whereDate('created_at', '>=', $startdate)
-                ->whereDate('created_at', '<=', $enddate)
-                //->where('branch_id',$branch_id)
-       // ->where('state_division',$state_division)
-                ->get();
-                $excel_query = DB::table('outwards')
-                ->select('sr_id', 'branch_id', 'sender_name', 'sender_nrc_passport', 'sender_address_ph', 'purpose', 'deposit_point', 'receiver_name', 'receiver_country_code', 'amount_mmk','equivalent_usd', 'exchange_rate_usd', 'txd_date_time','status')
+        $query = Outwards::all()
+        ->where('created_at', '>=', $startdate)
+        ->where('created_at', '<=', $enddate)
         ->where('status',1)
-        ->whereDate('created_at', '>=', $startdate)
-        ->whereDate('created_at', '<=', $enddate)
-        //->where('branch_id',$branch_id)
-       // ->where('state_division',$state_division)
-        ->get();
-          //dd($excel_query);
-          foreach ($excel_query as $collection) {
-          
-                unset($collection->created_at);
-           unset($collection->status);
+        ->groupBy(function($data)
+                        {
+                            return $data->created_at->format('Y-m-d');
+                        })->paginate(1000);
+
+
+                        $excel_query=Outwards::select('sr_id','branch_id','sender_name','sender_nrc_passport','state_division','sender_address_ph','purpose','deposit_point','receiver_name','receiver_country_code','amount_mmk','equivalent_usd','exchange_rate_usd','txd_date_time','status','created_at')->get()->where('status',1)
+                        ->where('created_at', '>=', $startdate)
+                        ->where('created_at', '<=', $enddate)
+                        ->groupBy(function($data)
+                        {
+                            return $data->created_at->format('Y-m-d');
+                        });
+         
+        $index=0;
+        $gtotal_usd=0;
+        $gtotalmmk=0;
+        foreach ($excel_query as $equery => $collection) {
+
+            $subtotalusd=0;
+            $subtotalmmk=0;
+
+            for ($i=0; $i <=count($collection) ; $i++) {
+                if($i==count($collection))
+                {
+                    $collection->put($i,collect());
+                    $collection[$i]->put('1','');
+                    $collection[$i]->put('2','');
+                    $collection[$i]->put('3','');
+                    $collection[$i]->put('4','');
+                    $collection[$i]->put('5','');
+                    $collection[$i]->put('6','');
+                    $collection[$i]->put('7','');
+                    $collection[$i]->put('8','');
+                    if(count($excel_query)>1)
+                    {
+                        $collection[$i]->put('receiver_name','SubTotal');
+                    }
+                    else
+                    {
+                        $collection[$i]->put('receiver_name','Total');
+                    }
+                    $collection[$i]->put('mmkamount',$subtotalmmk);
+                    $collection[$i]->put('equivalent_usd',$subtotalusd);
+                    break;
+                }
+                else
+                {
+
+                    $subtotalusd+=$collection[$i]->equivalent_usd;
+                    $subtotalmmk+=$collection[$i]->amount_mmk;
+                    $gtotalmmk+=$collection[$i]->amount_mmk;
+                    $gtotal_usd+=$collection[$i]->equivalent_usd;
+                    unset($collection[$i]->created_at);
+                    unset($collection[$i]->status);
+                    unset($collection[$i]->state_division);
+                }
+
             
+
+            }
+
+            $index++;
+            if($index==count($excel_query) && count($excel_query)>1)
+            {    $collection->put($index+1,collect());
+                $collection[$index+1]->put('1','');
+                $collection[$index+1]->put('2','');
+                $collection[$index+1]->put('3','');
+                $collection[$index+1]->put('4','');
+                $collection[$index+1]->put('5','');
+                $collection[$index+1]->put('6','');
+                $collection[$index+1]->put('7','');
+                $collection[$index+1]->put('8','');
+                $collection[$index+1]->put('Grand Total','Grand Total');
+                $collection[$index+1]->put('9',$gtotalmmk);
+                $collection[$index+1]->put('10',$gtotal_usd);
+
+            }
+        }
+        foreach ($query as $key => $dated_transactions) {
+            $subtotal_usd=0;
+            $subtotal_mmk=0;
+
+            for ($i=0; $i < count($dated_transactions); $i++) { 
+                $subtotal_usd+=$dated_transactions[$i]->equivalent_usd;
+                $subtotal_mmk+=$dated_transactions[$i]->amount_mmk;
+                $grandtotalmmk+=$dated_transactions[$i]->amount_mmk;
+                $grandtotalusd+=$dated_transactions[$i]->equivalent_usd;
+            }
+            $dated_transactions->put('subtotal',['usd'=>$subtotal_usd,'mmk'=>$subtotal_mmk]);
+
         }
 
     }
@@ -377,7 +707,9 @@ unset($collection->status);
 
     session()->put('outwardexcel', $excel_query);
 
-    return view('admin.reports.outward')->with('outwardtransactions', $query)->with('branches', $branches);
+    return view('admin.reports.outward')->with('outwardtransactions', $query)->with('branches', $branches)
+                                                                        ->with('grandtotalmmk',$grandtotalmmk)
+                                                                        ->with('grandtotalusd',$grandtotalusd);
 
 
      
