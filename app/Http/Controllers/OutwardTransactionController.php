@@ -107,15 +107,73 @@ class OutwardTransactionController extends Controller
             {
                 return $data->created_at->format('Y-m-d');
             });
-
-            //dd($excel_query);
+            $branches = Branch::all();
+        $grandtotalmmk=0;
+        $grandtotalusd=0;
+        $index=0;
             foreach ($excel_query as $query => $collection) {
-                for ($i=0; $i <count($collection) ; $i++) {
-                    unset($collection[$i]->created_at);
-               unset($collection[$i]->status);
+
+                $subtotalusd=0;
+                $subtotalmmk=0;
+
+                for ($i=0; $i <=count($collection) ; $i++) {
+                    if($i==count($collection))
+                    {
+                        $collection->put($i,collect());
+                        $collection[$i]->put('1','');
+                        $collection[$i]->put('2','');
+                        $collection[$i]->put('3','');
+                        $collection[$i]->put('4','');
+                        $collection[$i]->put('5','');
+                        $collection[$i]->put('6','');
+                        $collection[$i]->put('7','');
+                        $collection[$i]->put('8','');
+                        if(count($excel_query)>1)
+                        {
+                            $collection[$i]->put('receiver_name','SubTotal');
+                        }
+                        else
+                        {
+                            $collection[$i]->put('receiver_name','Total');
+                        }
+                        $collection[$i]->put('mmkamount',$subtotalmmk);
+                        $collection[$i]->put('equivalent_usd',$subtotalusd);
+                        break;
+                    }
+                    else
+                    {
+
+                        $subtotalusd+=$collection[$i]->equivalent_usd;
+                        $subtotalmmk+=$collection[$i]->amount_mmk;
+                        $grandtotalmmk+=$collection[$i]->amount_mmk;
+                        $grandtotalusd+=$collection[$i]->equivalent_usd;
+                        unset($collection[$i]->created_at);
+                        unset($collection[$i]->status);
+                    }
+
+                
+
+                }
+
+                $index++;
+                if($index==count($excel_query) && count($excel_query)>1)
+                {    $collection->put($index+1,collect());
+                    $collection[$index+1]->put('1','');
+                    $collection[$index+1]->put('2','');
+                    $collection[$index+1]->put('3','');
+                    $collection[$index+1]->put('4','');
+                    $collection[$index+1]->put('5','');
+                    $collection[$index+1]->put('6','');
+                    $collection[$index+1]->put('7','');
+                    $collection[$index+1]->put('8','');
+                    $collection[$index+1]->put('Grand Total','Grand Total');
+                    $collection[$index+1]->put('9',$grandtotalmmk);
+                    $collection[$index+1]->put('10',$grandtotalusd);
+
                 }
             }
-            $branches = Branch::all();
+
+           
             session()->put('outwardexcel', $excel_query);
             return view('admin.reports.outward')
                 ->with('outwardtransactions', $outwardtransactions)
@@ -294,24 +352,14 @@ unset($collection->status);
         }
 
     }
-  //  dd($excel_query);
+  
 
     session()->put('outwardexcel', $excel_query);
 
     return view('admin.reports.outward')->with('outwardtransactions', $query)->with('branches', $branches);
 
 
-        // $branches = Branch::all();
-        // $startdate = $request->input('startdate');
-        // $enddate = $request->input('enddate');
-
-        // $query = DB::table('outwards')->select()->whereDate('created_at', '>=', $startdate)->whereDate('created_at', '<=', $enddate)->get();
-
-        // $excel_query = DB::table('outwards')
-        //     ->select('sr_id', 'branch_id', 'sender_name', 'sender_nrc_passport', 'sender_address_ph', 'purpose', 'deposit_point', 'receiver_name', 'receiver_country_code', 'equivalent_usd', 'amount_mmk', 'txd_date_time')
-        //     ->whereDate('created_at', '>=', $startdate)->whereDate('created_at', '<=', $enddate)->get();
-
-        //     dd($excel_query);
+     
 
 
     }
