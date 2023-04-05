@@ -136,7 +136,7 @@
                     
                     @if($company && $company_image)
               
-                        <img class="profile_img" src="{{asset('/storage/image/company/'.$company->image)}}" alt="company image">
+                        <img class="profile_img" src="{{'/images/company/'.$company_image}}" alt="company image">
                     @else
                     
                     <span class="login100-form-logo">                       
