@@ -25,7 +25,7 @@ use Illuminate\Support\Facades\Storage;
 
 class OutwardTransactionController extends Controller
 {
-    
+
 
     public function outwardtransaction()
     {
@@ -41,26 +41,26 @@ class OutwardTransactionController extends Controller
         {
           return back()->with('status', 'You do not have access');
         }
-        
+
     }
 
    public function addoutwardtransaction(Request $req)
     {
         $outwardtransaction = Outwards::all();
-       
+
         if($outwardtransaction != null)
         {
             $outwardtransaction = Outwards::latest()->value('sr_id');
         }
         else
         {
-            
+
         }
        // dd($outwardtransaction);
         $branches = Branch::All();
         $purposeOfTrans = PurposeOfTrans::All();
         $exchange_rates = ExchangeRate::all();
-       
+
 
         $usd = DB::table('exchange_rates')->where('currency_code', 'USD')
             ->value('exchange_rate');
@@ -86,13 +86,13 @@ class OutwardTransactionController extends Controller
         $sum_usd_grouped_by_nrc=collect();
 
         foreach ($trans_grouped_by_nrc as $key => $collection) {
-        
+
             $usd_sum=0;
             foreach ($collection as $transaction) {
               $usd_sum+=$transaction->equivalent_usd;
             }
             $sum_usd_grouped_by_nrc->push(['id'=>$key,'usd'=>$usd_sum]);
-           
+
         }
         $outwardtransactions = Outwards::all();
 
@@ -120,8 +120,8 @@ class OutwardTransactionController extends Controller
         {
           return back()->with('status', 'You do not have access');
         }
-           
-       
+
+
 
     }
 
@@ -133,8 +133,8 @@ class OutwardTransactionController extends Controller
             {
                 return $data->created_at->format('Y-m-d');
             })->paginate(3);
-            
-          
+
+
             $excel_query=Outwards::select('sr_id','branch_id','sender_name','sender_nrc_passport','sender_address_ph','purpose','deposit_point','receiver_name','receiver_country_code','amount_mmk','equivalent_usd','exchange_rate_usd','txd_date_time','status','created_at')->get()->where('status',1)->groupBy(function($data)
             {
                 return $data->created_at->format('Y-m-d');
@@ -183,7 +183,7 @@ class OutwardTransactionController extends Controller
                         unset($collection[$i]->status);
                     }
 
-                
+
 
                 }
 
@@ -210,7 +210,7 @@ class OutwardTransactionController extends Controller
                 $subtotal_usd=0;
                 $subtotal_mmk=0;
 
-                for ($i=0; $i < count($dated_transactions); $i++) { 
+                for ($i=0; $i < count($dated_transactions); $i++) {
                     $subtotal_usd+=$dated_transactions[$i]->equivalent_usd;
                     $subtotal_mmk+=$dated_transactions[$i]->amount_mmk;
                 }
@@ -219,7 +219,7 @@ class OutwardTransactionController extends Controller
             }
          //   dd($outwardtransactions);
 
-           
+
             session()->put('outwardexcel', $excel_query);
             return view('admin.reports.outward')
                 ->with('outwardtransactions', $outwardtransactions)
@@ -231,7 +231,7 @@ class OutwardTransactionController extends Controller
         {
           return back()->with('status', 'You do not have access');
         }
-      
+
     }
     public function outwardwithbranch(Request $request)
     {
@@ -256,27 +256,27 @@ class OutwardTransactionController extends Controller
             $startdate = now()->toDateString();
             $enddate = now()->toDateString();
             $branches=Branch::all();
-    
+
             $startdatebusiness = '2020-01-01';
-    
+
             $total_num_trans = DB::table('outwards')->whereDate('created_at', Carbon::today())->count();
             $T_usd_amount = DB::table('outwards')->whereDate('created_at', Carbon::today())->sum('equivalent_usd');
             $T_mmk_amount = DB::table('outwards')->whereDate('created_at', Carbon::today())->sum('amount_mmk');
-    
+
             $Tb_usd_amount = DB::table('outwards')->whereDate('created_at', '>=', $startdatebusiness)
                 ->whereDate('created_at', '<=', $enddate)->sum('equivalent_usd');
             $Tb_mmk_amount = DB::table('outwards')->whereDate('created_at', '>=', $startdatebusiness)
                 ->whereDate('created_at', '<=', $enddate)->sum('amount_mmk');
-    
-    
+
+
                $temp_array=array("No" => 1, "date"=>$startdate,"t_no_trans"=>$total_num_trans,"t_usd"=>$T_usd_amount,"t_mmk"=>$T_mmk_amount,"tb_usd"=>$Tb_usd_amount,"tb_mmk"=>$Tb_mmk_amount);
-    
+
                $excel_array[0]=$temp_array;
              //  dd(collect($excel_array));
                 session()->put('outwardexcel', collect($excel_array));
-    
+
               //  dd(session()->get('outwardexcel'));
-    
+
             return view('admin.reports.totaloutward')
                 ->with('total_num_trans', $total_num_trans)
                 ->with('T_usd_amount', $T_usd_amount)->with('T_mmk_amount', $T_mmk_amount)
@@ -288,8 +288,8 @@ class OutwardTransactionController extends Controller
         {
           return back()->with('status', 'You do not have access');
         }
-           
-       
+
+
     }
 
     public function searchoutward(Request $request)
@@ -298,8 +298,8 @@ class OutwardTransactionController extends Controller
         $grandtotalusd=0;
 
         $branches=Branch::all();
-        $startdate = $request->input('startdate');
-        $enddate = $request->input('enddate');
+        $startdate = $request->input('startdate').' 00:00:00';
+        $enddate = $request->input('enddate').' 24:00:00';
         $branch_id=null;
         if($request->input('branch_id')!=null)
         {
@@ -339,7 +339,7 @@ class OutwardTransactionController extends Controller
         {
             return $data->created_at->format('Y-m-d');
         });
-        
+
         $index=0;
         $gtotal_usd=0;
         $gtotalmmk=0;
@@ -384,7 +384,7 @@ class OutwardTransactionController extends Controller
                     unset($collection[$i]->state_division);
                 }
 
-            
+
 
             }
 
@@ -410,7 +410,7 @@ class OutwardTransactionController extends Controller
             $subtotal_usd=0;
             $subtotal_mmk=0;
 
-            for ($i=0; $i < count($dated_transactions); $i++) { 
+            for ($i=0; $i < count($dated_transactions); $i++) {
                 $subtotal_usd+=$dated_transactions[$i]->equivalent_usd;
                 $subtotal_mmk+=$dated_transactions[$i]->amount_mmk;
                 $grandtotalmmk+=$dated_transactions[$i]->amount_mmk;
@@ -421,8 +421,8 @@ class OutwardTransactionController extends Controller
         }
 
     }else if(!is_null($branch_id) && is_null($state_division))
-                { 
-                    
+                {
+
                     $query = Outwards::all()
                 ->where('created_at', '>=', $startdate)
                 ->where('created_at', '<=', $enddate)
@@ -493,7 +493,7 @@ class OutwardTransactionController extends Controller
                         unset($collection[$i]->state_division);
                     }
 
-                
+
 
                 }
 
@@ -518,7 +518,7 @@ class OutwardTransactionController extends Controller
             $subtotal_usd=0;
             $subtotal_mmk=0;
 
-            for ($i=0; $i < count($dated_transactions); $i++) { 
+            for ($i=0; $i < count($dated_transactions); $i++) {
                 $subtotal_usd+=$dated_transactions[$i]->equivalent_usd;
                 $subtotal_mmk+=$dated_transactions[$i]->amount_mmk;
                 $grandtotalmmk+=$dated_transactions[$i]->amount_mmk;
@@ -595,7 +595,7 @@ class OutwardTransactionController extends Controller
                         unset($collection[$i]->state_division);
                     }
 
-                
+
 
                 }
 
@@ -620,7 +620,7 @@ class OutwardTransactionController extends Controller
             $subtotal_usd=0;
             $subtotal_mmk=0;
 
-            for ($i=0; $i < count($dated_transactions); $i++) { 
+            for ($i=0; $i < count($dated_transactions); $i++) {
                 $subtotal_usd+=$dated_transactions[$i]->equivalent_usd;
                 $subtotal_mmk+=$dated_transactions[$i]->amount_mmk;
                 $grandtotalmmk+=$dated_transactions[$i]->amount_mmk;
@@ -649,7 +649,7 @@ class OutwardTransactionController extends Controller
                         {
                             return $data->created_at->format('Y-m-d');
                         });
-         
+
         $index=0;
         $gtotal_usd=0;
         $gtotalmmk=0;
@@ -694,7 +694,7 @@ class OutwardTransactionController extends Controller
                     unset($collection[$i]->state_division);
                 }
 
-            
+
 
             }
 
@@ -719,7 +719,7 @@ class OutwardTransactionController extends Controller
             $subtotal_usd=0;
             $subtotal_mmk=0;
 
-            for ($i=0; $i < count($dated_transactions); $i++) { 
+            for ($i=0; $i < count($dated_transactions); $i++) {
                 $subtotal_usd+=$dated_transactions[$i]->equivalent_usd;
                 $subtotal_mmk+=$dated_transactions[$i]->amount_mmk;
                 $grandtotalmmk+=$dated_transactions[$i]->amount_mmk;
@@ -730,7 +730,7 @@ class OutwardTransactionController extends Controller
         }
 
     }
-  
+
 
     session()->put('outwardexcel', $excel_query);
 
@@ -739,7 +739,7 @@ class OutwardTransactionController extends Controller
                                                                         ->with('grandtotalusd',$grandtotalusd);
 
 
-     
+
 
 
     }
@@ -756,7 +756,7 @@ class OutwardTransactionController extends Controller
         if($branch_id==null)
         {
 
-       
+
 
         $query = DB::table('outwards')->select('equivalent_usd', 'amount_mmk')->whereDate('created_at', '>=', $startdate)
                                                                               ->whereDate('created_at', '<=', $enddate)
@@ -804,8 +804,8 @@ class OutwardTransactionController extends Controller
 
 
 
-     
-       
+
+
         $derived_array = $T_amount->toArray();
 
         foreach($derived_array as &$item)
@@ -1000,14 +1000,14 @@ class OutwardTransactionController extends Controller
      $excel_inoutward[0]=$temp_array;
     // dd(collect($excel_inoutward));
      session()->put('outwardexcel',collect($excel_inoutward));
- 
+
         return view('admin.reports.totalinwardoutward')
             ->with('sd', $startdate)->with('ed', $enddate)
             ->with('T_Inamount', $T_Inamount)->with('T_Outamount', $T_Outamount)
             ->with('Net_trans', $Net_trans)->with('Net_usd', $Net_usd)
             ->with('Net_mmk', $Net_mmk)
             ->with('branches',$branches);
-    
+
       }
       else
       {
@@ -1021,12 +1021,12 @@ class OutwardTransactionController extends Controller
         $startdate = $request->input('startdate');
         $enddate = $request->input('enddate');
         $branches=Branch::all();
-     
+
         $branch_id=$request->branch_id;
 
         if($branch_id==null)
         {
-            
+
             $T_Inamount = Inwards::select("id", DB::raw("(count(*)) as icount"), DB::raw("(sum(equivalent_usd)) as itusd"), DB::raw("(sum(amount_mmk)) as itmmk"),
             DB::raw("(DATE_FORMAT(created_at, '%Y-%m-%d')) as dates"))
             ->whereDate('created_at', '>=', $startdate)
@@ -1034,7 +1034,7 @@ class OutwardTransactionController extends Controller
             ->orderBy('created_at', 'desc')
             ->groupBy(DB::raw("DATE_FORMAT(created_at, '%d-%m-%Y')"))
             ->get();
-    
+
             $T_Outamount = Outwards::select("id", DB::raw("(count(*)) as ocount"), DB::raw("(sum(equivalent_usd)) as otusd"), DB::raw("(sum(amount_mmk)) as otmmk"),
             DB::raw("(DATE_FORMAT(created_at, '%Y-%m-%d')) as dates"))
             ->whereDate('created_at', '>=', $startdate)
@@ -1053,7 +1053,7 @@ class OutwardTransactionController extends Controller
             ->orderBy('created_at', 'desc')
             ->groupBy(DB::raw("DATE_FORMAT(created_at, '%d-%m-%Y')"))
             ->get();
-    
+
             $T_Outamount = Outwards::select("id", DB::raw("(count(*)) as ocount"), DB::raw("(sum(equivalent_usd)) as otusd"), DB::raw("(sum(amount_mmk)) as otmmk"),
             DB::raw("(DATE_FORMAT(created_at, '%Y-%m-%d')) as dates"))
             ->whereDate('created_at', '>=', $startdate)
@@ -1066,7 +1066,7 @@ class OutwardTransactionController extends Controller
 
 
         $T_amount= new \Illuminate\Database\Eloquent\Collection;
-        
+
         $T_amount=collect($T_Inamount)->merge(collect($T_Outamount));
 
 
@@ -1107,7 +1107,7 @@ class OutwardTransactionController extends Controller
         }
 
 
-   
+
  foreach($T_amountArray as $k=>$item)
 {
 
@@ -1471,24 +1471,24 @@ session()->put('outwardexcel',collect($temp));
             {
                 $par_count=$tran_max_limit[0]->par_transaction;
                 $par_month=$tran_max_limit[0]->par_month;
-    
+
             }
             $trans_grouped_by_nrc=Outwards::all()->where(
                 'created_at', '>=', Carbon::now()->subMonth()->toDateTimeString()
             )->groupBy('sender_nrc_passport');
-    
+
             $sum_usd_grouped_by_nrc=collect();
-    
+
             foreach ($trans_grouped_by_nrc as $key => $collection) {
-            
+
                 $usd_sum=0;
                 foreach ($collection as $transaction) {
                   $usd_sum+=$transaction->equivalent_usd;
                 }
                 $sum_usd_grouped_by_nrc->push(['id'=>$key,'usd'=>$usd_sum]);
-               
+
             }
-            
+
 
         return view('admin.dailytransaction.editoutwardtransaction')
             ->with('outward_transaction', $outwardtransaction)->with('branches', $branches)->with('purposeOfTrans', $purposeOfTrans)

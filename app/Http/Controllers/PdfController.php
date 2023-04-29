@@ -57,7 +57,7 @@ class PdfController extends Controller
 
   function get_image($img)
   {
-    
+
     $img_src = 'images/company/'.$img;
     return $img_src;
   }
@@ -73,7 +73,7 @@ class PdfController extends Controller
         // $merge_array = array_merge($data_outputs_array,$data_array);
         // $merge_array_collection =  collect($merge_array);
         // dd($merge_array_collection);
-    
+
         foreach($data_outputs as $data)
         {
           $address_ph = $data->receiver_address_ph;
@@ -91,7 +91,17 @@ class PdfController extends Controller
     <title>Document</title>
 </head>
 <body>
-<img style="width:50%;height:20%;margin-left:25%" src='.$this->get_image($company->image).'>
+
+<div style="font-family: Arial, sans-serif; font-size: 18px; color: #333;">
+    <div style="display: inline-block; vertical-align: middle;">
+        <img src='.$this->get_image($company->image).' alt="Company Logo" style="width: 100px; height: 100px; margin-right: 20px;">
+    </div>
+    <div style="display: inline-block; vertical-align: middle;">
+        <h1 style="font-size: 24px; font-weight: bold; margin: 0;">Company Name</h1>
+        <p style="margin: 0;">Company Phone Number</p>
+        <p style="margin: 0;">Company Address</p>
+    </div>
+</div>
 
 <table style="border: 2px solid black;border-collapse:collapse;width:100%">
         <tr style="border: 2px solid black;">
@@ -119,7 +129,7 @@ class PdfController extends Controller
           <td  style="border: 2px solid black;font-size: 14px;height: 30px;padding-left: 10px;width:50%;font-weight: bold;"">MMK:<span style="font-weight: normal;"> '.$data->amount_mmk.'</span></td>
           </tr>
       </table>
-      <img style="width:100%;height:25%";margin-left:30%;" src="frontend/images/sign.PNG">
+      <img style="width:100%;height:20%";margin-left:30%;" src="frontend/images/sign.PNG">
       <img style="width:50%;height:7%;margin-left:25%" src="frontend/images/voucher.png">
       <button style="background-color:green;padding:10px;float:right;"><a style="text-decoration:none;color:white;font-weight:bold;padding:10px;" href="/downloadpdfinward/'.$data->id.'">Print</a></button>
 
@@ -143,7 +153,7 @@ class PdfController extends Controller
       // $merge_array = array_merge($data_outputs_array,$data_array);
       // $merge_array_collection =  collect($merge_array);
       // dd($merge_array_collection);
-      
+
 
       foreach($data_outputs as $data)
       {
@@ -162,7 +172,17 @@ class PdfController extends Controller
     <title>Document</title>
 </head>
 <body>
-<img style="width:50%;height:20%;margin-left:25%" src="'.$this->get_image($company->image).'">
+
+<div style="font-family: Arial, sans-serif; font-size: 18px; color: #333;">
+    <div style="display: inline-block; vertical-align: middle;">
+        <img src='.$this->get_image($company->image).' alt="Company Logo" style="width: 100px; height: 100px; margin-right: 20px;">
+    </div>
+    <div style="display: inline-block; vertical-align: middle;">
+        <h1 style="font-size: 24px; font-weight: bold; margin: 0;">Company Name</h1>
+        <p style="margin: 0;">Company Phone Number</p>
+        <p style="margin: 0;">Company Address</p>
+    </div>
+</div>
 
 <table style="border: 2px solid black;border-collapse:collapse;width:100%">
         <tr style="border: 2px solid black;">
@@ -189,7 +209,7 @@ class PdfController extends Controller
           <td  style="border: 2px solid black;font-size: 14px;height: 30px;padding-left: 10px;width:50%;font-weight: bold;"">MMK:<span style="font-weight: normal;"> '.$data->amount_mmk.'</span></td>
           </tr>
       </table>
-      <img style="width:100%;height:25%";margin-left:30%;" src="frontend/images/sign.PNG">
+      <img style="width:100%;height:20%";margin-left:30%;" src="frontend/images/sign.PNG">
       <img style="width:50%;height:7%;margin-left:25%" src="frontend/images/voucher.png">
 
 
