@@ -34,7 +34,7 @@ class CustomerExport implements FromCollection,WithHeadings,ShouldAutoSize,WithS
         return [
             
      
-            'name'
+            'Name'
         ];
     }
 }

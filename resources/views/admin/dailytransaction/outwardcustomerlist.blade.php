@@ -10,7 +10,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Inward Cutomers List</h1>
+            <h1>Outward Cutomers List</h1>
           </div>
 
         </div>
@@ -23,7 +23,7 @@
         <div class="row">
           <div class="col-12">
             <div class="card">
-             
+            
 
               @if (Session::has('status'))
               <div class="alert alert-success">
@@ -31,7 +31,7 @@
               </div>
               @endif
               <!-- /.card-header -->
-             <form action="{{route('inward_customer_list_filtered')}}" method="GET">
+             <form action="{{route('outward_customer_list_filtered')}}" method="GET">
               @csrf
               <div class="card-body" style="overflow-x: scroll">
                 <div class="grid" style="display: flex">
