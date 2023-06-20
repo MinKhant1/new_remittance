@@ -17,6 +17,7 @@ class UserMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
+        return $next($request);
        // dd('hi');
         // if(Auth::guest())
         // {
