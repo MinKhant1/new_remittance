@@ -40,11 +40,9 @@
                       <div class="col-3" style="display: flex ">
                         <label for="exampleFormControlSelect1">Select Cutomer Type</label>
                       <select class="form-control" id="exampleFormControlSelect1"  name="branch_id">
-                        {{-- <option value=""></option>
-                        @foreach ($branches as $branch)
-                        <option value="{{$branch->branch_code}}">{{$branch->branch_name}}</option> --}}
-                        <option value="">Test</option>
-                        {{-- @endforeach --}}
+                        <option value="">All</option>
+                        <option value="">Residence</option>
+                        <option value="">Non-Residence</option>
                       </select>
 
                       </div>
