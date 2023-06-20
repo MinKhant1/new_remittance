@@ -17,15 +17,10 @@ class UserMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-      //  dd(Auth::guest());
-        if(Auth::guest())
-        {
-            return redirect('/login');   
-        }
-        if(!Auth::user()->admin)
-        {
-            return $next($request);
-        }
-       
+       // dd('hi');
+        // if(Auth::guest())
+        // {
+        //     return redirect('/login');   
+        // }      
     }
 }

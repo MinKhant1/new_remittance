@@ -17,7 +17,6 @@ class UserController extends Controller
     public function login()
     {
     $company=Company::find(1);
-        dd('hi');
         return view('auth.login')->with('company',$company);
 
     }
@@ -181,6 +180,11 @@ class UserController extends Controller
         $user->delete();
 
         return back()->with('status', 'User has been deleted!');
+      }
+
+      public function customer_list()
+      {
+        return view('admin.reports.customerlist');
       }
 }
 

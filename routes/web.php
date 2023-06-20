@@ -276,6 +276,11 @@ Route::post('/accessaccount', [UserController::class, 'accessaccount']);
 Route::get('/logout', [UserController::class, 'logout']);
 
 
+//Customer List
+Route::get('/customer_list', [UserController::class, 'customer_list']);
+
+
+
 
 //User
 Route::get('/user', [UserController::class, 'user'])->middleware('user_middleware');

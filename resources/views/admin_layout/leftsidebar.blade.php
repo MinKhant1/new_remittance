@@ -144,6 +144,12 @@
         </a>
       </li>
       <li class="nav-item">
+        <a href="{{url('/customer_list')}}" class="nav-link {{request()->is('') ? 'active' : ''}}">
+          <i class="fa fa-user" aria-hidden="true"></i>
+          <p>Customer List</p>
+        </a>
+      </li>
+      <li class="nav-item">
         <a href="{{url('/user')}}" class="nav-link {{request()->is('') ? 'active' : ''}}">
           <i class="fa fa-user" aria-hidden="true"></i>
           <p>User</p>
