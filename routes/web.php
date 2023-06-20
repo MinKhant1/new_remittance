@@ -277,7 +277,12 @@ Route::get('/logout', [UserController::class, 'logout']);
 
 
 //Customer List
-Route::get('/customer_list', [UserController::class, 'customer_list']);
+Route::get('/inward_customer_list', [AdminController::class, 'inward_customer_list'])->name('inward_customer_list');
+Route::get('/inward_customer_list_filtered', [AdminController::class, 'inward_customer_list_filtered'])->name('inward_customer_list_filtered');
+
+Route::get('/outward_customer_list', [AdminController::class, 'outward_customer_list'])->name('outward_customer_list');
+Route::get('/outward_customer_list_filtered', [AdminController::class, 'outward_customer_list_filtered'])->name('outward_customer_list_filtered');
+
 
 
 

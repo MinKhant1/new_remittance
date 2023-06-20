@@ -33,23 +33,23 @@
               </div>
               @endif
               <!-- /.card-header -->
-              {!!Form::open(['action' => 'App\Http\Controllers\InwardTransactionController@searchinward', 'method' => 'POST' , 'enctype' => 'multipart/form-data'])!!}
-              {{ csrf_field() }}
+             <form action="{{route('inward_customer_list_filtered')}}" method="GET">
+              @csrf
               <div class="card-body" style="overflow-x: scroll">
                 <div class="grid" style="display: flex">
                       <div class="col-3" style="display: flex ">
                         <label for="exampleFormControlSelect1">Select Cutomer Type</label>
-                      <select class="form-control" id="exampleFormControlSelect1"  name="branch_id">
-                        <option value="">All</option>
-                        <option value="">Residence</option>
-                        <option value="">Non-Residence</option>
+                      <select class="form-control" id="exampleFormControlSelect1"  name="customer_type">
+                        <option value="all">All</option>
+                        <option value="residence">Residence</option>
+                        <option value="non-residence">Non-Residence</option>
                       </select>
 
                       </div>
 
                       <div class=" ml-4 mr-4">                      
                       <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="inward" id="inward_check">
+                        <input class="form-check-input" type="checkbox" value="inward" id="inward_check" name="">
                         <label class="form-check-label" for="inward_check">
                           Inward
                         </label>
@@ -64,8 +64,8 @@
                       </div>
 
                       <div style="margin-bottom:3%">
-                      {!!Form::submit('Search', ['class' => 'btn btn-success','id'=>'search'])!!}
-                      {!!Form::close()!!}
+                        <input type="submit" class="btn btn-success" value="Search">
+                      </form>
                     </div>
 
                     <div style="margin-bottom:3%">

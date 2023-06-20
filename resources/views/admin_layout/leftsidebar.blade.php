@@ -91,7 +91,20 @@
           <p>Outward Approve</p>
         </a>
       </li>
-   
+      <li class="nav-item">
+        <a href="{{url('/inward_customer_list')}}" class="nav-link {{request()->is('') ? 'active' : ''}}">
+          <i class="fa fa-folder" aria-hidden="true"></i>
+          <p>Inward Customer List</p>
+        </a>
+      </li>
+
+
+      <li class="nav-item">
+        <a href="{{url('/outward_customer_list')}}" class="nav-link {{request()->is('') ? 'active' : ''}}">
+          <i class="fa fa-folder" aria-hidden="true"></i>
+          <p>Outward Customer List</p>
+        </a>
+      </li>
 
       {{-- Setup Data --}}
       <li class="nav-header">System Control</li>

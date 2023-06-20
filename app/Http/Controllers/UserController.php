@@ -182,9 +182,6 @@ class UserController extends Controller
         return back()->with('status', 'User has been deleted!');
       }
 
-      public function customer_list()
-      {
-        return view('admin.reports.customerlist');
-      }
+     
 }
 
