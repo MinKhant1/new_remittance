@@ -49,6 +49,22 @@
 
                       </div>
 
+                      <div class=" ml-4 mr-4">                      
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="inward" id="inward_check">
+                        <label class="form-check-label" for="inward_check">
+                          Inward
+                        </label>
+                      </div>
+
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="outward" id="outward_check">
+                        <label class="form-check-label" for="outward_check">
+                          Outward
+                        </label>
+                      </div>
+                      </div>
+
                       <div style="margin-bottom:3%">
                       {!!Form::submit('Search', ['class' => 'btn btn-success','id'=>'search'])!!}
                       {!!Form::close()!!}
