@@ -39,11 +39,28 @@
                 <div class="grid" style="display: flex">
                       <div class="col-3" style="display: flex ">
                         <label for="exampleFormControlSelect1">Select Cutomer Type</label>
-                      <select class="form-control" id="exampleFormControlSelect1"  name="customer_type">
-                        <option value="all">All</option>
-                        <option value="residence">Residence</option>
-                        <option value="non-residence">Non-Residence</option>
-                      </select>
+                        @if ($customer_type)
+                        <select class="form-control" id="exampleFormControlSelect1"  name="customer_type">
+                          <option value="all"  
+                          @if ($customer_type=='all')
+                              selected
+                          @endif
+                          >All</option>
+                          <option value="residence"
+                          @if ($customer_type=='residence')
+                          selected
+                          @endif >Residence</option>
+                          <option value="non-residence" 
+                          @if ($customer_type=='non-residence')
+                          selected
+                          @endif>Non-Residence</option>
+                        </select>
+                    
+                        @endif
+
+
+
+                     
                       </div>
 
                      
@@ -67,10 +84,14 @@
                     <th>Cutomer Name</th>
                   </tr>
                   </thead>
-                    <tr>
-                      <td></td>
-                      <td>Test</td>
-                    </tr>
+
+                  @foreach ($customers as $customer)
+                  <tr>
+                    <td>{{$loop->index+1}}</td>
+                    <td>{{$customer}}</td>
+                  </tr>
+                  @endforeach
+                    
                   </tbody>
                   <tfoot>
 
