@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\CustomerExport;
 use App\Models\Inwards;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AdminController extends Controller
 {
@@ -15,7 +17,7 @@ class AdminController extends Controller
 
         $unique_customers=$customers->unique('receiver_nrc_passport')->pluck('receiver_name');
 
-        // dd($unique_customers);
+       session()->put('customers',$unique_customers);
 
 
       
@@ -51,6 +53,7 @@ class AdminController extends Controller
     
 
         $unique_customers=$customers->unique('receiver_nrc_passport')->pluck('receiver_name');
+        session()->put('customers',$unique_customers);
 
         return view('admin.dailytransaction.inwardcustomerlist')->with('customers',$unique_customers)->with('customer_type',$customer_type);
     }
@@ -108,6 +111,25 @@ class AdminController extends Controller
        return $is_residence;
       
        
+
+    }
+
+    public function customer_export()
+    {
+      $customers=session()->get('customers');
+
+      $customer_collect=collect();
+
+    for ($i=0; $i <count($customers) ; $i++) { 
+      $customer_collect->push(['name'=>$customers[$i]]);
+    }
+
+     // dd($customer_collect);
+
+   
+    
+
+    return Excel::download(new CustomerExport($customer_collect),'Customers.xlsx');
 
     }
 

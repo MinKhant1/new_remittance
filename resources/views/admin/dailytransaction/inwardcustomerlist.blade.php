@@ -71,7 +71,7 @@
                     </div>
 
                     <div style="margin-bottom:3%">
-                      <a href="{{url('/exportexcelinward')}}" class="btn btn-success" style="margin-left: 20px" ><i class="nav-icon fas fa-print">  Print</i></a>
+                      <a href="{{url('/customer_export')}}" class="btn btn-success" style="margin-left: 20px" ><i class="nav-icon fas fa-print">  Print</i></a>
                     </div>
                 </div>
 
