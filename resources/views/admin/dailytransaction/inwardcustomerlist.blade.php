@@ -38,13 +38,13 @@
                   <div class="col-1-4 col-1-4-sm" style="padding-right: 5%">
                     <div class="controls">
                       <label for="arrive" style="padding-right: 20px" class="label-date">&nbsp;&nbsp;Start Date</label>
-                      <input type="date" style="margin-right: 40px" id="arrive" class="floatLabel" name="startdate" value="<?php echo date('Y-m-d'); ?>">
+                      <input type="date" style="margin-right: 40px" id="arrive" class="floatLabel" name="startDate"  value="{{$startDate}}">
                     </div>
                   </div>
                   <div class="col-1-4 col-1-4-sm">
                     <div class="controls">
                       <label for="arrive" style="padding-right: 20px" class="label-date">&nbsp;&nbsp;End Date</label>
-                      <input type="date" style="margin-right: 80px" id="arrive" class="floatLabel" name="enddate" value="<?php echo date('Y-m-d'); ?>">
+                      <input type="date" style="margin-right: 80px" id="arrive" class="floatLabel" name="endDate" value="{{$endDate}}">
                     </div>
                   </div>
 

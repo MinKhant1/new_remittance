@@ -14,7 +14,11 @@ class AdminController extends Controller
     public function inward_customer_list()
     {
 
-        $customers=Inwards::select('*')->whereDate('created_at', Carbon::today())->distinct('receiver_name')->get();
+      $startDate=null;
+      $endDate=null;
+
+
+        $customers=Inwards::select('*')->distinct('receiver_name')->get();
 
         $unique_customers=$customers->unique('receiver_nrc_passport')->pluck('receiver_name');
 
@@ -23,13 +27,20 @@ class AdminController extends Controller
 
       
 
-      return view('admin.dailytransaction.inwardcustomerlist')->with('customers',$unique_customers)->with('customer_type','all');
+      return view('admin.dailytransaction.inwardcustomerlist')
+                                        ->with('customers',$unique_customers)
+                                        ->with('customer_type','all')
+                                        ->with('startDate',$startDate)
+                                        ->with('endDate',$endDate);
     }
 
     public function outward_customer_list()
     {
+      $startDate=null;
+      $endDate=null;
 
-        $customers=Outwards::select('*')->whereDate('created_at', Carbon::today())->distinct('sender_name')->get();
+
+        $customers=Outwards::select('*')->distinct('sender_name')->get();
 
         $unique_customers=$customers->unique('sender_nrc_passport')->pluck('sender_name');
 
@@ -38,19 +49,25 @@ class AdminController extends Controller
 
       
 
-      return view('admin.dailytransaction.outwardcustomerlist')->with('customers',$unique_customers)->with('customer_type','all');
+      return view('admin.dailytransaction.outwardcustomerlist')
+                                          ->with('customers',$unique_customers)
+                                          ->with('customer_type','all')
+                                          ->with('startDate',$startDate)
+                                          ->with('endDate',$endDate);
     }
 
     public function inward_customer_list_filtered(Request $request)
     {
         $customer_type=$request->customer_type;
-
+       
+       $startDate=$request->startDate;
+      $endDate=$request->endDate;
         
       
-      
+     
         if($customer_type=='residence')
         {
-            $customers=Inwards::select('*')->whereDate('created_at', Carbon::today())->distinct('receiver_name')->get();
+            $customers=Inwards::select('*')->whereBetween('created_at', [Carbon::parse($startDate)->toDateString(),Carbon::parse($endDate)->toDateString()])->distinct('receiver_name')->get();
        
             $customers= $this->filterInwardResidence($customers,true);
 
@@ -58,12 +75,12 @@ class AdminController extends Controller
         }
         else if($customer_type=='non-residence')
         {
-            $customers=Inwards::select('*')->whereDate('created_at', Carbon::today())->distinct('receiver_name')->get();
+            $customers=Inwards::select('*')->whereBetween('created_at', [Carbon::parse($startDate)->toDateString(),Carbon::parse($endDate)->toDateString()])->distinct('receiver_name')->get();
             $customers= $this->filterInwardResidence($customers,false);
         }
         else 
         {
-            $customers=Inwards::select('*')->whereDate('created_at', Carbon::today())->distinct('receiver_name')->get();
+            $customers=Inwards::select('*')->whereBetween('created_at', [Carbon::parse($startDate)->toDateString(),Carbon::parse($endDate)->toDateString()])->distinct('receiver_name')->get();
 
         }
     
@@ -71,7 +88,10 @@ class AdminController extends Controller
         $unique_customers=$customers->unique('receiver_nrc_passport')->pluck('receiver_name');
         session()->put('customers',$unique_customers);
 
-        return view('admin.dailytransaction.inwardcustomerlist')->with('customers',$unique_customers)->with('customer_type',$customer_type);
+        return view('admin.dailytransaction.inwardcustomerlist')->with('customers',$unique_customers)
+                                                                ->with('customer_type',$customer_type)
+                                                                ->with('startDate',$startDate)
+                                                                ->with('endDate',$endDate);
     }
 
 
@@ -81,12 +101,13 @@ class AdminController extends Controller
     {
       $customer_type=$request->customer_type;
 
-        
+      $startDate=$request->startDate;
+      $endDate=$request->endDate;
       
       
       if($customer_type=='residence')
       {
-          $customers=Outwards::select('*')->whereDate('created_at', Carbon::today())->distinct('sender_name')->get();
+          $customers=Outwards::select('*')->whereBetween('created_at', [Carbon::parse($startDate)->toDateString(),Carbon::parse($endDate)->toDateString()])->distinct('sender_name')->get();
      
           $customers= $this->filterouwardResidence($customers,true);
 
@@ -94,12 +115,12 @@ class AdminController extends Controller
       }
       else if($customer_type=='non-residence')
       {
-          $customers=Outwards::select('*')->whereDate('created_at', Carbon::today())->distinct('sender_name')->get();
+          $customers=Outwards::select('*')->whereBetween('created_at', [Carbon::parse($startDate)->toDateString(),Carbon::parse($endDate)->toDateString()])->distinct('sender_name')->get();
           $customers= $this->filterouwardResidence($customers,false);
       }
       else 
       {
-          $customers=Outwards::select('*')->whereDate('created_at', Carbon::today())->distinct('sender_name')->get();
+          $customers=Outwards::select('*')->whereBetween('created_at', [Carbon::parse($startDate)->toDateString(),Carbon::parse($endDate)->toDateString()])->distinct('sender_name')->get();
 
       }
   
@@ -107,7 +128,9 @@ class AdminController extends Controller
       $unique_customers=$customers->unique('sender_nrc_passport')->pluck('sender_name');
       session()->put('customers',$unique_customers);
 
-      return view('admin.dailytransaction.outwardcustomerlist')->with('customers',$unique_customers)->with('customer_type',$customer_type);
+      return view('admin.dailytransaction.outwardcustomerlist')->with('customers',$unique_customers)->with('customer_type',$customer_type)
+      ->with('startDate',$startDate)
+      ->with('endDate',$endDate);
     }
 
 
