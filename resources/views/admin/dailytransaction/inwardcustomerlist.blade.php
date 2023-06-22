@@ -82,7 +82,7 @@
                     </div>
 
                     <div style="margin-bottom:3%">
-                      <a href="{{url('/customer_export')}}" class="btn btn-success" style="margin-left: 20px" ><i class="nav-icon fas fa-print">  Print</i></a>
+                      <a href="{{url('/inward_customer_export')}}" class="btn btn-success" style="margin-left: 20px" ><i class="nav-icon fas fa-print">  Print</i></a>
                     </div>
                 </div>
 
@@ -93,13 +93,17 @@
                   <tr>
                     <th>#</th>
                     <th>Cutomer Name</th>
+                    <th>NRC/Passport</th>
+                    <th>Address/Phone No.</th>
                   </tr>
                   </thead>
 
                   @foreach ($customers as $customer)
                   <tr>
                     <td>{{$loop->index+1}}</td>
-                    <td>{{$customer}}</td>
+                    <td>{{$customer->receiver_name}}</td>
+                    <td>{{$customer->receiver_nrc_passport}}</td>
+                    <td>{{$customer->receiver_address_ph}}</td>
                   </tr>
                   @endforeach
                     

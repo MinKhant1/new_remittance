@@ -20,7 +20,7 @@ class AdminController extends Controller
 
         $customers=Inwards::select('*')->distinct('receiver_name')->get();
 
-        $unique_customers=$customers->unique('receiver_nrc_passport')->pluck('receiver_name');
+        $unique_customers=$customers->unique('receiver_nrc_passport');
 
        session()->put('customers',$unique_customers);
 
@@ -42,7 +42,7 @@ class AdminController extends Controller
 
         $customers=Outwards::select('*')->distinct('sender_name')->get();
 
-        $unique_customers=$customers->unique('sender_nrc_passport')->pluck('sender_name');
+        $unique_customers=$customers->unique('sender_nrc_passport');
 
        session()->put('customers',$unique_customers);
 
@@ -85,7 +85,7 @@ class AdminController extends Controller
         }
     
 
-        $unique_customers=$customers->unique('receiver_nrc_passport')->pluck('receiver_name');
+        $unique_customers=$customers->unique('receiver_nrc_passport');
         session()->put('customers',$unique_customers);
 
         return view('admin.dailytransaction.inwardcustomerlist')->with('customers',$unique_customers)
@@ -125,7 +125,7 @@ class AdminController extends Controller
       }
   
 
-      $unique_customers=$customers->unique('sender_nrc_passport')->pluck('sender_name');
+      $unique_customers=$customers->unique('sender_nrc_passport');
       session()->put('customers',$unique_customers);
 
       return view('admin.dailytransaction.outwardcustomerlist')->with('customers',$unique_customers)->with('customer_type',$customer_type)
@@ -202,22 +202,43 @@ class AdminController extends Controller
 
     }
 
-    public function customer_export()
+    public function inward_customer_export()
     {
       $customers=session()->get('customers');
 
-      $customer_collect=collect();
+      $customer_results=collect();
 
-    for ($i=0; $i <count($customers) ; $i++) { 
-      $customer_collect->push(['name'=>$customers[$i]]);
-    }
-
-     // dd($customer_collect);
+    $index=0;
+      foreach ($customers as $key=>$customer) {
+      $customer_results->put($index,['name'=>$customer->receiver_name,'Nrc'=>$customer->receiver_nrc_passport,'address_ph'=>$customer->receiver_address_ph]);
+      $index++;
+      }
+    
 
    
     
 
-    return Excel::download(new CustomerExport($customer_collect),'Customers.xlsx');
+    return Excel::download(new CustomerExport($customer_results),'Customers.xlsx');
+
+    }
+
+    public function outward_customer_export()
+    {
+      $customers=session()->get('customers');
+
+      $customer_results=collect();
+
+      $index=0;
+      foreach ($customers as $key=>$customer) {
+      $customer_results->put($index,['name'=>$customer->sender_name,'Nrc'=>$customer->sender_nrc_passport,'address_ph'=>$customer->sender_address_ph]);
+      $index++;
+      }
+    
+
+   
+    
+
+    return Excel::download(new CustomerExport($customer_results),'Customers.xlsx');
 
     }
 

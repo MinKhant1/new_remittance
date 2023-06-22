@@ -283,7 +283,8 @@ Route::get('/inward_customer_list_filtered', [AdminController::class, 'inward_cu
 Route::get('/outward_customer_list', [AdminController::class, 'outward_customer_list'])->name('outward_customer_list');
 Route::get('/outward_customer_list_filtered', [AdminController::class, 'outward_customer_list_filtered'])->name('outward_customer_list_filtered');
 
-Route::get('/customer_export', [AdminController::class, 'customer_export'])->name('customer_export');
+Route::get('/inward_customer_export', [AdminController::class, 'inward_customer_export'])->name('inward_customer_export');
+Route::get('/outward_customer_export', [AdminController::class, 'outward_customer_export'])->name('outward_customer_export');
 
 
 

@@ -34,7 +34,9 @@ class CustomerExport implements FromCollection,WithHeadings,ShouldAutoSize,WithS
         return [
             
      
-            'Name'
+            'Name',
+            'NRC/Passport',
+            'Address/Phone Number'
         ];
     }
 }
