@@ -80,6 +80,12 @@
                         <input type="submit" class="btn btn-success" value="Search">
                       </form>
                     </div>
+                    <div class="row">
+                      
+                    </div>
+                    <div style="display: flex" id="search_pos" class="col-12">
+
+                    </div>
 
                     <div style="margin-bottom:3%">
                       <a href="{{url('/inward_customer_export')}}" class="btn btn-success" style="margin-left: 20px" ><i class="nav-icon fas fa-print">  Print</i></a>
@@ -168,6 +174,13 @@
       $("#example1").DataTable({
         "responsive": false,
         "autoWidth": false,
+        "language": {
+    "search": "Search with Customer name or NRC:"
+    
+  },
+  initComplete : function() {
+        $("#example1_filter").detach().appendTo('#search_pos');
+    }
       });
       $('#example2').DataTable({
         "paging": false,
