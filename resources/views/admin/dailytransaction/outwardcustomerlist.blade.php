@@ -86,7 +86,9 @@
                     </div>
                 </div>
 
+                <div style="margin-bottom: 20px" id="search_pos" class="col-6">
 
+                </div>
 
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
@@ -168,6 +170,13 @@
       $("#example1").DataTable({
         "responsive": false,
         "autoWidth": false,
+        "language": {
+    "search": "Search with Customer name or NRC:"
+    
+  },
+  initComplete : function() {
+        $("#example1_filter").detach().appendTo('#search_pos');
+    }
       });
       $('#example2').DataTable({
         "paging": false,
