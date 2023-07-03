@@ -30,6 +30,7 @@
                 {{Session::get('status')}}
               </div>
               @endif
+              
               <!-- /.card-header -->
              <form action="{{route('inward_customer_list_filtered')}}" method="GET">
               @csrf
@@ -80,18 +81,17 @@
                         <input type="submit" class="btn btn-success" value="Search">
                       </form>
                     </div>
-                    <div class="row">
-                      
-                      {{-- to fix pos --}}
-                      <div style="display: flex" id="search_pos" class="col-12">
-  
-                      </div>
-                    </div>
-
+      
+                
 
                     <div style="margin-bottom:3%">
                       <a href="{{url('/inward_customer_export')}}" class="btn btn-success" style="margin-left: 20px" ><i class="nav-icon fas fa-print">  Print</i></a>
                     </div>
+                    
+                    
+                </div>
+                <div style="margin-bottom: 20px" id="search_pos" class="col-6">
+
                 </div>
 
 
