@@ -110,7 +110,22 @@
                   <tr>
                     <td>{{$loop->index+1}}</td>
                     <td>{{$customer->receiver_name}}</td>
-                    <td>{{$customer->receiver_nrc_passport}}</td>
+                    <td>
+                    <form action="{{route('inward_customer_detail')}}" method="POST">
+                      @csrf
+                      <input type="hidden" name="nrc" value="{{$customer->receiver_nrc_passport}}">
+                      <a ><button type="submit" style="background-color: Transparent;
+                        background-repeat:no-repeat;
+                        border: none;
+                        cursor:pointer;
+                        overflow: hidden;
+                        outline:none;
+                        color:blue;
+                        " ><u>{{$customer->receiver_nrc_passport}}</u></button></a>
+                     
+                    
+                    </td>
+                    </form>
                     <td>{{$customer->receiver_address_ph}}</td>
                   </tr>
                   @endforeach

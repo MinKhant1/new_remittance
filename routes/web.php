@@ -286,7 +286,8 @@ Route::get('/outward_customer_list_filtered', [AdminController::class, 'outward_
 Route::get('/inward_customer_export', [AdminController::class, 'inward_customer_export'])->name('inward_customer_export');
 Route::get('/outward_customer_export', [AdminController::class, 'outward_customer_export'])->name('outward_customer_export');
 
-
+Route::post('/inward_customer_detail', [AdminController::class, 'inward_customer_detail'])->name('inward_customer_detail');
+Route::post('/outward_customer_detail', [AdminController::class, 'outward_customer_detail'])->name('outward_customer_detail');
 
 
 
