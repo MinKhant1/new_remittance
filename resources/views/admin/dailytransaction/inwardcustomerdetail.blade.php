@@ -10,42 +10,19 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Customer Detail</h1>
+            <h1 style="margin-bottom: 20px">Customer Detail</h1>
+            <h5 style="font-size: 20px" class="text-bold">Name: <span style="font-weight: 400">Gway Si</span></h5>
+            <h5 class="text-bold">NRC: <span style="font-weight: 400">Gway Si</span></h5>
+            <h5 class="text-bold">Total No of Inward Transactions: <span style="font-weight: 400">Gway Si</span></h5>
           </div>
 
         </div>
       </div><!-- /.container-fluid -->
     </section>
 
-
-
-
-
-
-
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
-
-
-        
-
-        <div class="d-flex justify-content-left">
-          <div class="col-4 col-md-4 col-lg-4 mt-10"> 
-          <table class="profile-table">
-          <tr class="profile-tr">
-            <td class="profile-td">Name : <span class="profile-span">Gway Si</span></td>
-          </tr>
-          <tr class="profile-tr">
-            <td class="profile-td">Nrc : <span class="profile-span">Gway Si</span></td>
-          </tr>
-          <tr class="profile-tr">
-            <td class="profile-td">Total No of Inward Transactions : <span class="profile-span">Gway Si</span></td>
-          </tr>
-        </table>
-          </div>
-      </div>
-
 
 
         <div class="row">
