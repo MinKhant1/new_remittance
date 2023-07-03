@@ -249,11 +249,37 @@ class AdminController extends Controller
       
         $transactions=Inwards::where('receiver_nrc_passport',$nrc)->get();
         $total_inward_transactions=$transactions->count();
-    //  dd($transactions);
+        $name=$transactions[0]->receiver_name;
+    //  dd($name);
         // $outwards=Outwards::where('sender_nrc_passport',$nrc)->get();
 
     
-        return view('admin.dailytransaction.inwardcustomerdetail');
+        return view('admin.dailytransaction.inwardcustomerdetail')->with('name',$name)
+                                                                  ->with('nrc',$nrc)
+                                                                  ->with('total_count',$total_inward_transactions)
+                                                                  ->with('inward_transactions',$transactions);
+
+
+
+    }
+
+
+
+    public function outward_customer_detail(Request $request)
+    {
+     
+      $nrc=$request->nrc;
+      
+        $transactions=Outwards::where('sender_nrc_passport',$nrc)->get();
+        $total_outward_transactions=$transactions->count();
+        $name=$transactions[0]->sender_name;
+
+
+    
+        return view('admin.dailytransaction.outwardcustomerdetail')->with('name',$name)
+                                                                  ->with('nrc',$nrc)
+                                                                  ->with('total_count',$total_outward_transactions)
+                                                                  ->with('outward_transactions',$transactions);
 
 
 

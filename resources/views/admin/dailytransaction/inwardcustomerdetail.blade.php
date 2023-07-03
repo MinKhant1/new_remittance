@@ -11,9 +11,9 @@
         <div class="row mb-2">
           <div class="col-sm-6">
             <h1 style="margin-bottom: 20px">Customer Detail</h1>
-            <h5 style="font-size: 20px" class="text-bold">Name: <span style="font-weight: 400">Gway Si</span></h5>
-            <h5 class="text-bold">NRC: <span style="font-weight: 400">Gway Si</span></h5>
-            <h5 class="text-bold">Total No of Inward Transactions: <span style="font-weight: 400">Gway Si</span></h5>
+            <h5 style="font-size: 20px" class="text-bold">Name: <span style="font-weight: 400">{{$name}}</span></h5>
+            <h5 class="text-bold">NRC/Passport: <span style="font-weight: 400">{{$nrc}}</span></h5>
+            <h5 class="text-bold">Total No of Inward Transactions: <span style="font-weight: 400">{{$total_count}}</span></h5>
           </div>
 
         </div>
@@ -52,7 +52,7 @@
                     <th>Purpose of transaction</th>
                     <th>Withdraw point</th>
                     <th>Sender Name</th>
-                    <th>Sender NRC/Passport<</th>
+                    <th>Sender NRC/Passport</th>
                     <th>Sender Country</th>
                     <th>Currency</th>
                     <th>Amount</th>
@@ -64,7 +64,7 @@
                   </tr>
                   </thead>
                   <tbody>
-                  {{-- @foreach ($inward_transactions as $inwardtransaction)
+                  @foreach ($inward_transactions as $inwardtransaction)
                 
           
                   <tr>
@@ -72,7 +72,7 @@
                   
                  
                     <td>{{$increment}}</td>
-                 
+                    <td>{{ Str::substr($inwardtransaction->txd_date_time,  0, 10) }}</td>
                     <td>{{$inwardtransaction->branch_id}}</td>
                     <td>{{$inwardtransaction->receiver_name}}</td>
                     <td>{{$inwardtransaction->receiver_nrc_passport}}</td>
@@ -88,13 +88,13 @@
                     <td>{{number_format($inwardtransaction->amount_mmk,2)}}</td>
                     <td>{{$inwardtransaction->exchange_rate}}</td>
                     <td>{{$inwardtransaction->exchange_rate_usd}}</td>
-                    <td>{{$inwardtransaction->txd_date_time}}</td>
+                 
                     
                      
                      
                   </tr>
                   {{Form::hidden('', $increment = $increment + 1)}}
-                  @endforeach --}}
+                  @endforeach
                   </tbody>
                   <tfoot>
                 

@@ -10,10 +10,10 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 style="margin-bottom: 20px">Customer Detail</h1>
-            <h5 style="font-size: 20px" class="text-bold">Name: <span style="font-weight: 400">Gway Si</span></h5>
-            <h5 class="text-bold">NRC: <span style="font-weight: 400">Gway Si</span></h5>
-            <h5 class="text-bold">Total No of Outward Transactions: <span style="font-weight: 400">Gway Si</span></h5>
+            <h1 style="margin-bottom: 20px">Outward Customer Detail</h1>
+            <h5 style="font-size: 20px" class="text-bold">Name: <span style="font-weight: 400">{{$name}}</span></h5>
+            <h5 class="text-bold">NRC/Passport: <span style="font-weight: 400">{{$nrc}}</span></h5>
+            <h5 class="text-bold">Total No of Outward Transactions: <span style="font-weight: 400">{{$total_count}}</span></h5>
           </div>
 
         </div>
@@ -43,7 +43,7 @@
                   <thead>
                     <tr>
                       <th>ID</th>
-                      <th>Approve Status</th>
+                    <th>Date Time</th>
                       <th>Sender Name</th>
                       <th>Sender address/phone no</th>
                       <th>Sender NRC/Passport</th>
@@ -56,7 +56,7 @@
                   </tr>
                   </thead>
                   <tbody>
-                  {{-- @foreach ($inward_transactions as $inwardtransaction)
+                  @foreach ($outward_transactions as $transaction)
                 
           
                   <tr>
@@ -64,29 +64,22 @@
                   
                  
                     <td>{{$increment}}</td>
-                 
-                    <td>{{$inwardtransaction->branch_id}}</td>
-                    <td>{{$inwardtransaction->receiver_name}}</td>
-                    <td>{{$inwardtransaction->receiver_nrc_passport}}</td>
-                    <td>{{$inwardtransaction->receiver_address_ph}}</td>
-                    <td>{{$inwardtransaction->purpose}}</td>
-                    <td>{{$inwardtransaction->withdraw_point}}</td>
-                    <td>{{$inwardtransaction->sender_name}}</td>
-                    <td class="nrc_passport">{{$inwardtransaction->sender_nrc_passport}}</td>
-                    <td>{{$inwardtransaction->sender_country_code}}</td>
-                    <td>{{$inwardtransaction->currency_code}}</td>
-                    <td>{{number_format($inwardtransaction->amount,2)}}</td>
-                    <td>{{number_format($inwardtransaction->equivalent_usd,2)}}</td>
-                    <td>{{number_format($inwardtransaction->amount_mmk,2)}}</td>
-                    <td>{{$inwardtransaction->exchange_rate}}</td>
-                    <td>{{$inwardtransaction->exchange_rate_usd}}</td>
-                    <td>{{$inwardtransaction->txd_date_time}}</td>
+                    <td>{{ Str::substr($transaction->txd_date_time,  0, 10) }}</td>
+                    <td>{{$transaction->sender_name}}</td>
+                    <td>{{$transaction->sender_address_ph}}</td>
+                    <td class="nrc_passport">{{$transaction->sender_nrc_passport}}</td>
+                    <td>{{$transaction->purpose}}</td>
+                    <td>{{$transaction->deposit_point}}</td>
+                    <td>{{$transaction->receiver_name}}</td>
+                    <td>{{$transaction->receiver_country_code}}</td>
+                    <td>{{$transaction->amount_mmk}}</td>
+                    <td>{{$transaction->equivalent_usd}}</td>
                     
                      
                      
                   </tr>
                   {{Form::hidden('', $increment = $increment + 1)}}
-                  @endforeach --}}
+                  @endforeach
                   </tbody>
                   <tfoot>
                 

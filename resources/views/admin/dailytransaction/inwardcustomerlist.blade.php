@@ -192,7 +192,7 @@
         "responsive": false,
         "autoWidth": false,
         "language": {
-    "search": "Search with Customer name or NRC:"
+    "search": "Filter with Customer name or NRC:"
     
   },
   initComplete : function() {
