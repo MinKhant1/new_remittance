@@ -82,10 +82,12 @@
                     </div>
                     <div class="row">
                       
+                      {{-- to fix pos --}}
+                      <div style="display: flex" id="search_pos" class="col-12">
+  
+                      </div>
                     </div>
-                    <div style="display: flex" id="search_pos" class="col-12">
 
-                    </div>
 
                     <div style="margin-bottom:3%">
                       <a href="{{url('/inward_customer_export')}}" class="btn btn-success" style="margin-left: 20px" ><i class="nav-icon fas fa-print">  Print</i></a>
