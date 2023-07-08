@@ -12,9 +12,11 @@
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
           <a href="{{url('/')}}" class="d-block">
+            @if ($company)  
             <div class="image">
-              <img src="{{asset('frontend/images/logo_sys.jpg')}}" style="width: 200px" class="img-thumbnail elevation-2" alt="User Image">
+              <img src="{{'/images/company/'.$company->image}}" style="width: 200px" class="img-thumbnail elevation-2" alt="User Image">
             </div></a>
+            @endif
       </div>
    
 <!-- Sidebar Menu -->
