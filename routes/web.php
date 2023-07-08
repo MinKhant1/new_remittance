@@ -324,6 +324,7 @@ Route::get('/deleterole/{id}', [RoleController::class, 'deleterole'])->middlewar
 Auth::routes();
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home')->middleware('user_middleware');
+Route::get('/countwithdate',[App\Http\Controllers\HomeController::class, 'countwithdate'])->name('countwithdate');
 Route::post('/dailywithdate', [App\Http\Controllers\HomeController::class, 'dailywithdate'])->name('home');
 Route::post('/monthlywithdate', [App\Http\Controllers\HomeController::class, 'monthlywithdate'])->name('home');
 Route::post('/yearlywithdate', [App\Http\Controllers\HomeController::class, 'yearlywithdate'])->name('home');

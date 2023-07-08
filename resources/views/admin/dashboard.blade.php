@@ -43,7 +43,7 @@
       <!-- Small boxes (Stat box) -->
       <div class="row">
         <div class="col-8">
-          {!!Form::open(['action' => 'App\Http\Controllers\HomeController@dailywithdate', 'method' => 'POST' , 'enctype' => 'multipart/form-data'])!!}
+          {!!Form::open(['action' => 'App\Http\Controllers\HomeController@countwithdate', 'method' => 'POST' , 'enctype' => 'multipart/form-data'])!!}
                 {{ csrf_field() }}
           <h5>Transactions Status</h5>
           <div class="grid" style="display: flex">
@@ -84,7 +84,7 @@
             <tbody>
             <tr>
             <td>1.</td>
-            <td style="font-weight: 500">Update software</td>
+            <td style="font-weight: 500">{{Carbon::today()->toDateString()}}</td>
             <td style="font-size: 20px" class="text-center"><span class="badge bg-info">55%</span></td>
             <td style="font-size: 20px" class="text-center"><span class="badge bg-success">55%</span></td>
             <td style="font-size: 20px" class="text-center"><span class="badge bg-danger">55%</span></td>

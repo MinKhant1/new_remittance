@@ -87,12 +87,40 @@ class HomeController extends Controller
             ->count();
 
         $yearlytotal = $yearlyinward + $yearlyoutward;
-        // return dd($dailytotal, $weeklytotal);
+
+
+        $startCountDate=null;
+        $endCountDate=null;
+
+        $totalInwardCount=Inwards::whereDate('created_at',Carbon::today())->count();
+        $approvedInwardCount=Inwards::whereDate('created_at',Carbon::today())->where('status',1)->count();
+        $remainingInwardCount=Inwards::whereDate('created_at',Carbon::today())->where('status',0)->count();
+        
+
+        $totalOutwardCount=Outwards::whereDate('created_at',Carbon::today())->count();
+        $approvedOutwardCount=Outwards::whereDate('created_at',Carbon::today())->where('status',1)->count();
+        $remainingOutwardCount=Outwards::whereDate('created_at',Carbon::today())->where('status',0)->count();
+        
+       
+
         return view('admin.dashboard')->with('dailyinward', $dailyinward)->with('dailyoutward', $dailyoutward)
             ->with('dailytotal', $dailytotal)->with('monthlyinward', $monthlyinward)->with('monthlyoutward', $monthlyoutward)
             ->with('weeklytotal', $weeklytotal)->with('monthlytotal', $monthlytotal)
             ->with('yearlyinward', $yearlyinward)->with('yearlyoutward', $yearlyoutward)->with('yearlytotal', $yearlytotal)
-            ->with('inwardsum',$inwardsum)->with('outwardsum',$outwardsum);;
+            ->with('inwardsum',$inwardsum)->with('outwardsum',$outwardsum)
+            ->with('totalInwardCount',$totalInwardCount)
+            ->with('apprevedInwardCount',$approvedInwardCount)
+            ->with('remainingInwardCount',$remainingInwardCount)
+            ->with('totalOutwardCount',$totalOutwardCount)
+            ->with('approvedOutwardCount',$approvedOutwardCount)
+            ->with('remainingOutwardCount',$remainingOutwardCount)
+            ->with('startCountDate',$startCountDate)
+            ->with('endCountDate',$endCountDate);
+    }
+
+    public function countwithdate(Request $request)
+    {
+
     }
 
     public function dailywithdate(Request $request)
