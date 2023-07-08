@@ -50,13 +50,13 @@
             <div class="col-1-4 col-1-4-sm" style="padding-right: 5%">
                 <div class="controls">
                   <label for="arrive" class="label-date"  style="padding-right: 20px">&nbsp;&nbsp;Start Date</label>
-                  <input type="date" id="arrive"  style="margin-right: 40px" class="floatLabel" name="startdate"  value="<?php echo date('Y-m-d'); ?>">                 
+                  <input type="date" id="arrive"  style="margin-right: 40px" class="floatLabel" name="startCountDate"   value="{{$startCountDate}}">                 
                 </div>
               </div>
               <div class="col-1-4 col-1-4-sm">
                 <div class="controls">
                   <label for="arrive" class="label-date" style="padding-right: 20px">&nbsp;&nbsp;End Date</label>
-                  <input type="date" id="arrive"   style="margin-right: 80px"  class="floatLabel"  name="enddate" value="<?php echo date('Y-m-d'); ?>">                 
+                  <input type="date" id="arrive"   style="margin-right: 80px"  class="floatLabel"  name="endCountDate" value="{{$endCountDate}}">                 
                 </div>
               </div>
               {!!Form::submit('Search', ['class' => 'btn btn-success'])!!}
@@ -67,7 +67,7 @@
          <div class="col-8">
           <div class="card" style="margin-top: 10px">
             <div class="card-header">
-            <h3 class="card-title">Transactions Status</h3>
+            <h3 class="card-title">Inward Transactions</h3>
             </div>
             
             <div class="card-body p-0">
@@ -82,13 +82,17 @@
             </tr>
             </thead>
             <tbody>
-            <tr>
-              
-            <td style="font-weight: 500">{{\Carbon\Carbon::today()->toDateString()}}</td>
-            <td style="font-size: 20px" class="text-center"><span class="badge bg-info">{{$totalInwardCount}}</span></td>
-            <td style="font-size: 20px" class="text-center"><span class="badge bg-success">{{$apprevedInwardCount}}</span></td>
-            <td style="font-size: 20px" class="text-center"><span class="badge bg-danger">{{$remainingInwardCount}}</span></td>
-            </tr>
+
+              @foreach ($inwardCounts as $key=>$inwardcount)
+              <tr>
+                
+              <td style="font-weight: 500">{{$key}}</td>
+              <td style="font-size: 20px" class="text-center"><span class="badge bg-info">{{$inwardcount['total_count']}}</span></td>
+              <td style="font-size: 20px" class="text-center"><span class="badge bg-success">{{$inwardcount['approved_count']}}</span></td>
+              <td style="font-size: 20px" class="text-center"><span class="badge bg-danger">{{$inwardcount['remaining_count']}}</span></td>
+              </tr>
+                  
+              @endforeach
           
 
            
@@ -103,45 +107,56 @@
           </div>
 
 
-          <div class="col-12" style="border-bottom: solid 2px black">
-            <div class="col-8">
-             <div class="card" style="margin-top: 10px">
-               <div class="card-header">
-               <h3 class="card-title">Transactions Status</h3>
-               </div>
-               
-               <div class="card-body p-0">
-               <table class="table table-sm">
-               <thead>
-               <tr>
-              
-               <th>Date</th>
-               <th>Total Transactions</th>
-               <th>Approved Transactions</th>
-               <th>Remaining Transactions</th>
-               </tr>
-               </thead>
-               <tbody>
-               <tr>
-                
-               <td style="font-weight: 500">{{\Carbon\Carbon::today()->toDateString()}}</td>
-               <td style="font-size: 20px" class="text-center"><span class="badge bg-info">{{$totalInwardCount}}</span></td>
-               <td style="font-size: 20px" class="text-center"><span class="badge bg-success">{{$apprevedInwardCount}}</span></td>
-               <td style="font-size: 20px" class="text-center"><span class="badge bg-danger">{{$remainingInwardCount}}</span></td>
-               </tr>
-             
-   
-              
-   
-               </tbody>
-               </table>
-               </div>
-               
-               </div>
-               
-               </div>
-             </div>
+          
         </div>
+
+
+        <div class="col-12" style="border-bottom: solid 2px black">
+          <div class="col-8">
+           <div class="card" style="margin-top: 10px">
+             <div class="card-header">
+             <h3 class="card-title">Outward Transactions</h3>
+             </div>
+             
+             <div class="card-body p-0">
+             <table class="table table-sm">
+             <thead>
+             <tr>
+            
+             <th>Date</th>
+             <th>Total Transactions</th>
+             <th>Approved Transactions</th>
+             <th>Remaining Transactions</th>
+             </tr>
+             </thead>
+             <tbody>
+ 
+               @foreach ($outwardCounts as $key=>$outwardCount)
+               <tr>
+                 
+               <td style="font-weight: 500">{{$key}}</td>
+               <td style="font-size: 20px" class="text-center"><span class="badge bg-info">{{$outwardCount['total_count']}}</span></td>
+               <td style="font-size: 20px" class="text-center"><span class="badge bg-success">{{$outwardCount['approved_count']}}</span></td>
+               <td style="font-size: 20px" class="text-center"><span class="badge bg-danger">{{$outwardCount['remaining_count']}}</span></td>
+               </tr>
+                   
+               @endforeach
+           
+ 
+            
+ 
+             </tbody>
+             </table>
+             </div>
+             
+             </div>
+             
+             </div>
+           </div>
+ 
+ 
+           
+         </div>
         <br>
         <div class="col-8">
           {!!Form::open(['action' => 'App\Http\Controllers\HomeController@dailywithdate', 'method' => 'POST' , 'enctype' => 'multipart/form-data'])!!}

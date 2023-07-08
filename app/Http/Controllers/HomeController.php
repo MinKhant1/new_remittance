@@ -92,14 +92,55 @@ class HomeController extends Controller
         $startCountDate=null;
         $endCountDate=null;
 
-        $totalInwardCount=Inwards::whereDate('created_at',Carbon::today())->count();
-        $approvedInwardCount=Inwards::whereDate('created_at',Carbon::today())->where('status',1)->count();
-        $remainingInwardCount=Inwards::whereDate('created_at',Carbon::today())->where('status',0)->count();
+
+        $inwardTransactions=Inwards::whereDate('created_at','>=',Carbon::today())->get();
+
+        $inwardDateGrouped=$inwardTransactions->groupBy(function($data)
+        {
+            return  Carbon::parse($data->created_at)->toDateString();
+        });
+
+
+        $inwardCounts=collect();
+
+        foreach ($inwardDateGrouped as $key=>$inward) {
+        
+            $total_count=$inward->count();
+          $approved_count=  $inward->where('status',1)->count();
+          $remaining_count=  $inward->where('status',0)->count();
+
+          $inwardCounts->put($key,['total_count'=>$total_count,'approved_count'=>$approved_count,'remaining_count'=>$remaining_count]);
+
+
+        }
+
+
+        $outTransactions=Outwards::whereDate('created_at','>=',Carbon::today())->get();
+
+        $outwardDateGrouped=$outTransactions->groupBy(function($data)
+        {
+            return  Carbon::parse($data->created_at)->toDateString();
+        });
+
+
+        $outwardCounts=collect();
+
+        foreach ($outwardDateGrouped as $key=>$outward) {
+        
+            $total_count=$outward->count();
+          $approved_count=  $outward->where('status',1)->count();
+          $remaining_count=  $outward->where('status',0)->count();
+
+          $outwardCounts->put($key,['total_count'=>$total_count,'approved_count'=>$approved_count,'remaining_count'=>$remaining_count]);
+
+
+        }
+
+       
+
         
 
-        $totalOutwardCount=Outwards::whereDate('created_at',Carbon::today())->count();
-        $approvedOutwardCount=Outwards::whereDate('created_at',Carbon::today())->where('status',1)->count();
-        $remainingOutwardCount=Outwards::whereDate('created_at',Carbon::today())->where('status',0)->count();
+      
         
        
 
@@ -108,19 +149,142 @@ class HomeController extends Controller
             ->with('weeklytotal', $weeklytotal)->with('monthlytotal', $monthlytotal)
             ->with('yearlyinward', $yearlyinward)->with('yearlyoutward', $yearlyoutward)->with('yearlytotal', $yearlytotal)
             ->with('inwardsum',$inwardsum)->with('outwardsum',$outwardsum)
-            ->with('totalInwardCount',$totalInwardCount)
-            ->with('apprevedInwardCount',$approvedInwardCount)
-            ->with('remainingInwardCount',$remainingInwardCount)
-            ->with('totalOutwardCount',$totalOutwardCount)
-            ->with('approvedOutwardCount',$approvedOutwardCount)
-            ->with('remainingOutwardCount',$remainingOutwardCount)
+            ->with('inwardCounts',$inwardCounts)
+            ->with('outwardCounts',$outwardCounts)
             ->with('startCountDate',$startCountDate)
             ->with('endCountDate',$endCountDate);
     }
 
     public function countwithdate(Request $request)
     {
+       
 
+
+        $inwardsum=0;
+        $outwardsum=0;
+
+        $dailyinward = Inwards::select("*")
+            ->whereDate('created_at', Carbon::today())
+            ->count();
+
+        $dailyoutward = Outwards::select("*")
+            ->whereDate('created_at', Carbon::today())
+            ->count();
+
+        $dailytotal = $dailyinward + $dailyoutward;
+
+        // weekly
+
+        $weeklyinward = Inwards::select("*")
+            ->whereBetween('created_at',
+                [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->count();
+
+        $weeklyoutward = Outwards::select("*")
+            ->whereBetween('created_at',
+                [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
+            ->count();
+
+        $weeklytotal = $weeklyinward + $weeklyoutward;
+
+        // monthly
+        $monthly = Inwards::select("*")->whereMonth('created_at', Carbon::now()->month)->get();
+        $monthlyusd = 0;
+        foreach ($monthly as $transation) {
+            $monthlyusd += $transation->equivalent_usd;
+        }
+        $monthlyinward = Inwards::select("*")
+            ->whereMonth('created_at', Carbon::now()->month)
+            ->count();
+
+        $monthlyoutward = Outwards::select("*")
+            ->whereMonth('created_at', Carbon::now()->month)
+            ->count();
+
+        $monthlytotal = $monthlyinward + $monthlyoutward;
+
+        // yearly
+        $yearly = Inwards::select("*")
+            ->whereYear('created_at', date('Y'))->get();
+        $yearlyusd = 0;
+        foreach ($yearly as $transation) {
+            $yearlyusd += $transation->equivalent_usd;
+        }
+        $yearlyinward = Inwards::select("*")
+            ->whereYear('created_at', date('Y'))
+            ->count();
+
+        $yearlyoutward = Outwards::select("*")
+            ->whereYear('created_at', date('Y'))
+            ->count();
+
+        $yearlytotal = $yearlyinward + $yearlyoutward;
+
+
+        $startCountDate=$request->startCountDate;
+        $endCountDate=$request->endCountDate;
+
+    $inwardTransactions=Inwards::whereDate('created_at','>=',$startCountDate)->whereDate('created_at','<=',$endCountDate)->get();
+
+        $inwardDateGrouped=$inwardTransactions->groupBy(function($data)
+        {
+            return  Carbon::parse($data->created_at)->toDateString();
+        });
+
+
+        $inwardCounts=collect();
+
+        foreach ($inwardDateGrouped as $key=>$inward) {
+        
+            $total_count=$inward->count();
+          $approved_count=  $inward->where('status',1)->count();
+          $remaining_count=  $inward->where('status',0)->count();
+
+          $inwardCounts->put($key,['total_count'=>$total_count,'approved_count'=>$approved_count,'remaining_count'=>$remaining_count]);
+
+
+        }
+
+
+        $outTransactions=Outwards::whereDate('created_at','>=',$startCountDate)->whereDate('created_at','<=',$endCountDate)->get();
+
+        $outwardDateGrouped=$outTransactions->groupBy(function($data)
+        {
+            return  Carbon::parse($data->created_at)->toDateString();
+        });
+
+
+        $outwardCounts=collect();
+
+        foreach ($outwardDateGrouped as $key=>$outward) {
+        
+            $total_count=$outward->count();
+          $approved_count=  $outward->where('status',1)->count();
+          $remaining_count=  $outward->where('status',0)->count();
+
+          $outwardCounts->put($key,['total_count'=>$total_count,'approved_count'=>$approved_count,'remaining_count'=>$remaining_count]);
+
+
+        }
+
+       
+
+        
+
+      
+        
+       
+
+        return view('admin.dashboard')->with('dailyinward', $dailyinward)->with('dailyoutward', $dailyoutward)
+            ->with('dailytotal', $dailytotal)->with('monthlyinward', $monthlyinward)->with('monthlyoutward', $monthlyoutward)
+            ->with('weeklytotal', $weeklytotal)->with('monthlytotal', $monthlytotal)
+            ->with('yearlyinward', $yearlyinward)->with('yearlyoutward', $yearlyoutward)->with('yearlytotal', $yearlytotal)
+            ->with('inwardsum',$inwardsum)->with('outwardsum',$outwardsum)
+            ->with('inwardCounts',$inwardCounts)
+            ->with('outwardCounts',$outwardCounts)
+            ->with('startCountDate',$startCountDate)
+            ->with('endCountDate',$endCountDate);
+
+       
     }
 
     public function dailywithdate(Request $request)
