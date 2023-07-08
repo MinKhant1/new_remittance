@@ -29,7 +29,6 @@ class HomeController extends Controller
     public function index()
     {
         // dd(auth()->user()->type);
-        $company = Company::find(1);
         $inwardsum=0;
         $outwardsum=0;
 
@@ -117,7 +116,6 @@ class HomeController extends Controller
             ->with('remainingOutwardCount',$remainingOutwardCount)
             ->with('startCountDate',$startCountDate)
             ->with('endCountDate',$endCountDate)
-            ->with('company',$company);
     }
 
     public function countwithdate(Request $request)
