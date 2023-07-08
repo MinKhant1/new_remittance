@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\WithdrawPointController;
 use App\Http\Controllers\BranchController;
 use App\Http\Controllers\InwardController;
 use App\Http\Controllers\TransmaxlimitController;
@@ -290,6 +291,18 @@ Route::post('/inward_customer_detail', [AdminController::class, 'inward_customer
 Route::post('/outward_customer_detail', [AdminController::class, 'outward_customer_detail'])->name('outward_customer_detail');
 
 
+//Withdraw point
+Route::get('/withdrawpoint', [WithdrawPointController::class, 'withdrawpoint'])->middleware('user_middleware');
+
+Route::get('/addwithdrawpoint', [WithdrawPointController::class, 'addwithdrawpoint'])->middleware('user_middleware');
+
+Route::post('/savewithdrawpoint', [WithdrawPointController::class, 'savewithdrawpoint']);
+
+Route::get('/editwithdrawpoint/{id}', [WithdrawPointController::class, 'editwithdrawpoint'])->middleware('user_middleware');
+
+Route::post('/updatewithdrawpoint', [WithdrawPointController::class, 'updatewithdrawpoint']);
+
+Route::get('/deletetwithdrawpoint/{id}', [WithdrawPointController::class, 'deletewithdrawpoint'])->middleware('user_middleware');
 
 //User
 Route::get('/user', [UserController::class, 'user'])->middleware('user_middleware');

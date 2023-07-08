@@ -41,7 +41,7 @@ class PurposeOfTransController extends Controller
         $purpose->purpose_name=$request->input('purpose_name');
         $purpose->save();
 
-        return redirect('/purposeoftrans')->with('status', 'Currency has been added!');
+        return redirect('/purposeoftrans')->with('status', 'Purpose Of Transactions has been added!');
     }
 
     public function editpurposeoftrans($id)
