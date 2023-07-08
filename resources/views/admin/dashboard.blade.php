@@ -74,7 +74,7 @@
             <table class="table table-sm">
             <thead>
             <tr>
-            <th style="width: 10px"></th>
+           
             <th>Date</th>
             <th>Total Transactions</th>
             <th>Approved Transactions</th>
@@ -83,13 +83,16 @@
             </thead>
             <tbody>
             <tr>
-            <td>1.</td>
-            <td style="font-weight: 500">{{Carbon::today()->toDateString()}}</td>
-            <td style="font-size: 20px" class="text-center"><span class="badge bg-info">55%</span></td>
-            <td style="font-size: 20px" class="text-center"><span class="badge bg-success">55%</span></td>
-            <td style="font-size: 20px" class="text-center"><span class="badge bg-danger">55%</span></td>
+              
+            <td style="font-weight: 500">{{\Carbon\Carbon::today()->toDateString()}}</td>
+            <td style="font-size: 20px" class="text-center"><span class="badge bg-info">{{$totalInwardCount}}</span></td>
+            <td style="font-size: 20px" class="text-center"><span class="badge bg-success">{{$apprevedInwardCount}}</span></td>
+            <td style="font-size: 20px" class="text-center"><span class="badge bg-danger">{{$remainingInwardCount}}</span></td>
             </tr>
-            <tr>
+          
+
+           
+
             </tbody>
             </table>
             </div>
@@ -98,6 +101,46 @@
             
             </div>
           </div>
+
+
+          <div class="col-12" style="border-bottom: solid 2px black">
+            <div class="col-8">
+             <div class="card" style="margin-top: 10px">
+               <div class="card-header">
+               <h3 class="card-title">Transactions Status</h3>
+               </div>
+               
+               <div class="card-body p-0">
+               <table class="table table-sm">
+               <thead>
+               <tr>
+              
+               <th>Date</th>
+               <th>Total Transactions</th>
+               <th>Approved Transactions</th>
+               <th>Remaining Transactions</th>
+               </tr>
+               </thead>
+               <tbody>
+               <tr>
+                
+               <td style="font-weight: 500">{{\Carbon\Carbon::today()->toDateString()}}</td>
+               <td style="font-size: 20px" class="text-center"><span class="badge bg-info">{{$totalInwardCount}}</span></td>
+               <td style="font-size: 20px" class="text-center"><span class="badge bg-success">{{$apprevedInwardCount}}</span></td>
+               <td style="font-size: 20px" class="text-center"><span class="badge bg-danger">{{$remainingInwardCount}}</span></td>
+               </tr>
+             
+   
+              
+   
+               </tbody>
+               </table>
+               </div>
+               
+               </div>
+               
+               </div>
+             </div>
         </div>
         <br>
         <div class="col-8">
