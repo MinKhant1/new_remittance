@@ -30,7 +30,6 @@ class HomeController extends Controller
     {
         // dd(auth()->user()->type);
         $company = Company::find(1);
-        dd($company);
         $inwardsum=0;
         $outwardsum=0;
 
