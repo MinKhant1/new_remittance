@@ -13,6 +13,7 @@ use App\Models\PurposeOfTrans;
 use App\Models\TotalInward;
 use App\Models\blacklists;
 use App\Models\TransMaxLimit;
+use App\Models\WithdrawPoint;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Http\Request;
@@ -61,6 +62,7 @@ class InwardTransactionController extends Controller
         $purposeOfTrans = PurposeOfTrans::all();
         $branches = Branch::All();
         $exhange_rates=ExchangeRate::all();
+        $withdrawpoints=WithdrawPoint::all();
 
         // dd($exhange_rates);
        //dd($inwardtransaction);
@@ -107,7 +109,8 @@ class InwardTransactionController extends Controller
             ->with('usd', $usd)->with('thb', $thb)
             ->with('par_transaction',$par_count)
             ->with('par_month_transaction',$par_month)
-            ->with('sum_usd_grouped_by_nrc',$sum_usd_grouped_by_nrc);
+            ->with('sum_usd_grouped_by_nrc',$sum_usd_grouped_by_nrc)
+            ->with('withdrawpoints',$withdrawpoints);
 
          
     }
@@ -214,6 +217,8 @@ class InwardTransactionController extends Controller
         $purposeOfTrans = PurposeOfTrans::all();
         $branches = Branch::All();
         $exchange_rates=ExchangeRate::all();
+        $withdrawpoints=WithdrawPoint::all();
+        
 
         $usd = DB::table('exchange_rates')->where('currency_code', 'USD')
             ->value('exchange_rate');
@@ -253,7 +258,8 @@ class InwardTransactionController extends Controller
             ->with('exchange_rates',$exchange_rates)
             ->with('par_transaction',$par_count)
             ->with('par_month_transaction',$par_month)
-            ->with('sum_usd_grouped_by_nrc',$sum_usd_grouped_by_nrc);
+            ->with('sum_usd_grouped_by_nrc',$sum_usd_grouped_by_nrc)
+            ->with('withdrawpoints',$withdrawpoints);
 
     }
 

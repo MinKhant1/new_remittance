@@ -170,7 +170,16 @@
   <div class="col-2">
 
     <label for="withdraw_point" class="mr-sm-2">Withdraw Point:</label>
-    <input type="text" class="form-control mb-2 mr-sm-2" placeholder="" id="withdraw_point"  name="withdraw_point" value="{{old('withdraw_point')}}">
+    {{-- <input type="text" class="form-control mb-2 mr-sm-2" placeholder="" id="withdraw_point"  name="withdraw_point" value="{{old('withdraw_point')}}"> --}}
+    <select class="form-control" id="withdraw_point" name="withdraw_point" >
+
+      @foreach ($withdrawpoints as $withdrawpoint)
+          
+      <option value="{{$withdrawpoint->withdraw_point_name}}">{{$withdrawpoint->withdraw_point_name}}</option>
+      @endforeach
+
+
+    </select>
   </div>
 
 
