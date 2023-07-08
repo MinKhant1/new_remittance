@@ -115,7 +115,7 @@ class HomeController extends Controller
             ->with('approvedOutwardCount',$approvedOutwardCount)
             ->with('remainingOutwardCount',$remainingOutwardCount)
             ->with('startCountDate',$startCountDate)
-            ->with('endCountDate',$endCountDate)
+            ->with('endCountDate',$endCountDate);
     }
 
     public function countwithdate(Request $request)
