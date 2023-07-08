@@ -7,15 +7,16 @@
     </a> --}}
 
     <!-- Sidebar -->
+   
     <div class="sidebar">
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-       
           <a href="{{url('/')}}" class="d-block">
             <div class="image">
               <img src="{{asset('frontend/images/logo_sys.jpg')}}" style="width: 200px" class="img-thumbnail elevation-2" alt="User Image">
             </div></a>
       </div>
+   
 <!-- Sidebar Menu -->
 <nav class="mt-2">
     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">

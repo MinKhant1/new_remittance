@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Inwards;
 use App\Models\Outwards;
+use App\Models\Company;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Http\Request;
@@ -28,7 +29,8 @@ class HomeController extends Controller
     public function index()
     {
         // dd(auth()->user()->type);
-
+        $company = Company::find(1);
+        dd($company);
         $inwardsum=0;
         $outwardsum=0;
 
@@ -115,7 +117,8 @@ class HomeController extends Controller
             ->with('approvedOutwardCount',$approvedOutwardCount)
             ->with('remainingOutwardCount',$remainingOutwardCount)
             ->with('startCountDate',$startCountDate)
-            ->with('endCountDate',$endCountDate);
+            ->with('endCountDate',$endCountDate)
+            ->with('company',$company);
     }
 
     public function countwithdate(Request $request)
