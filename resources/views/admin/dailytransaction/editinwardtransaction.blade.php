@@ -27,7 +27,9 @@
     <!--  General -->
     {{Form::hidden('id', $inward_transaction->id)}}
     <div class="form-row" style="margin: 2% 2% 2% 18%">
-
+      <div class="col-12">
+        <p class="text-bold" style="color:black; font-size:25px">Edit Inward Transaction </p>
+      </div>
       <div class="col-2">
         <label for="Date" class="mr-sm-2">Date:</label>
         {{-- <input type="date" class="form-control mb-2 mr-sm-2" placeholder="Enter Date" id="date" name="date" value="2013-01-08"> --}}
