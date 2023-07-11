@@ -43,6 +43,7 @@
                     <th>Num.</th>
                     <th>Username</th>
                     <th>Role</th>
+                    <th>Branch Code</th>
                     <th>Details</th>
                     <th>Delete</th>
                   </tr>
@@ -53,6 +54,7 @@
                     <td>{{$increment}}</td>
                     <td>{{$user->name}}</td>
                     <td>{{$user->type}}</td>
+                    <td>{{$user->branch_code}}</td>
                     <td>
                       <a href="{{url('/edituser/' . $user->id)}}" class="btn btn-primary"><i class="nav-icon fas fa-edit"></i></a></td>
                     <td>
@@ -68,6 +70,7 @@
                     <th>Num.</th>
                     <th>Username</th>
                     <th>Role</th>
+                    <th>Branch Code</th>
                     <th>Details</th>
                     <th>Delete</th>
                   </tr>

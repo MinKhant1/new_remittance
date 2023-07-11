@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use App\Models\Branch;
 use App\Models\Role;
 use App\Http\Middleware\CheckerUser;
 use App\Models\Company;
@@ -92,7 +93,9 @@ class UserController extends Controller
 
       public function adduser()
       {
-        return view('admin.usersetup.adduser');
+        $branches = Branch::all();
+
+        return view('admin.usersetup.adduser')->with('branches', $branches);
       }
 
 
@@ -110,6 +113,7 @@ class UserController extends Controller
         $user = new User();
         // $user = User::find($request->input('id'));
         $user->name = $request->input('name');
+        $user->branch_code = $request->input('branch_code');
         $user->password = bcrypt($request->input('password'));
         $user->inward = $request->input('inward');
         $user->outward = $request->input('outward');
@@ -138,10 +142,12 @@ class UserController extends Controller
       {
           $user = User::find($id);
 
+          $branches = Branch::all();
+
           $roles =  DB::table('users')->select('type')->groupby('type')->get()->toArray();
 
 
-          return view('admin.usersetup.edituser')->with('user', $user)->with('roles', $roles);
+          return view('admin.usersetup.edituser')->with('user', $user)->with('roles', $roles)->with('branches', $branches);
       }
 
       public function updateuser(Request $request)
@@ -150,6 +156,8 @@ class UserController extends Controller
                                    ]);
 
         $user = User::find($request->input('id'));
+        $user->name = $request->input('name');
+        $user->branch_code = $request->input('branch_code');
         $user->inward = $request->input('inward');
         $user->outward = $request->input('outward');
         $user->total_inward = $request->input('total_inward');

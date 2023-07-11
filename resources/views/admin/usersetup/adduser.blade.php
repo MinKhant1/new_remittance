@@ -54,8 +54,20 @@
                   <input type="text" name="product_name" class="form-control" id="exampleInputEmail1" placeholder="Enter product name"> --}}
                   {{Form::label('', 'User', ['for' => 'exampleInputEmail1' ])}}
                   {{Form::text('name', '',  ['placeholder' => 'User','class' => 'form-control', 'id'=> 'exampleInputEmail1' ])}}
+
+                  <div class="form-group">
+                    <label for="branch_code">Branch</label>
+                    <select class="form-control" id="branch_code"  name="branch_code">
+                      <option value="blank"></option>
+                      @foreach ($branches as $branch)
+                      <option value="{{$branch->branch_code}}">{{$branch->branch_code}}</option>
+                      @endforeach
+                    </select>
+                  </div>
+
                   {{Form::label('', 'Password', ['for' => 'exampleInputEmail1' ])}}
                   {{Form::password('password', ['placeholder' => 'Password','class' => 'form-control', 'id'=> 'exampleInputEmail1' ])}}
+
                   {{Form::label('', 'Confirm Password', ['for' => 'exampleInputEmail1' ])}}
                   {{Form::password('password_confirmation', ['placeholder' => 'Confirm Password','class' => 'form-control', 'id'=> 'exampleInputEmail1' ])}}
                 </div>

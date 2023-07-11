@@ -57,6 +57,18 @@
                   {{Form::text('name', $user->name,  ['placeholder' => 'Username','class' => 'form-control', 'id'=> 'exampleInputEmail1' ])}}
                 </div>
 
+                <div class="form-group">
+                  <label for="branch_code">Branch</label>
+                  <select class="form-control" id="branch_code"  name="branch_code">
+                    <option value="blank"></option>
+                    @if ($branches)
+                    @foreach ($branches as $branch)
+                    <option {{ ( $branch->branch_code == $user->branch_code) ? 'selected' : '' }} value="{{$branch->branch_code}}">{{$branch->branch_code}}</option>
+                    @endforeach    
+                    @endif
+                  </select>
+                </div>
+
                 {{-- <div class="form-group">
                   <label>Select role</label>
                   <select class="form-control select2" name="role" style="width: 100%;">
