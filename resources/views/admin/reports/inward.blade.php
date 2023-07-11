@@ -166,7 +166,12 @@
                       <td>{{number_format($inwardtransaction->equivalent_usd,2)}}</td>
                       <td>{{number_format($inwardtransaction->amount_mmk,2)}}</td>
                       <td>{{number_format($inwardtransaction->amount_mmk/$inwardtransaction->amount,2)}}</td>
+                      @if (isset($inwardtransaction->equivalent_usd) && $inwardtransaction->equivalent_usd>0)
+                      
                       <td>{{number_format($inwardtransaction->amount_mmk/$inwardtransaction->equivalent_usd,2)}}</td>
+                      @else
+                      <td></td>
+                      @endif
                       <td>{{$inwardtransaction->txd_date_time}}</td>
 
 
