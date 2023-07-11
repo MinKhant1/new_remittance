@@ -7,6 +7,20 @@
     </a> --}}
 
     <!-- Sidebar -->
+
+    @php
+
+    $user_branch_code=Auth::user()->branch_code;
+    $user_branch=\App\Models\Branch::where('branch_code',$user_branch_code)->first();
+
+     $isMyanmar=false;
+        if ($user_branch->country=='MMR') {
+          $isMyanmar=true;
+        }
+    @endphp
+   
+
+
    
     <div class="sidebar">
       <!-- Sidebar user panel (optional) -->
@@ -46,25 +60,45 @@
       <li class="nav-item">
         <a href="{{url('/inwardtransaction')}}" class="nav-link {{request()->is('') ? 'active' : ''}}">
           <i class="fa fa-user" aria-hidden="true"></i>
+          @if ($isMyanmar)
+          
           <p>Inward Transaction</p>
+          @else
+          <p>Outward Transaction</p>
+          @endif
         </a>
       </li>
       <li class="nav-item">
         <a href="{{url('/approveinwardtransaction')}}" class="nav-link {{request()->is('') ? 'active' : ''}}">
           <i class="fas fa-edit" aria-hidden="true"></i>
+          @if ($isMyanmar)
+          
           <p>Inward Approve</p>
+          @else
+          <p>Outward Approve</p>
+          @endif
         </a>
       </li>
       <li class="nav-item">
         <a href="{{url('/outwardtransaction')}}" class="nav-link {{request()->is('') ? 'active' : ''}}">
           <i class="fa fa-user" aria-hidden="true"></i>
+          @if ($isMyanmar)
+          
           <p>Outward Transaction</p>
+          @else
+          <p>Inward Transaction</p>
+          @endif
         </a>
       </li>
       <li class="nav-item">
         <a href="{{url('/outwardtransactionapprove')}}" class="nav-link {{request()->is('') ? 'active' : ''}}">
           <i class="fas fa-edit" aria-hidden="true"></i>
+          @if ($isMyanmar)
+          
           <p>Outward Approve</p>
+          @else
+          <p>Inward Approve</p>
+          @endif
         </a>
       </li>
 
@@ -72,25 +106,45 @@
       <li class="nav-item">
         <a href="{{url('/inward')}}" class="nav-link {{request()->is('') ? 'active' : ''}}">
           <i class="fa fa-folder" aria-hidden="true"></i>
+          @if ($isMyanmar)
+          
           <p>Inward</p>
+          @else
+          <p>Outward</p>
+          @endif
         </a>
       </li>
       <li class="nav-item">
         <a href="{{url('/outwardtransactionreport')}}" class="nav-link {{request()->is('') ? 'active' : ''}}">
           <i class="fas fa-folder" aria-hidden="true"></i>
+          @if ($isMyanmar)
+          
           <p>Outward</p>
+          @else
+          <p>Inward</p>
+          @endif
         </a>
       </li>
       <li class="nav-item">
         <a href="{{url('/totalinward')}}" class="nav-link {{request()->is('') ? 'active' : ''}}">
           <i class="fa fa-folder" aria-hidden="true"></i>
+          @if ($isMyanmar)
+          
           <p>Total Inward</p>
+          @else
+          <p>Total Outward</p>
+          @endif
         </a>
       </li>
       <li class="nav-item">
         <a href="{{url('/totaloutward')}}" class="nav-link {{request()->is('') ? 'active' : ''}}">
           <i class="fas fa-folder" aria-hidden="true"></i>
+          @if ($isMyanmar)
+          
           <p>Total Outward</p>
+          @else
+          <p>Total Inward</p>
+          @endif
         </a>
       </li>
       <li class="nav-item">
@@ -102,7 +156,12 @@
       <li class="nav-item">
         <a href="{{url('/inward_customer_list')}}" class="nav-link {{request()->is('') ? 'active' : ''}}">
           <i class="fa fa-folder" aria-hidden="true"></i>
+          @if ($isMyanmar)
+          
           <p>Inward Customer List</p>
+          @else
+          <p>Outward Customer List</p>
+          @endif
         </a>
       </li>
 
@@ -110,7 +169,12 @@
       <li class="nav-item">
         <a href="{{url('/outward_customer_list')}}" class="nav-link {{request()->is('') ? 'active' : ''}}">
           <i class="fa fa-folder" aria-hidden="true"></i>
+          @if ($isMyanmar)
+          
           <p>Outward Customer List</p>
+          @else
+          <p>Inward Customer List</p>
+          @endif
         </a>
       </li>
 
