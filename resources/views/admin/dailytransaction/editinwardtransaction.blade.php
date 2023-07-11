@@ -169,7 +169,7 @@
       <input type="text" class="form-control mb-2 mr-sm-2" placeholder="" id="withdraw_point"  name="withdraw_point" value="{{$inward_transaction->withdraw_point}}">
     </div> --}}
 
-    <div class="col-2">
+    <div class="col-6">
 
       <label for="withdraw_point" class="mr-sm-2">Withdraw Point:</label>
       {{-- <input type="text" class="form-control mb-2 mr-sm-2" placeholder="" id="withdraw_point"  name="withdraw_point" value="{{old('withdraw_point')}}"> --}}
@@ -182,6 +182,11 @@
   
   
       </select>
+    </div>
+  
+    <div class="col-6">
+      <label for="sender_name" class="mr-sm-2">Withdraw Point No:</label>
+      <input type="text" class="form-control mb-2 mr-sm-2" placeholder="" id="withdrawpoint_no"  name="withdrawpoint_no" value="{{old('withdrawpoint_no')}}">
     </div>
 
 
