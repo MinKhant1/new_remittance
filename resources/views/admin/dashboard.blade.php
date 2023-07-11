@@ -50,13 +50,24 @@
             <div class="col-1-4 col-1-4-sm" style="padding-right: 5%">
                 <div class="controls">
                   <label for="arrive" class="label-date"  style="padding-right: 20px">&nbsp;&nbsp;Start Date</label>
+                  @if (isset($startCountDate))
                   <input type="date" id="arrive"  style="margin-right: 40px" class="floatLabel" name="startCountDate"   value="{{$startCountDate}}">                 
+                 @else
+                 <input type="date" id="arrive"  style="margin-right: 40px" class="floatLabel" name="startCountDate"   value=""> 
+                  @endif
                 </div>
               </div>
               <div class="col-1-4 col-1-4-sm">
                 <div class="controls">
+
                   <label for="arrive" class="label-date" style="padding-right: 20px">&nbsp;&nbsp;End Date</label>
+
+                  @if (isset($endCountDate))
+                      
                   <input type="date" id="arrive"   style="margin-right: 80px"  class="floatLabel"  name="endCountDate" value="{{$endCountDate}}">                 
+                  @else
+                  <input type="date" id="arrive"   style="margin-right: 80px"  class="floatLabel"  name="endCountDate" value="">  
+                  @endif
                 </div>
               </div>
               {!!Form::submit('Search', ['class' => 'btn btn-success'])!!}
@@ -83,6 +94,7 @@
             </thead>
             <tbody>
 
+              @if (isset($inwardCounts))
               @foreach ($inwardCounts as $key=>$inwardcount)
               <tr>
                 
@@ -92,7 +104,9 @@
               <td style="font-size: 20px" class="text-center"><span class="badge bg-danger">{{$inwardcount['remaining_count']}}</span></td>
               </tr>
                   
-              @endforeach
+              @endforeach 
+              @endif
+          
           
 
            
@@ -130,7 +144,7 @@
              </tr>
              </thead>
              <tbody>
- 
+              @if (isset($outwardCounts))
                @foreach ($outwardCounts as $key=>$outwardCount)
                <tr>
                  
@@ -141,7 +155,7 @@
                </tr>
                    
                @endforeach
-           
+           @endif
  
             
  
