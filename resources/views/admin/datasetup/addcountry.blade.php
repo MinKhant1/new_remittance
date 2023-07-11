@@ -54,7 +54,7 @@
                   <select class="form-control" id="country_code"  name="country_code" onchange="changecountrycode()">
                     <option value="blank"></option>
                     @foreach ($country_lists as $country)
-                    <option value="{{$country->country_code}}">{{$country->country_name}}</option>
+                    <option value="{{$country->country_code}}">{{$country->country_code}}</option>
                     @endforeach
                   </select>                 
                 </div>
@@ -64,7 +64,7 @@
                   <select class="form-control" id="country_name"  name="country_name">
                     <option value="blank"></option>
                     @foreach ($country_lists as $country)
-                    <option value="{{$country->country_name}}">{{$country->country_code}}</option>
+                    <option value="{{$country->country_name}}">{{$country->country_name}}</option>
                     @endforeach
                   </select>                      
                 </div>
