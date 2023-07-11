@@ -186,7 +186,11 @@
   
     <div class="col-6">
       <label for="sender_name" class="mr-sm-2">Withdraw Point No:</label>
-      <input type="text" class="form-control mb-2 mr-sm-2" placeholder="" id="withdrawpoint_no"  name="withdrawpoint_no" value="{{old('withdrawpoint_no')}}">
+      @if (isset($inward_transaction->withdrawpoint_no))
+      <input type="text" class="form-control mb-2 mr-sm-2" placeholder="" id="withdrawpoint_no"  name="withdrawpoint_no" value="{{$inward_transaction->withdrawpoint_no}}">
+      @else
+      <input type="text" class="form-control mb-2 mr-sm-2" placeholder="" id="withdrawpoint_no"  name="withdrawpoint_no" value="">
+      @endif
     </div>
 
 

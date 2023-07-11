@@ -125,6 +125,7 @@ class InwardTransactionController extends Controller
                              'receiver_phno'=>'required',
                              'purpose_of_transaction'=>'required',
                              'withdraw_point'=>'required',
+                             'withdrawpoint_no'=>'required',
                              'sender_name'=>'required',
                              'sender_nrc_passport'=> 'required',
                              'sender_country'=>'required',
@@ -179,6 +180,7 @@ class InwardTransactionController extends Controller
          $inwardtransaction->receiver_address_ph =$request->input('receiver_address').'/'.$request->input('receiver_phno');
          $inwardtransaction->purpose= $request->input('purpose_of_transaction');
          $inwardtransaction->withdraw_point = $request->input('withdraw_point');
+         $inwardtransaction->withdrawpoint_no=$request->input('withdrawpoint_no');
          $inwardtransaction->remark_for_withdraw_point = $request->input('remark_withdraw_point');
          $inwardtransaction->sender_name = $request->input('sender_name');
          $inwardtransaction->sender_nrc_passport = $request->input('sender_nrc_passport');
@@ -273,6 +275,7 @@ class InwardTransactionController extends Controller
                              'receiver_phno'=>'required',
                              'purpose_of_transaction'=>'required',
                              'withdraw_point'=>'required',
+                             'withdrawpoint_no'=>'required',
                              'sender_name'=>'required',
                              'sender_nrc_passport'=> 'required',
                              'sender_country'=>'required',
@@ -324,6 +327,7 @@ class InwardTransactionController extends Controller
          $inwardtransaction->receiver_address_ph =$request->input('receiver_address').'/'.$request->input('receiver_phno');
          $inwardtransaction->purpose= $request->input('purpose_of_transaction');
          $inwardtransaction->withdraw_point = $request->input('withdraw_point');
+         $inwardtransaction->withdrawpoint_no=$request->input('withdrawpoint_no');
          $inwardtransaction->remark_for_withdraw_point = $request->input('remark_withdraw_point');
          $inwardtransaction->sender_name = $request->input('sender_name');
          $inwardtransaction->sender_nrc_passport = $request->input('sender_nrc_passport');
