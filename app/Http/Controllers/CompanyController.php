@@ -52,7 +52,7 @@ class CompanyController extends Controller
       $ext = $request->file('image')->getClientOriginalExtension();
 
       $fileName = pathinfo($fileName, PATHINFO_FILENAME);
-      $destinationPath = public_path().'/images/company' ;
+      $destinationPath = public_path().'/frontend/images' ;
 
       $fileNameToStore = $fileName.'_'.time().'.'.$ext;   
       
@@ -107,7 +107,7 @@ class CompanyController extends Controller
         $ext = $request->file('image')->getClientOriginalExtension();
 
         $fileName = pathinfo($fileName, PATHINFO_FILENAME);
-        $destinationPath = public_path().'/images/company' ;
+        $destinationPath = public_path().'/frontend/images' ;
 
         $fileNameToStore = $fileName.'_'.time().'.'.$ext;   
         

@@ -97,7 +97,8 @@
                       <td>{{$transaction->amount_mmk}}</td>
                       <td>{{$transaction->equivalent_usd}}</td>
                       <td> 
-                        @if ($transaction->file != 'Nofile.jpg')
+                        {{-- @if ($transaction->file != 'Nofile.jpg') --}}
+                        @if ($transaction->file != 'Nofile.jpg' && isset($transaction->file) ) 
                     
                         <a href="{{url('/download/'. $transaction->file)}}" class="btn btn-warning" ><i class="nav-icon fas fa-print"></i>
                         </a></td>

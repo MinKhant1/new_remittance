@@ -60,7 +60,7 @@ body {
 
             @if ($company)
                 
-            <img class="profile_img" src="{{'/images/company/'.$company->image}}" alt="company image">
+            <img class="profile_img" src="{{'frontend/images/'.$company->image}}" alt="company image">
             @else
             <img class="profile_img" src="https://www.pngkey.com/png/full/115-1150152_default-profile-picture-avatar-png-green.png" alt="company Logo">
             @endif

@@ -51,13 +51,17 @@ class PdfController_2 extends Controller
         }
     }
     function get_starred($str) {
+      if($str==null)
+      {
+        return '';
+      }
       $len = strlen($str);
       return substr($str, 0, 2).str_repeat('*', $len - 4).substr($str, $len - 2, 3);
   }
   function get_image($img)
   {
 
-    $img_src = 'images/company/'.$img;
+    $img_src = 'frontend/images/'.$img;
     return $img_src;
   }
 
@@ -75,9 +79,18 @@ class PdfController_2 extends Controller
 
         foreach($data_outputs as $data)
         {
-          $address_ph = $data->sender_address_ph;
+          $address_ph = $data->receiver_address_ph;
           $separator = '/';
-          $add_ph = explode($separator, $address_ph);
+          if($address_ph!=null)
+          {
+
+            $add_ph = explode($separator, $address_ph);
+          }
+          else
+          {
+            $add_ph=array('','');
+            
+          }
         $output = '
         <!DOCTYPE html>
 <meta charset="UTF-8">
@@ -103,32 +116,32 @@ class PdfController_2 extends Controller
 
 <table style="border: 2px solid black;border-collapse:collapse;width:100%">
         <tr style="border: 2px solid black;">
-          <td  style="border: 2px solid black;font-size: 14px;height: 30px;padding-left: 10px;width:50%;font-weight: bold;">Slip No. <span style="font-weight: normal;">'.$data->sr_id.'</span></td>
-          <td  style="border: 2px solid black;font-size: 14px;height: 30px;padding-left: 10px;width:50%;font-weight: bold;">Date:<span style="font-weight: normal;"> '.$data->created_at->toDateString().'</span></td>
+          <td  style="border: 2px solid black;font-size: 10px;height: 20px;padding-left: 10px;width:50%;font-weight: bold;">Slip No. <span style="font-weight: normal;">'.$data->sr_id.'</span></td>
+          <td  style="border: 2px solid black;font-size: 10px;height: 20px;padding-left: 10px;width:50%;font-weight: bold;">Date:<span style="font-weight: normal;"> '.$data->created_at->toDateString().'</span></td>
         </tr>
         <tr style="border: 2px solid black;">
-          <td style="border: 2px solid black;font-size: 14px;height: 30px;padding-left: 10px;width:50%;font-weight: bold;">Sender Name:<span style="font-weight: normal;"> '.$data->sender_name.'</span></td>
-          <td style="border: 2px solid black;font-size: 14px;height: 30px;padding-left: 10px;width:50%;font-weight: bold;">Receiver Name:<span style="font-weight: normal;"> '.$data->receiver_name.'</span></td>
+          <td style="border: 2px solid black;font-size: 10px;height: 20px;padding-left: 10px;width:50%;font-weight: bold;">Sender Name:<span style="font-weight: normal;"> '.$data->sender_name.'</span></td>
+          <td style="border: 2px solid black;font-size: 10px;height: 20px;padding-left: 10px;width:50%;font-weight: bold;">Receiver Name:<span style="font-weight: normal;"> '.$data->receiver_name.'</span></td>
           </tr>
           <tr style="border: 2px solid black;">
-          <td style="border: 2px solid black;font-size: 14px;height: 30px;padding-left: 10px;width:50%;font-weight: bold;">Sender NRC/Passport:<span style="font-weight: normal;"> '.$data->sender_nrc_passport.'</span></td>
-          <td style="border: 2px solid black;font-size: 14px;height: 30px;padding-left: 10px;width:50%;font-weight: bold;">Receiver NRC/Passport:<span style="font-weight: normal;"> '.$this->get_starred($data->receiver_nrc_passport).'</span></td>
+          <td style="border: 2px solid black;font-size: 10px;height: 20px;padding-left: 10px;width:50%;font-weight: bold;">Sender NRC/Passport:<span style="font-weight: normal;"> '.$data->sender_nrc_passport.'</span></td>
+          <td style="border: 2px solid black;font-size: 10px;height: 20px;padding-left: 10px;width:50%;font-weight: bold;">Receiver NRC/Passport:<span style="font-weight: normal;"> '.$this->get_starred($data->receiver_nrc_passport).'</span></td>
           </tr>
           <tr style="border: 2px solid black;">
-          <td style="border: 2px solid black;font-size: 14px;height: 30px;padding-left: 10px;width:50%;font-weight: bold;">Sender Address:<span style="font-weight: normal;"> '.$add_ph[0].' </span></td>
-          <td style="border: 2px solid black;font-size: 14px;height: 30px;padding-left: 10px;width:50%;font-weight: bold;">Receiver Country:<span style="font-weight: normal;"> '.$data->receiver_country_code.'</span></td>
+          <td style="border: 2px solid black;font-size: 10px;height: 20px;padding-left: 10px;width:50%;font-weight: bold;">Sender Address:<span style="font-weight: normal;"> '.$add_ph[0].' </span></td>
+          <td style="border: 2px solid black;font-size: 10px;height: 20px;padding-left: 10px;width:50%;font-weight: bold;">Receiver Country:<span style="font-weight: normal;"> '.$data->receiver_country_code.'</span></td>
           </tr>
           <tr style="border: 2px solid black;">
-          <td style="border: 2px solid black;font-size: 14px;height: 30px;padding-left: 10px;width:50%;font-weight: bold;">Sender Phone Number:<span style="font-weight: normal;"> '.$add_ph[1].' </span></td>
-          <td  style="border: 2px solid black;font-size: 14px;height: 30px;padding-left: 10px;width:50%;font-weight: bold;">Equivalent USD:<span style="font-weight: normal;"> '.$data->equivalent_usd.'</span></td>
+          <td style="border: 2px solid black;font-size: 10px;height: 20px;padding-left: 10px;width:50%;font-weight: bold;">Sender Phone Number:<span style="font-weight: normal;"> '.$add_ph[1].' </span></td>
+          <td  style="border: 2px solid black;font-size: 10px;height: 20px;padding-left: 10px;width:50%;font-weight: bold;">Equivalent USD:<span style="font-weight: normal;"> '.$data->equivalent_usd.'</span></td>
         </tr>
           <tr style="border: 2px solid black;">
-          <td  style="border: 2px solid black;font-size: 14px;height: 30px;padding-left: 10px;width:50%;font-weight: bold;">Purpose of Transaction:<span style="font-weight: normal;"> '.$data->purpose.'</span></td>
-          <td  style="border: 2px solid black;font-size: 14px;height: 30px;padding-left: 10px;width:50%;font-weight: bold;"">MMK:<span style="font-weight: normal;"> '.$data->amount_mmk.'</span></td>
+          <td  style="border: 2px solid black;font-size: 10px;height: 20px;padding-left: 10px;width:50%;font-weight: bold;">Purpose of Transaction:<span style="font-weight: normal;"> '.$data->purpose.'</span></td>
+          <td  style="border: 2px solid black;font-size: 10px;height: 20px;padding-left: 10px;width:50%;font-weight: bold;"">MMK:<span style="font-weight: normal;"> '.$data->amount_mmk.'</span></td>
           </tr>
           <tr style="border: 2px solid black;">
-          <td  style="border: 2px solid black;font-size: 14px;height: 30px;padding-left: 10px;width:50%;font-weight: bold;">Withdraw Point:<span style="font-weight: normal;"> '.$data->deposit_point.'</span></td>
-          <td style="border: 2px solid black;font-size: 14px;height: 30px;padding-left: 10px;width:50%;font-weight: bold;"></td>
+          <td  style="border: 2px solid black;font-size: 10px;height: 20px;padding-left: 10px;width:50%;font-weight: bold;">Withdraw Point:<span style="font-weight: normal;"> '.$data->deposit_point.'</span></td>
+          <td style="border: 2px solid black;font-size: 10px;height: 20px;padding-left: 10px;width:50%;font-weight: bold;"></td>
           </tr>
       </table>
       <img style="width:100%;height:20%";margin-left:30%;" src="frontend/images/sign.PNG">
@@ -188,32 +201,32 @@ class PdfController_2 extends Controller
 
   <table style="border: 2px solid black;border-collapse:collapse;width:100%">
           <tr style="border: 2px solid black;">
-            <td  style="border: 2px solid black;font-size: 14px;height: 30px;padding-left: 10px;width:50%;font-weight: bold;">Slip No. <span style="font-weight: normal;">'.$data->sr_id.'</span></td>
-            <td  style="border: 2px solid black;font-size: 14px;height: 30px;padding-left: 10px;width:50%;font-weight: bold;">Date:<span style="font-weight: normal;"> '.$data->created_at->toDateString().'</span></td>
+            <td  style="border: 2px solid black;font-size: 10px;height: 20px;padding-left: 10px;width:50%;font-weight: bold;">Slip No. <span style="font-weight: normal;">'.$data->sr_id.'</span></td>
+            <td  style="border: 2px solid black;font-size: 10px;height: 20px;padding-left: 10px;width:50%;font-weight: bold;">Date:<span style="font-weight: normal;"> '.$data->created_at->toDateString().'</span></td>
           </tr>
           <tr style="border: 2px solid black;">
-            <td style="border: 2px solid black;font-size: 14px;height: 30px;padding-left: 10px;width:50%;font-weight: bold;">Sender Name:<span style="font-weight: normal;"> '.$data->sender_name.'</span></td>
-            <td style="border: 2px solid black;font-size: 14px;height: 30px;padding-left: 10px;width:50%;font-weight: bold;">Receiver Name:<span style="font-weight: normal;"> '.$data->receiver_name.'</span></td>
+            <td style="border: 2px solid black;font-size: 10px;height: 20px;padding-left: 10px;width:50%;font-weight: bold;">Sender Name:<span style="font-weight: normal;"> '.$data->sender_name.'</span></td>
+            <td style="border: 2px solid black;font-size: 10px;height: 20px;padding-left: 10px;width:50%;font-weight: bold;">Receiver Name:<span style="font-weight: normal;"> '.$data->receiver_name.'</span></td>
             </tr>
             <tr style="border: 2px solid black;">
-            <td style="border: 2px solid black;font-size: 14px;height: 30px;padding-left: 10px;width:50%;font-weight: bold;">Sender NRC/Passport:<span style="font-weight: normal;"> '.$data->sender_nrc_passport.'</span></td>
-            <td style="border: 2px solid black;font-size: 14px;height: 30px;padding-left: 10px;width:50%;font-weight: bold;">Receiver NRC/Passport:<span style="font-weight: normal;"> '.$this->get_starred($data->receiver_nrc_passport).'</span></td>
+            <td style="border: 2px solid black;font-size: 10px;height: 20px;padding-left: 10px;width:50%;font-weight: bold;">Sender NRC/Passport:<span style="font-weight: normal;"> '.$data->sender_nrc_passport.'</span></td>
+            <td style="border: 2px solid black;font-size: 10px;height: 20px;padding-left: 10px;width:50%;font-weight: bold;">Receiver NRC/Passport:<span style="font-weight: normal;"> '.$this->get_starred($data->receiver_nrc_passport).'</span></td>
             </tr>
             <tr style="border: 2px solid black;">
-            <td style="border: 2px solid black;font-size: 14px;height: 30px;padding-left: 10px;width:50%;font-weight: bold;">Sender Address:<span style="font-weight: normal;"> '.$add_ph[0].' </span></td>
-            <td style="border: 2px solid black;font-size: 14px;height: 30px;padding-left: 10px;width:50%;font-weight: bold;">Receiver Country:<span style="font-weight: normal;"> '.$data->receiver_country_code.'</span></td>
+            <td style="border: 2px solid black;font-size: 10px;height: 20px;padding-left: 10px;width:50%;font-weight: bold;">Sender Address:<span style="font-weight: normal;"> '.$add_ph[0].' </span></td>
+            <td style="border: 2px solid black;font-size: 10px;height: 20px;padding-left: 10px;width:50%;font-weight: bold;">Receiver Country:<span style="font-weight: normal;"> '.$data->receiver_country_code.'</span></td>
             </tr>
             <tr style="border: 2px solid black;">
-            <td style="border: 2px solid black;font-size: 14px;height: 30px;padding-left: 10px;width:50%;font-weight: bold;">Sender Phone Number:<span style="font-weight: normal;"> '.$add_ph[1].' </span></td>
-            <td  style="border: 2px solid black;font-size: 14px;height: 30px;padding-left: 10px;width:50%;font-weight: bold;">'.$data->currency_code.':<span style="font-weight: normal;"> '.$data->equivalent_usd.'</span></td>
+            <td style="border: 2px solid black;font-size: 10px;height: 20px;padding-left: 10px;width:50%;font-weight: bold;">Sender Phone Number:<span style="font-weight: normal;"> '.$add_ph[1].' </span></td>
+            <td  style="border: 2px solid black;font-size: 10px;height: 30px;padding-left: 10px;width:50%;font-weight: bold;">'.$data->currency_code.':<span style="font-weight: normal;"> '.$data->equivalent_usd.'</span></td>
           </tr>
             <tr style="border: 2px solid black;">
-            <td  style="border: 2px solid black;font-size: 14px;height: 30px;padding-left: 10px;width:50%;font-weight: bold;">Purpose of Transaction:<span style="font-weight: normal;"> '.$data->purpose.'</span></td>
-            <td  style="border: 2px solid black;font-size: 14px;height: 30px;padding-left: 10px;width:50%;font-weight: bold;"">MMK:<span style="font-weight: normal;"> '.$data->amount_mmk.'</span></td>
+            <td  style="border: 2px solid black;font-size: 10px;height: 20px;padding-left: 10px;width:50%;font-weight: bold;">Purpose of Transaction:<span style="font-weight: normal;"> '.$data->purpose.'</span></td>
+            <td  style="border: 2px solid black;font-size: 10px;height: 20px;padding-left: 10px;width:50%;font-weight: bold;"">MMK:<span style="font-weight: normal;"> '.$data->amount_mmk.'</span></td>
             </tr>
             <tr style="border: 2px solid black;">
-          <td  style="border: 2px solid black;font-size: 14px;height: 30px;padding-left: 10px;width:50%;font-weight: bold;">Withdraw Point:<span style="font-weight: normal;"> '.$data->deposit_point.'</span></td>
-          <td style="border: 2px solid black;font-size: 14px;height: 30px;padding-left: 10px;width:50%;font-weight: bold;"></td>
+          <td  style="border: 2px solid black;font-size: 10px;height: 20px;padding-left: 10px;width:50%;font-weight: bold;">Withdraw Point:<span style="font-weight: normal;"> '.$data->deposit_point.'</span></td>
+          <td style="border: 2px solid black;font-size: 10px;height: 20px;padding-left: 10px;width:50%;font-weight: bold;"></td>
           </tr>
         </table>
         <img style="width:100%;height:20%";margin-left:30%;" src="frontend/images/sign.PNG">
