@@ -5,12 +5,6 @@
   {{Session::get('status')}}
 </div>
 @endif
-<div class="alert alert-danger" style="margin-left: 15rem;" id="daily_max_warning" hidden>
-  Daily Transaction Max Limit Excedded
-</div>
-<div class="alert alert-danger" style="margin-left: 15rem;" id="monthly_max_warning" hidden>
-  Monthly Transaction Max Limit Excedded
-</div>
 
 @if (count($errors) > 0)
   <div class="alert alert-danger" style="margin-left: 15rem">
@@ -27,9 +21,7 @@
     <!--  General -->
     {{Form::hidden('id', $inward_transaction->id)}}
     <div class="form-row" style="margin: 2% 2% 2% 18%">
-      <div class="col-12">
-        <p class="text-bold" style="color:black; font-size:25px">Edit Inward Transaction </p>
-      </div>
+
       <div class="col-2">
         <label for="Date" class="mr-sm-2">Date:</label>
         {{-- <input type="date" class="form-control mb-2 mr-sm-2" placeholder="Enter Date" id="date" name="date" value="2013-01-08"> --}}
@@ -164,38 +156,11 @@
       </select>
     </div>
 
-    {{-- <div class="col-2">
+    <div class="col-2">
       <label for="withdraw_point" class="mr-sm-2">Withdraw Point:</label>
       <input type="text" class="form-control mb-2 mr-sm-2" placeholder="" id="withdraw_point"  name="withdraw_point" value="{{$inward_transaction->withdraw_point}}">
-    </div> --}}
-
-    <div class="col-6">
-
-      <label for="withdraw_point" class="mr-sm-2">Withdraw Point:</label>
-      {{-- <input type="text" class="form-control mb-2 mr-sm-2" placeholder="" id="withdraw_point"  name="withdraw_point" value="{{old('withdraw_point')}}"> --}}
-      <select class="form-control" id="withdraw_point" name="withdraw_point" >
-  
-        @foreach ($withdrawpoints as $withdrawpoint)
-            
-        <option value="{{$withdrawpoint->withdraw_point_name}}">{{$withdrawpoint->withdraw_point_name}}</option>
-        @endforeach
-  
-  
-      </select>
-    </div>
-  
-    <div class="col-6">
-      <label for="sender_name" class="mr-sm-2">Withdraw Point No:</label>
-      @if (isset($inward_transaction->withdrawpoint_no))
-      <input type="text" class="form-control mb-2 mr-sm-2" placeholder="" id="withdrawpoint_no"  name="withdrawpoint_no" value="{{$inward_transaction->withdrawpoint_no}}">
-      @else
-      <input type="text" class="form-control mb-2 mr-sm-2" placeholder="" id="withdrawpoint_no"  name="withdrawpoint_no" value="">
-      @endif
     </div>
 
-
-    <input type="hidden" name="exchange_rate_input_usd" id="exchange_rate_input_usd" value="">
-    <input type="hidden" name="exchange_rate_input" id="exchange_rate_input" value="">
 
     <div class="col-6">
       <label for="remark_withdraw_point" class="mr-sm-2">Remark for Withdraw Point:</label>
@@ -233,7 +198,7 @@
 
      <div class="col-3">
       <label for="prefer_currency">Currency</label>
-    <select class="form-control" id="prefer_currency" name="prefer_currency" onchange="changeRateField({{$exchange_rates}})">
+    <select class="form-control" id="prefer_currency" name="prefer_currency">
       <option value="blank"></option>
        @foreach ($exchange_rates as $exchange_rate)
       <option value="{{$exchange_rate->currency_code}}">{{$exchange_rate->currency_code}}</option>
@@ -243,7 +208,7 @@
 
 
     <div class="col-2">
-      <label for="amount" class="mr-sm-2" id="rate_amount"></label>
+      <label for="receiver_name" class="mr-sm-2" style="margin-top: 9%"></label>
       <input type="text" class="form-control mb-2 mr-sm-2" p id="amount" name="amount" value="" oninput="changecurrencyvalue({{$exchange_rates}})">
     </div>
 
@@ -525,60 +490,7 @@
 
 
 
-    function changeRateField(exchange_rates)
-    {
-   
-      let rate_amount_field=document.getElementById("rate_amount");
-      let currencyDropDown=document.getElementById('prefer_currency');
 
-
-
-
-      let rate;
-      let usdRate;
-      for(i=0;i<exchange_rates.length; i++)
-      {
-
-       if(exchange_rates[i].currency_code==currencyDropDown.value)
-       {
-        rate=exchange_rates[i].exchange_rate;
-        break;
-
-       }
-      }
-
-      for(i=0;i<exchange_rates.length; i++)
-      {
-
-       if(exchange_rates[i].currency_code=='USD')
-       {
-        usdRate=exchange_rates[i].exchange_rate;
-        break;
-
-       }
-      }
-
-      rate_amount_field.innerHTML="Rate: "+rate+" MMK";
-
-      changeRateFormValue(rate);
-     changeUSDFormValue(usdRate);
-
-    }
-
-    function changeUSDFormValue(rate)
-    {
-      // console.log(rate);
-      let input=document.getElementById('exchange_rate_input_usd');
-      input.value=rate;
-
-
-    }
-    function changeRateFormValue(rate)
-    {
-      // console.log(rate);
-      let input=document.getElementById('exchange_rate_input');
-      input.value=rate;
-    }
 
 
     function changecurrencyvalue(exchange_rates)
@@ -660,7 +572,7 @@
          currency.value = splitStr[1];
          let hiddenbranchid=document.getElementById('hidden_branch_id');
          hiddenbranchid.value=splitStr[2];
-         changeRateField(@json($exchange_rates));
+
       });
     });
   </script>
@@ -703,65 +615,21 @@
    )
 </script>
 
-{{-- Check Max Limit --}}
 <script>
-  var par_transaction=@json($par_transaction);
-  var par_month_transaction=@json($par_month_transaction);
-  var sum_usd_grouped_by_nrc=@json($sum_usd_grouped_by_nrc);
-   sender_nrc=document.getElementById('nrc_id').value;
-   var daily_warning=document.getElementById('daily_max_warning');
-  var monthly_warning=document.getElementById('monthly_max_warning');
   function disableSave(value)
   {
-     
-     saveButton=document.getElementById('savebut');
-     if(value>Number(par_transaction))
-     {
-       saveButton.disabled = true;
-       daily_warning.hidden=false;
-      
-     }
-     else
-     {
-      var sender_nrc=document.getElementById('nrc_id').value;
-      
-    let total=Number(getUSDByNRC(sender_nrc))+Number(value);
- 
-      if( Number(total)>Number(par_month_transaction))
-      {
-       saveButton.disabled = true;
-       monthly_warning.hidden=false;
-      }
-      else
-      {
-        saveButton.disabled = false;
-        daily_warning.hidden=true;
-        monthly_warning.hidden=true;
-        
-      }
-     }
-     
- 
-   }
- 
-  
- </script>
- 
- <script>
-    function getUSDByNRC(nrc)
-   {
-     let usdVal=0;
-     sum_usd_grouped_by_nrc.forEach(element => {
-      
-       if(element.id==nrc)
-       {
-         usdVal=element.usd;
-       }
-       
-       
-     });
- 
-    return usdVal;
-   }
- </script>
+    saveButton=document.getElementById('savebut');
+    if(value>1000)
+    {
+      saveButton.disabled = true;
+      // saveButton.style.background = 'red';
+    }
+    else
+    {
+      saveButton.disabled = false;
+    }
+    
+
+  }
+</script>
     @endsection

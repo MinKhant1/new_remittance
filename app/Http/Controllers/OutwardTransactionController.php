@@ -298,6 +298,7 @@ class OutwardTransactionController extends Controller
         $grandtotalusd=0;
 
         $branches=Branch::all();
+        $blacklists = blacklists::All();
         $startdate = $request->input('startdate').' 00:00:00';
         $enddate = $request->input('enddate').' 24:00:00';
         $branch_id=null;
@@ -736,7 +737,8 @@ class OutwardTransactionController extends Controller
 
     return view('admin.reports.outward')->with('outwardtransactions', $query)->with('branches', $branches)
                                                                         ->with('grandtotalmmk',$grandtotalmmk)
-                                                                        ->with('grandtotalusd',$grandtotalusd);
+                                                                        ->with('grandtotalusd',$grandtotalusd)
+                                                                        ->with('blacklists',$blacklists);
 
 
 

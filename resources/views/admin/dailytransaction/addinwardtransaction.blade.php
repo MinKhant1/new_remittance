@@ -4,14 +4,8 @@
 <div class="alert alert-success" style="margin-left: 15rem;">
   {{Session::get('status')}}
 </div>
-
 @endif
-<div class="alert alert-danger" style="margin-left: 15rem;" id="daily_max_warning" hidden>
-  Daily Transaction Max Limit Excedded
-</div>
-<div class="alert alert-danger" style="margin-left: 15rem;" id="monthly_max_warning" hidden>
-  Monthly Transaction Max Limit Excedded
-</div>
+
 @if (count($errors) > 0)
   <div class="alert alert-danger" style="margin-left: 15rem">
     <ul>
@@ -22,14 +16,11 @@
   </div>
 @endif
 
-
   {!!Form::open(['action' => 'App\Http\Controllers\InwardTransactionController@saveinwardtransaction', 'method' => 'POST' , 'enctype' => 'multipart/form-data'])!!}
   {{ csrf_field() }}
     <!--  General -->
    <div class="form-row" style="margin: 2% 2% 2% 18%">
-    <div class="col-12">
-      <p class="text-bold" style="color:black; font-size:25px">Add Inward Transaction </p>
-    </div>
+
     <div class="col-2">
       <label for="Date" class="mr-sm-2">Date:</label>
       {{-- <input type="date" class="form-control mb-2 mr-sm-2" placeholder="Enter Date" id="date" name="date" value="2013-01-08"> --}}
@@ -53,23 +44,23 @@
       <label for="receiver_name" class="mr-sm-2">Hidden Branch:</label>
       <input type="text" class="form-control mb-2 mr-sm-2" placeholder="" id="hidden_branch_id" name="hidden_branch_id" value="">
     </div>
- 
+
      @if($inwardtransaction != null)
-    
+
     <div class="col-3" style="margin-left: 20%">
       <label for="sr_id" class="mr-sm-2">Transaction No:</label>
       <input type="text" class="form-control mb-2 mr-sm-2"  placeholder="Transaction No" id="sr_id" name="sr_id" value="{{$inwardtransaction+1}}" readonly>
-    </div>  
-    
+    </div>
+
     @else
-      
+
    <div class="col-3" style="margin-left: 20%">
     <label for="sr_id" class="mr-sm-2">Transaction No:</label>
     <input type="text" class="form-control mb-2 mr-sm-2"  placeholder="Transaction No" id="sr_id" name="sr_id" value="1" readonly>
   </div>
   @endif
 
- 
+
 
     <div class="col-12">
       <p class="text-bold" style="color:blue; font-size:20px">RECEIVER INFORMATION : </p>
@@ -170,25 +161,13 @@
 
     </select>
   </div>
-  <div class="col-6">
+  <div class="col-2">
 
     <label for="withdraw_point" class="mr-sm-2">Withdraw Point:</label>
-    {{-- <input type="text" class="form-control mb-2 mr-sm-2" placeholder="" id="withdraw_point"  name="withdraw_point" value="{{old('withdraw_point')}}"> --}}
-    <select class="form-control" id="withdraw_point" name="withdraw_point" >
-
-      @foreach ($withdrawpoints as $withdrawpoint)
-          
-      <option value="{{$withdrawpoint->withdraw_point_name}}">{{$withdrawpoint->withdraw_point_name}}</option>
-      @endforeach
-
-
-    </select>
+    <input type="text" class="form-control mb-2 mr-sm-2" placeholder="" id="withdraw_point"  name="withdraw_point" value="{{old('withdraw_point')}}">
   </div>
 
-  <div class="col-6">
-    <label for="sender_name" class="mr-sm-2">Withdraw Point No:</label>
-    <input type="text" class="form-control mb-2 mr-sm-2" placeholder="" id="withdrawpoint_no"  name="withdrawpoint_no" value="{{old('withdrawpoint_no')}}">
-  </div>
+
 
 
 
@@ -245,7 +224,7 @@
     <label for="mmk" class="mr-sm-2">MMK</label>
     <input type="text" class="form-control mb-2 mr-sm-2" id="mmk" name="mmk_amount" oninput="changecurrencyvaluemmk({{$exchange_rates}})">
   </div>
- 
+
   <div class="col-2">
     <label for="receiver_name" class="mr-sm-2">USD</label>
     <input type="text" class="form-control mb-2 mr-sm-2" id="usd" name="equivalent_usd" value="" oninput="changecurrencyvalueusd({{$exchange_rates}})">
@@ -256,9 +235,9 @@
     <input type="file" class="form-control mb-2 mr-sm-2" id="file" name="file">
   </div>
 
-  
+
   <div class="col-12">
-   
+
     {!!Form::submit('Save', ['class' => 'btn btn-success','id'=>'savebut'])!!}
   </div>
 
@@ -400,11 +379,11 @@
 
     }
 
-    
+
 
     function changeRateField(exchange_rates)
     {
-   
+
       let rate_amount_field=document.getElementById("rate_amount");
       let currencyDropDown=document.getElementById('prefer_currency');
 
@@ -444,22 +423,21 @@
 
     function changeUSDFormValue(rate)
     {
-      // console.log(rate);
+      console.log(rate);
       let input=document.getElementById('exchange_rate_input_usd');
       input.value=rate;
 
 
     }
     function changeRateFormValue(rate)
-    {
-      // console.log(rate);
+    {console.log(rate);
       let input=document.getElementById('exchange_rate_input');
       input.value=rate;
     }
 
     function changecurrencyvaluemmk(exchange_rates)
     {
-     
+
 
       var currencyDropDown=document.getElementById('prefer_currency');
 
@@ -627,8 +605,8 @@
 
        }
       }
-      // console.log('mmk_to_usd'+mmk_to_usd);
-      // console.log('rate:'+  rate);
+      console.log('mmk_to_usd'+mmk_to_usd);
+      console.log('rate:'+  rate);
 
       mmk_value= amount_value*rate;
       mmk_input.value=mmk_value;
@@ -663,7 +641,7 @@
        let hiddenbranchid=document.getElementById('hidden_branch_id');
        hiddenbranchid.value=splitStr[2];
     changeRateField(@json($exchange_rates));
-     
+
     });
   });
 </script>
@@ -694,8 +672,6 @@
      }
     populate(s1,s2);
   }
-
-  
  )
 </script>
 
@@ -718,68 +694,25 @@
    )
 </script>
 
-
-{{-- Check Max Limit --}}
 <script>
- var par_transaction=@json($par_transaction);
- var par_month_transaction=@json($par_month_transaction);
- var sum_usd_grouped_by_nrc=@json($sum_usd_grouped_by_nrc);
-  sender_nrc=document.getElementById('nrc_id').value;
-  var daily_warning=document.getElementById('daily_max_warning');
-  var monthly_warning=document.getElementById('monthly_max_warning');
- function disableSave(value)
- {
-    
+  function disableSave(value)
+  {
     saveButton=document.getElementById('savebut');
-    if(value>Number(par_transaction))
+    if(value>1000)
     {
       saveButton.disabled = true;
-      daily_warning.hidden=false;
-     
+      // saveButton.style.background = 'red';
     }
     else
     {
-     var sender_nrc=document.getElementById('nrc_id').value;
-     
-   let total=Number(getUSDByNRC(sender_nrc))+Number(value);
-
-     if( Number(total)>Number(par_month_transaction))
-     {
-      saveButton.disabled = true;
-      monthly_warning.hidden=false;
-     }
-     else
-     {
-       saveButton.disabled = false;
-       daily_warning.hidden=true;
-       monthly_warning.hidden=true;
-       
-     }
+      saveButton.disabled = false;
     }
-    
+
 
   }
-
- 
 </script>
 
-<script>
-   function getUSDByNRC(nrc)
-  {
-    let usdVal=0;
-    sum_usd_grouped_by_nrc.forEach(element => {
-     
-      if(element.id==nrc)
-      {
-        usdVal=element.usd;
-      }
-      
-      
-    });
 
-   return usdVal;
-  }
-</script>
 
 
   @endsection

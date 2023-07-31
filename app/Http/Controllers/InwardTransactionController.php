@@ -12,8 +12,6 @@ use App\Models\InwardTransaction;
 use App\Models\PurposeOfTrans;
 use App\Models\TotalInward;
 use App\Models\blacklists;
-use App\Models\TransMaxLimit;
-use App\Models\WithdrawPoint;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Http\Request;
@@ -33,8 +31,6 @@ class InwardTransactionController extends Controller
             ->whereDate('created_at', Carbon::today())
             ->get();
             $blacklists = blacklists::All();
-       
-           
             return view('admin.dailytransaction.inwardtransaction')->with('inward_transactions', $inwardtransactions)->with('blacklists', $blacklists);
 
         }
@@ -49,20 +45,19 @@ class InwardTransactionController extends Controller
     public function addinwardtransaction()
     {
          $inwardtransactions = Inwards::all();
-       
+
          if($inwardtransactions != null)
          {
              $inwardtransaction = Inwards::latest()->value('sr_id');
          }
          else
          {
-           
+             $inwardtransaction = 1;
          }
-        
+
         $purposeOfTrans = PurposeOfTrans::all();
         $branches = Branch::All();
         $exhange_rates=ExchangeRate::all();
-        $withdrawpoints=WithdrawPoint::all();
 
         // dd($exhange_rates);
        //dd($inwardtransaction);
@@ -73,46 +68,15 @@ class InwardTransactionController extends Controller
         $thb = DB::table('exchange_rates')->where('currency_code', 'THB')
             ->value('exchange_rate');
 
-            $tran_max_limit=TransMaxLimit::all();
-            $par_count=1000;
-            $par_month=5000;
-            if(count($tran_max_limit)>0)
-            {
-                $par_count=$tran_max_limit[0]->par_transaction;
-                $par_month=$tran_max_limit[0]->par_month;
 
-            }
-
-         $trans_grouped_by_nrc=Inwards::all()->where(
-            'created_at', '>=', Carbon::now()->subMonth()->toDateTimeString()
-        )->groupBy('sender_nrc_passport');
-
-        $sum_usd_grouped_by_nrc=collect();
-
-        foreach ($trans_grouped_by_nrc as $key => $collection) {
-        
-            $usd_sum=0;
-            foreach ($collection as $transaction) {
-              $usd_sum+=$transaction->equivalent_usd;
-            }
-            $sum_usd_grouped_by_nrc->push(['id'=>$key,'usd'=>$usd_sum]);
-           
-        }
-  
-        //  dd($sum_usd_grouped_by_nrc);
-           
 
         return view('admin.dailytransaction.addinwardtransaction')
             ->with('purposeOfTrans', $purposeOfTrans)->with('branches', $branches)
             ->with('exchange_rates',$exhange_rates)
             ->with('inwardtransaction',$inwardtransaction)
-            ->with('usd', $usd)->with('thb', $thb)
-            ->with('par_transaction',$par_count)
-            ->with('par_month_transaction',$par_month)
-            ->with('sum_usd_grouped_by_nrc',$sum_usd_grouped_by_nrc)
-            ->with('withdrawpoints',$withdrawpoints);
+            ->with('usd', $usd)->with('thb', $thb);
 
-         
+
     }
 
     public function saveinwardtransaction(Request $request)
@@ -125,7 +89,7 @@ class InwardTransactionController extends Controller
                              'receiver_phno'=>'required',
                              'purpose_of_transaction'=>'required',
                              'withdraw_point'=>'required',
-                             'withdrawpoint_no'=>'required',
+                             'remark_withdraw_point'=>'required',
                              'sender_name'=>'required',
                              'sender_nrc_passport'=> 'required',
                              'sender_country'=>'required',
@@ -180,7 +144,6 @@ class InwardTransactionController extends Controller
          $inwardtransaction->receiver_address_ph =$request->input('receiver_address').'/'.$request->input('receiver_phno');
          $inwardtransaction->purpose= $request->input('purpose_of_transaction');
          $inwardtransaction->withdraw_point = $request->input('withdraw_point');
-         $inwardtransaction->withdrawpoint_no=$request->input('withdrawpoint_no');
          $inwardtransaction->remark_for_withdraw_point = $request->input('remark_withdraw_point');
          $inwardtransaction->sender_name = $request->input('sender_name');
          $inwardtransaction->sender_nrc_passport = $request->input('sender_nrc_passport');
@@ -196,10 +159,10 @@ class InwardTransactionController extends Controller
          $inwardtransaction->status = 0;
          $inwardtransaction->exchange_rate=$request->input('exchange_rate_input');
          $inwardtransaction->exchange_rate_usd=$request->input('exchange_rate_input_usd');
-       
+
         if($blacklist_user == null)
         {
-           
+
             $inwardtransaction->save();
 
             return back()->with('status', 'Inward Transaction has been added!');
@@ -219,8 +182,6 @@ class InwardTransactionController extends Controller
         $purposeOfTrans = PurposeOfTrans::all();
         $branches = Branch::All();
         $exchange_rates=ExchangeRate::all();
-        $withdrawpoints=WithdrawPoint::all();
-        
 
         $usd = DB::table('exchange_rates')->where('currency_code', 'USD')
             ->value('exchange_rate');
@@ -228,40 +189,10 @@ class InwardTransactionController extends Controller
         $thb = DB::table('exchange_rates')->where('currency_code', 'THB')
             ->value('exchange_rate');
 
-            $tran_max_limit=TransMaxLimit::all();
-            $par_count=1000;
-            $par_month=5000;
-            if(count($tran_max_limit)>0)
-            {
-                $par_count=$tran_max_limit[0]->par_transaction;
-                $par_month=$tran_max_limit[0]->par_month;
-
-            }
-            $trans_grouped_by_nrc=Inwards::all()->where(
-               'created_at', '>=', Carbon::now()->subMonth()->toDateTimeString()
-           )->groupBy('sender_nrc_passport');
-   
-           $sum_usd_grouped_by_nrc=collect();
-   
-           foreach ($trans_grouped_by_nrc as $key => $collection) {
-           
-               $usd_sum=0;
-               foreach ($collection as $transaction) {
-                 $usd_sum+=$transaction->equivalent_usd;
-               }
-               $sum_usd_grouped_by_nrc->push(['id'=>$key,'usd'=>$usd_sum]);
-              
-           }
-            
-
         return view('admin.dailytransaction.editinwardtransaction')->with('purposeOfTrans', $purposeOfTrans)->with('branches', $branches)
             ->with('inward_transaction', $inwardtransaction)
             ->with('usd', $usd)->with('thb', $thb)
-            ->with('exchange_rates',$exchange_rates)
-            ->with('par_transaction',$par_count)
-            ->with('par_month_transaction',$par_month)
-            ->with('sum_usd_grouped_by_nrc',$sum_usd_grouped_by_nrc)
-            ->with('withdrawpoints',$withdrawpoints);
+            ->with('exchange_rates',$exchange_rates);
 
     }
 
@@ -275,7 +206,7 @@ class InwardTransactionController extends Controller
                              'receiver_phno'=>'required',
                              'purpose_of_transaction'=>'required',
                              'withdraw_point'=>'required',
-                             'withdrawpoint_no'=>'required',
+                             'remark_withdraw_point'=>'required',
                              'sender_name'=>'required',
                              'sender_nrc_passport'=> 'required',
                              'sender_country'=>'required',
@@ -327,7 +258,6 @@ class InwardTransactionController extends Controller
          $inwardtransaction->receiver_address_ph =$request->input('receiver_address').'/'.$request->input('receiver_phno');
          $inwardtransaction->purpose= $request->input('purpose_of_transaction');
          $inwardtransaction->withdraw_point = $request->input('withdraw_point');
-         $inwardtransaction->withdrawpoint_no=$request->input('withdrawpoint_no');
          $inwardtransaction->remark_for_withdraw_point = $request->input('remark_withdraw_point');
          $inwardtransaction->sender_name = $request->input('sender_name');
          $inwardtransaction->sender_nrc_passport = $request->input('sender_nrc_passport');
@@ -372,10 +302,9 @@ class InwardTransactionController extends Controller
 
     }
 
-   public function inward()
+    public function inward()
     {
-    
-          if (auth()->user()->type == 'editor' && auth()->user()->inward == 1)
+        if (auth()->user()->type == 'editor' && auth()->user()->inward == 1)
         {
          $inwardtransactions = Inwards::All()->where('status',1)->groupBy(function($data)
         {
@@ -399,6 +328,10 @@ class InwardTransactionController extends Controller
             $index=0;
 
 
+
+
+
+
             $total_currency_codes=array();
             $total_collection=collect();
 
@@ -413,14 +346,14 @@ class InwardTransactionController extends Controller
                         array_push($total_currency_codes,$transaction->currency_code);
                     }
                 }
-          
+
+
                 foreach ($dated_transactions as $transaction) {
                     if(!in_array($transaction->currency_code,$currency_codes_in_date))
                     {
                         array_push($currency_codes_in_date,$transaction->currency_code);
                     }
                 }
-            
 
                 $sub_total_collection=collect();
                 foreach ($currency_codes_in_date as $currency_code) {
@@ -444,7 +377,6 @@ class InwardTransactionController extends Controller
 
 
             }
-            // dd($excel_query);
             foreach ($excel_query as $query => $collection)
             {
                 $subtotal_amount_array=array();
@@ -456,20 +388,11 @@ class InwardTransactionController extends Controller
 
                 for ($i=0; $i <=count($collection) ; $i++) {
 
-                    
                     if($i==count($collection))
                     {
                         $collection->put($i,collect());
                         $collection[$i]->put('sr_id','');
-                        if(count($excel_query)>1)
-                        {
-                            $collection[$i]->put('receiver_name','SubTotal');
-                        }
-                        else
-                        {
-                            $collection[$i]->put('receiver_name','Total');
-                        }
-                      
+                        $collection[$i]->put('receiver_name','SubTotal');
 
                         $increment=0;
                         foreach ($subtotal_amount_array as $key => $value)
@@ -516,7 +439,7 @@ class InwardTransactionController extends Controller
                 }
                 $index++;
                 $sec_index=0;
-                if($index==count($excel_query) && count($excel_query)>1)
+                if($index==count($excel_query))
                 {
 
                   foreach ($total_collection as $key => $value) {
@@ -574,6 +497,7 @@ class InwardTransactionController extends Controller
         {
           return back()->with('status', 'You do not have access');
         }
+
     }
 
     public function inwardwithbranch(Request $request)
@@ -1425,15 +1349,18 @@ class InwardTransactionController extends Controller
 
         $startdate = $request->input('startdate');
         $enddate = $request->input('enddate');
+        
 
         $query = DB::table('inwards')->select()
             ->whereDate('created_at', '>=', $startdate)
             ->whereDate('created_at', '<=', $enddate)->orderBy("txd_date_time", "desc")
+        
             ->get();
 
             $blacklists = blacklists::All();
 
-        return view('admin.dailytransaction.inwardtransaction')->with('inward_transactions', $query)->with('blacklists', $blacklists);
+        return view('admin.dailytransaction.inwardtransaction')->with('inward_transactions', $query)
+                                                               ->with('blacklists',$blacklists);
     }
 
 
@@ -1465,6 +1392,8 @@ class InwardTransactionController extends Controller
          $aed_amounts = self::currencyCatcher('AED', 'aed_amounts', $startdate, $enddate);
          $qar_amounts = self::currencyCatcher('QAR', 'qar_amounts', $startdate, $enddate);
          $other_amounts = self::othercurrencyCatcher($currency_code_array, $startdate, $enddate);
+
+
          $Totaltransaction = self::TtransactionCatcher($startdate, $enddate);
          $T_amount = self::TCatcher($startdate, $enddate);
 
@@ -1606,18 +1535,11 @@ foreach($dategp_array as &$array)
 
    $index++;
 
-}
-$count=0;
-$tusd=0;
-$mmk=0;
-foreach ($dategp_array as $item) {
-    $count+= $item['count'];
-    $tusd+= $item['tusd'] ;
-    $mmk+=$item['tmmk'];
+
+
 }
 
-// dd($temp);
-array_push($temp,['1'=>'','2'=>'','3'=>'','4'=>'','5'=>'','6'=>'','7'=>'','8'=>'','9'=>'','10'=>'','11'=>'','l'=>'Total','12'=>$count,'13'=>$tusd,'14'=>$mmk]);
+
 
 session()->put('query',collect($temp));
 
