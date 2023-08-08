@@ -230,24 +230,11 @@
     <input type="text" class="form-control mb-2 mr-sm-2" id="usd" name="equivalent_usd" value="" oninput="changecurrencyvalueusd({{$exchange_rates}})">
   </div>
 
-
-
-  <div class="col-2"  >
-    <label for="mmk_allowance" class="mr-sm-2">MMK Allowance</label>
-    <input type="text" class="form-control mb-2 mr-sm-2" id="mmk_allowance" name="mmk_allowance" value="" readonly>
-  </div>
-
-  <div class="col-2"  >
-    <label for="total_mmk" class="mr-sm-2">Total MMK</label>
-    <input type="text" class="form-control mb-2 mr-sm-2" id="total_mmk" name="total_mmk" value="" readonly>
-  </div>
-
   <div class="col-6">
     <label for="file" class="mr-sm-2">Upload File</label>
     <input type="file" class="form-control mb-2 mr-sm-2" id="file" name="file">
   </div>
 
-  
 
   <div class="col-12">
 
@@ -507,17 +494,6 @@
 
 
 
-      var mmk_allowance_input=document.getElementById('mmk_allowance');
-      var total_mmk_input=document.getElementById('total_mmk');
-
-      mmk_allowance_value=usd_value*30;
-      mmk_allowance_input.value=Math.round(mmk_allowance_value);
-
-        int_mmk_value=Number(mmk_value);
-      total_mmk_value=int_mmk_value+mmk_allowance_value;
-
-    
-      total_mmk_input.value=Math.round(total_mmk_value);
 
     }
 
@@ -576,14 +552,6 @@
       amount_value=mmk_value* (1/rate);
       amount_input.value=amount_value.toFixed(2);
 
-      var mmk_allowance_input=document.getElementById('mmk_allowance');
-      var total_mmk_input=document.getElementById('total_mmk');
-
-      mmk_allowance_value=usd_value*30;
-      mmk_allowance_input.value=Math.round(mmk_allowance_value);
-      total_mmk_value=mmk_value+mmk_allowance_value;
-
-      total_mmk_input.value=Math.round(total_mmk_value);
 
 
     }
@@ -602,7 +570,6 @@
       var usd_input=document.getElementById("usd");
       var amount_input=document.getElementById("amount");
 
-     
       mmk_input.value=0;
       usd_input.value=0;
       //amount_input.value=0;
@@ -647,16 +614,6 @@
       usd_value=mmk_value*(1/mmk_to_usd);
       usd_input.value=usd_value.toFixed(2);
 
-
-      var mmk_allowance_input=document.getElementById('mmk_allowance');
-      var total_mmk_input=document.getElementById('total_mmk');
-
-      mmk_allowance_value=usd_value*30;
-      mmk_allowance_input.value=Math.round(mmk_allowance_value);
-     
-      total_mmk_value=mmk_value+mmk_allowance_value;
-
-      total_mmk_input.value=Math.round(total_mmk_value);
 
 
 
