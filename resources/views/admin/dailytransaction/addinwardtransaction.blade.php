@@ -230,18 +230,24 @@
     <input type="text" class="form-control mb-2 mr-sm-2" id="usd" name="equivalent_usd" value="" oninput="changecurrencyvalueusd({{$exchange_rates}})">
   </div>
 
+  @if ($is_text30_valid)
+      
+ 
+<div class="col-2"></div>
+<div class="col-3"></div>
+<div class="col-2"></div>
 
-
-  <div class="col-2"  >
+  <div class="col-2">
     <label for="mmk_allowance" class="mr-sm-2">MMK Allowance</label>
     <input type="text" class="form-control mb-2 mr-sm-2" id="mmk_allowance" name="mmk_allowance" value="" readonly>
   </div>
 
   <div class="col-2"  >
     <label for="total_mmk" class="mr-sm-2">Total MMK</label>
-    <input type="text" class="form-control mb-2 mr-sm-2" id="total_mmk" name="total_mmk" value="" readonly>
+    <input type="text" class="form-control mb-2 mr-sm-2" id="total_mmk" name="total_mmk_amount" value="" readonly>
   </div>
-
+ 
+@endif
   <div class="col-6">
     <label for="file" class="mr-sm-2">Upload File</label>
     <input type="file" class="form-control mb-2 mr-sm-2" id="file" name="file">

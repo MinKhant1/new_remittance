@@ -79,7 +79,8 @@ class InwardTransactionController extends Controller
             ->with('purposeOfTrans', $purposeOfTrans)->with('branches', $branches)
             ->with('exchange_rates',$exhange_rates)
             ->with('inwardtransaction',$inwardtransaction)
-            ->with('usd', $usd)->with('thb', $thb);
+            ->with('usd', $usd)->with('thb', $thb)
+            ->with('is_text30_valid',$this->isText30_valid(Carbon::today()));
 
 
     }
@@ -165,6 +166,11 @@ class InwardTransactionController extends Controller
          $inwardtransaction->exchange_rate=$request->input('exchange_rate_input');
          $inwardtransaction->exchange_rate_usd=$request->input('exchange_rate_input_usd');
 
+         if ($this->isText30_valid_today()) {
+          $inwardtransaction->mmk_allowance=$request->input('mmk_allowance');
+          $inwardtransaction->total_mmk_amount=$request->input('total_mmk_amount');
+         }
+
         if($blacklist_user == null)
         {
 
@@ -197,7 +203,8 @@ class InwardTransactionController extends Controller
         return view('admin.dailytransaction.editinwardtransaction')->with('purposeOfTrans', $purposeOfTrans)->with('branches', $branches)
             ->with('inward_transaction', $inwardtransaction)
             ->with('usd', $usd)->with('thb', $thb)
-            ->with('exchange_rates',$exchange_rates);
+            ->with('exchange_rates',$exchange_rates)
+            ->with('is_text30_valid',$this->isText30_valid($inwardtransaction->created_at));;
 
     }
 
@@ -276,7 +283,10 @@ class InwardTransactionController extends Controller
          $inwardtransaction->state_division=$request->input('state_division');
          $inwardtransaction->file = $fileNameToStore;
         $inwardtransaction->status = 0;
-
+        if ($this->isText30_valid_today()) {
+            $inwardtransaction->mmk_allowance=$request->input('mmk_allowance');
+            $inwardtransaction->total_mmk_amount=$request->input('total_mmk_amount');
+           }
         $inwardtransaction->update();
 
         return back()->with('status', 'Inward Transaction has been updated!');
