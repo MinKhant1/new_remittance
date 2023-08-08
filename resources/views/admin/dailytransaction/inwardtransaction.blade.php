@@ -76,6 +76,12 @@
                     <th>Amount</th>
                     <th>Equivent USD</th>
                     <th>MMK Amount</th>
+                    @if ($is_text30_valid)
+                    <th>MMK Allowance</th>
+                    @endif
+                    @if ($is_text30_valid)
+                    <th>Total MMK Amount</th>
+                    @endif
                     <th>Exchange rate</th>
                     <th>Exchange rate USD</th>
                     <th>Txd Date Time</th>
@@ -112,6 +118,12 @@
                     <td>{{number_format($inwardtransaction->amount,2)}}</td>
                     <td>{{number_format($inwardtransaction->equivalent_usd,2)}}</td>
                     <td>{{number_format($inwardtransaction->amount_mmk,2)}}</td>
+                    @if ($is_text30_valid)
+                    <td>{{$inwardtransaction->mmk_allowance}}</td>
+                    @endif
+                    @if ($is_text30_valid)
+                    <td>{{$inwardtransaction->total_mmk_amount}}</td>
+                    @endif
                     <td>{{$inwardtransaction->exchange_rate}}</td>
                     <td>{{$inwardtransaction->exchange_rate_usd}}</td>
                     <td>{{$inwardtransaction->txd_date_time}}</td>

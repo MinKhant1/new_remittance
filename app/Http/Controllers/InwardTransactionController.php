@@ -6,6 +6,7 @@ use App\Exports\ReportsExport;
 use App\Exports\ReportsExport_TotalInward;
 use App\Exports\Total_inward;
 use App\Models\Branch;
+use App\Models\Dates;
 use App\Models\ExchangeRate;
 use App\Models\Inwards;
 use App\Models\InwardTransaction;
@@ -31,7 +32,10 @@ class InwardTransactionController extends Controller
             ->whereDate('created_at', Carbon::today())
             ->get();
             $blacklists = blacklists::All();
-            return view('admin.dailytransaction.inwardtransaction')->with('inward_transactions', $inwardtransactions)->with('blacklists', $blacklists);
+
+           $is_text30_valid= $this->isText30_valid(Carbon::today());
+            return view('admin.dailytransaction.inwardtransaction')->with('inward_transactions', $inwardtransactions)->with('blacklists', $blacklists)
+                                                                   ->with('is_text30_valid', $is_text30_valid);
 
         }
         else
@@ -291,7 +295,7 @@ class InwardTransactionController extends Controller
         if (auth()->user()->type == 'editor' && auth()->user()->inward_approve == 1)
         {
             $inwardtransactions = Inwards::All()->where('status', 0);
-
+          
             return view('admin.dailytransaction.approveinwardtransaction')->with('inwardtransactions', $inwardtransactions);
 
         }
@@ -1358,9 +1362,10 @@ class InwardTransactionController extends Controller
             ->get();
 
             $blacklists = blacklists::All();
-
+            $is_text30_valid= $this->isText30_valid($startdate);
         return view('admin.dailytransaction.inwardtransaction')->with('inward_transactions', $query)
-                                                               ->with('blacklists',$blacklists);
+                                                               ->with('blacklists',$blacklists)
+                                                               ->with('is_text30_valid',$is_text30_valid);
     }
 
 
@@ -1793,6 +1798,60 @@ session()->put('query',collect($temp));
 {
     $down = public_path(). '/storage/files/' .$file;
     return \Response::download($down);
+}
+
+public function isText30_valid($date)
+{
+    $text30_startdate_row=Dates::where('name','text30start')->first();
+
+    if ($text30_startdate_row) {
+     
+      $text30_startdate=$text30_startdate_row->date;
+    }
+
+   $text30_enddate_row=Dates::where('name','text30end')->first();
+
+   if ($text30_enddate_row)  {
+   
+    $text30_enddate=$text30_enddate_row->date;
+   }
+
+  if (!empty($text30_startdate)) {
+   
+
+    if (!empty($text30_enddate)) {
+       
+        if ($date>$text30_startdate && $date<$text30_enddate) {
+          
+           return true;
+
+
+        }
+        else
+        {
+          
+            return false;
+        }
+    }
+    else
+    {
+            if ($date>$text30_startdate) {
+            
+                return true;
+            }
+            else
+            {
+              return false;
+            }
+    }
+
+
+  }
+  else
+  {
+            return false;
+  }
+
 }
 
 }
