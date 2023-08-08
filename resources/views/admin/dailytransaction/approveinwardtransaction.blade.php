@@ -51,6 +51,10 @@
                     <th>Amount</th>
                     <th>Equivent USD</th>
                     <th>MMK Amount</th>
+                    <th>MMK Allowance</th>
+                    <th>Total MMK Amount</th>
+                    <th>Exchange Rate</th>
+                    <th>Exchange Rate USD</th>
                     <th>Txd_date_time</th>
                     <th>Update / Approve</th>
                   </tr>
@@ -76,6 +80,10 @@
                  <td>{{$inwardtransaction->amount}}</td>
                  <td>{{$inwardtransaction->equivalent_usd}}</td>
                  <td>{{$inwardtransaction->amount_mmk/1000000}}</td>
+                 <td>{{$inwardtransaction->mmk_allowance}}</td>
+                 <td>{{$inwardtransaction->total_mmk_amount}}</td>
+                 <td>{{$inwardtransaction->exchange_rate}}</td>
+                 <td>{{$inwardtransaction->exchange_rate_usd}}</td>
                  <td>{{$inwardtransaction->txd_date_time}}</td>
 
                     <td>
