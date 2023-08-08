@@ -424,7 +424,17 @@
       usd_value=mmk_value*(1/mmk_to_usd);
       usd_input.value=usd_value.toFixed(2);
 
+      var mmk_allowance_input=document.getElementById('mmk_allowance');
+      var total_mmk_input=document.getElementById('total_mmk');
 
+      mmk_allowance_value=usd_value*30;
+      mmk_allowance_input.value=Math.round(mmk_allowance_value);
+
+        int_mmk_value=Number(mmk_value);
+      total_mmk_value=int_mmk_value+mmk_allowance_value;
+
+    
+      total_mmk_input.value=Math.round(total_mmk_value);
 
 
     }
@@ -484,7 +494,14 @@
       amount_value=mmk_value* (1/rate);
       amount_input.value=amount_value.toFixed(2);
 
+      var mmk_allowance_input=document.getElementById('mmk_allowance');
+      var total_mmk_input=document.getElementById('total_mmk');
 
+      mmk_allowance_value=usd_value*30;
+      mmk_allowance_input.value=Math.round(mmk_allowance_value);
+      total_mmk_value=mmk_value+mmk_allowance_value;
+
+      total_mmk_input.value=Math.round(total_mmk_value);
 
     }
 
@@ -546,7 +563,15 @@
       usd_value=mmk_value*(1/mmk_to_usd);
       usd_input.value=usd_value.toFixed(2);
 
+      var mmk_allowance_input=document.getElementById('mmk_allowance');
+      var total_mmk_input=document.getElementById('total_mmk');
 
+      mmk_allowance_value=usd_value*30;
+      mmk_allowance_input.value=Math.round(mmk_allowance_value);
+     
+      total_mmk_value=mmk_value+mmk_allowance_value;
+
+      total_mmk_input.value=Math.round(total_mmk_value);
 
 
     }
