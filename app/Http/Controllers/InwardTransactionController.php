@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\ReportsExport;
+use App\Exports\ReportsExportText30;
 use App\Exports\ReportsExport_TotalInward;
 use App\Exports\Total_inward;
 use App\Models\Branch;
@@ -321,11 +322,21 @@ class InwardTransactionController extends Controller
 
             $branches=Branch::all();
 
+            if ($this->isText30_valid(Carbon::today())) {
 
-            $excel_query=Inwards::select('sr_id','branch_id','receiver_name','receiver_nrc_passport','receiver_address_ph','purpose','withdraw_point','sender_name','sender_country_code','currency_code','amount','equivalent_usd','amount_mmk','exchange_rate','exchange_rate_usd','txd_date_time','status','created_at')->get()->where('status',1)->groupBy(function($data)
+                $excel_query=Inwards::select('sr_id','branch_id','receiver_name','receiver_nrc_passport','receiver_address_ph','purpose','withdraw_point','sender_name','sender_country_code','currency_code','amount','equivalent_usd','amount_mmk','mmk_allowance','total_mmk_amount','exchange_rate','exchange_rate_usd','txd_date_time','status','created_at')->get()->where('status',1)->groupBy(function($data)
+                {
+                    return $data->created_at->format('Y-m-d');
+                });
+            }
+            else
             {
-                return $data->created_at->format('Y-m-d');
-            });
+                $excel_query=Inwards::select('sr_id','branch_id','receiver_name','receiver_nrc_passport','receiver_address_ph','purpose','withdraw_point','sender_name','sender_country_code','currency_code','amount','equivalent_usd','amount_mmk','exchange_rate','exchange_rate_usd','txd_date_time','status','created_at')->get()->where('status',1)->groupBy(function($data)
+                {
+                    return $data->created_at->format('Y-m-d');
+                });
+            }
+          
 
             $grandtotalusd=0;
             $grandtotalmmk=0;
@@ -1755,7 +1766,14 @@ session()->put('query',collect($temp));
 
     public function exportexcelinward(Request $request)
     {
-        return Excel::download(new ReportsExport(session()->get('query')), 'InwardTransaction_Report.xlsx');
+        if ($this->isText30_valid_today()) {
+           
+            return Excel::download(new ReportsExportText30(session()->get('query')), 'InwardTransaction_Report.xlsx');
+        }
+        else
+        {
+            return Excel::download(new ReportsExport(session()->get('query')), 'InwardTransaction_Report.xlsx');
+        }
     }
 
     public function exportexceltotalinward(Request $request)
@@ -1802,6 +1820,61 @@ session()->put('query',collect($temp));
 
 public function isText30_valid($date)
 {
+    $text30_startdate_row=Dates::where('name','text30start')->first();
+
+    if ($text30_startdate_row) {
+     
+      $text30_startdate=$text30_startdate_row->date;
+    }
+
+   $text30_enddate_row=Dates::where('name','text30end')->first();
+
+   if ($text30_enddate_row)  {
+   
+    $text30_enddate=$text30_enddate_row->date;
+   }
+
+  if (!empty($text30_startdate)) {
+   
+
+    if (!empty($text30_enddate)) {
+       
+        if ($date>$text30_startdate && $date<$text30_enddate) {
+          
+           return true;
+
+
+        }
+        else
+        {
+          
+            return false;
+        }
+    }
+    else
+    {
+            if ($date>$text30_startdate) {
+            
+                return true;
+            }
+            else
+            {
+              return false;
+            }
+    }
+
+
+  }
+  else
+  {
+            return false;
+  }
+
+}
+
+public function isText30_valid_today()
+{
+    $date=Carbon::today();
     $text30_startdate_row=Dates::where('name','text30start')->first();
 
     if ($text30_startdate_row) {
