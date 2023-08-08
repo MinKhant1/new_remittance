@@ -1362,7 +1362,7 @@ class InwardTransactionController extends Controller
             ->get();
 
             $blacklists = blacklists::All();
-            $is_text30_valid= $this->isText30_valid($startdate);
+            $is_text30_valid= $this->isText30_valid($enddate);
         return view('admin.dailytransaction.inwardtransaction')->with('inward_transactions', $query)
                                                                ->with('blacklists',$blacklists)
                                                                ->with('is_text30_valid',$is_text30_valid);
