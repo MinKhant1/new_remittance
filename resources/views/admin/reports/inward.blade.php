@@ -115,6 +115,10 @@
                     <th>Amount</th>
                     <th>Equivent USD</th>
                     <th>MMK Amount</th>
+                    @if ($is_text30_valid)
+                        <th>MMK Allowance</th>
+                        <th>Total MMK Amount</th>
+                    @endif
                     <th>Exchange rate</th>
                     <th>Exchange rate USD</th>
                     <th>Txd Date Time</th>
@@ -165,6 +169,10 @@
                       <td>{{number_format($inwardtransaction->amount,2)}}</td>
                       <td>{{number_format($inwardtransaction->equivalent_usd,2)}}</td>
                       <td>{{number_format($inwardtransaction->amount_mmk,2)}}</td>
+                      @if ($is_text30_valid)
+                          <td>{{$inwardtransaction->mmk_allowance}}</td>
+                          <td>{{$inwardtransaction->total_mmk_amount}}</td>
+                      @endif
                       <td>{{number_format($inwardtransaction->amount_mmk/$inwardtransaction->amount,2)}}</td>
                       @if (isset($inwardtransaction->equivalent_usd) && $inwardtransaction->equivalent_usd>0)
                       
@@ -185,8 +193,15 @@
                              <td colspan="9" style="font-weight: bold; text-align: right">Sub Total</td>
                              <td style="font-weight: bold">{{$key}}</td>
                              <td style="font-weight: bold">{{number_format($value['amount'],2)}}</td>
+                            
                              <td style="font-weight: bold">{{number_format($value['equivalent_usd'],2)}}</td>
-                             <td colspan="4" style="font-weight: bold">{{number_format($value['amount_mmk'],2)}}</td>
+                             <td style="font-weight: bold">{{number_format($value['amount_mmk'],2)}}</td>
+
+                             @if ($is_text30_valid)
+                             <td style="font-weight: bold">{{number_format($value['mmk_allowance'],2)}}</td>
+                             <td style="font-weight: bold">{{number_format($value['total_mmk_amount'],2)}}</td>  
+                             @endif
+                            
 
                         </tr>
                          @endforeach

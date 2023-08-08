@@ -385,7 +385,11 @@ class InwardTransactionController extends Controller
                  $subtotal_amount= $dated_transactions->where('currency_code',$currency_code)->sum('amount');
                  $sub_equsd= $dated_transactions->where('currency_code',$currency_code)->sum('equivalent_usd');
                  $sub_eqmmk= $dated_transactions->where('currency_code',$currency_code)->sum('amount_mmk');
-                 $sub_total_collection->put($currency_code,['amount'=>$subtotal_amount,'equivalent_usd'=>$sub_equsd,'amount_mmk'=>$sub_eqmmk]);
+
+                 $mmk_allowance= $dated_transactions->where('currency_code',$currency_code)->sum('mmk_allowance');
+                 $total_mmk_amount= $dated_transactions->where('currency_code',$currency_code)->sum('total_mmk_amount');
+                
+                 $sub_total_collection->put($currency_code,['amount'=>$subtotal_amount,'mmk_allowance'=>$mmk_allowance,'total_mmk_amount'=>$total_mmk_amount,'equivalent_usd'=>$sub_equsd,'amount_mmk'=>$sub_eqmmk]);
                  $dated_transactions->put('subtotal',$sub_total_collection);
                 }
 
@@ -515,7 +519,8 @@ class InwardTransactionController extends Controller
                 ->with('ttlusd',$ttlusd)
                 ->with('ttlmmk',$ttlmmk)
                 ->with('branches',$branches)
-                ->with('total_collection',$total_collection);
+                ->with('total_collection',$total_collection)
+                ->with('is_text30_valid',$this->isText30_valid_today());
 
         }
         else
@@ -622,7 +627,10 @@ class InwardTransactionController extends Controller
                  $subtotal_amount= $dated_transactions->where('currency_code',$currency_code)->sum('amount');
                  $sub_equsd= $dated_transactions->where('currency_code',$currency_code)->sum('equivalent_usd');
                  $sub_eqmmk= $dated_transactions->where('currency_code',$currency_code)->sum('amount_mmk');
-                 $sub_total_collection->put($currency_code,['amount'=>$subtotal_amount,'equivalent_usd'=>$sub_equsd,'amount_mmk'=>$sub_eqmmk]);
+                 $mmk_allowance= $dated_transactions->where('currency_code',$currency_code)->sum('mmk_allowance');
+                 $total_mmk_amount= $dated_transactions->where('currency_code',$currency_code)->sum('total_mmk_amount');
+                
+                 $sub_total_collection->put($currency_code,['amount'=>$subtotal_amount,'mmk_allowance'=>$mmk_allowance,'total_mmk_amount'=>$total_mmk_amount,'equivalent_usd'=>$sub_equsd,'amount_mmk'=>$sub_eqmmk]);
                  $dated_transactions->put('subtotal',$sub_total_collection);
                 }
 
@@ -794,7 +802,10 @@ class InwardTransactionController extends Controller
                  $subtotal_amount= $dated_transactions->where('currency_code',$currency_code)->sum('amount');
                  $sub_equsd= $dated_transactions->where('currency_code',$currency_code)->sum('equivalent_usd');
                  $sub_eqmmk= $dated_transactions->where('currency_code',$currency_code)->sum('amount_mmk');
-                 $sub_total_collection->put($currency_code,['amount'=>$subtotal_amount,'equivalent_usd'=>$sub_equsd,'amount_mmk'=>$sub_eqmmk]);
+                 $mmk_allowance= $dated_transactions->where('currency_code',$currency_code)->sum('mmk_allowance');
+                 $total_mmk_amount= $dated_transactions->where('currency_code',$currency_code)->sum('total_mmk_amount');
+                
+                 $sub_total_collection->put($currency_code,['amount'=>$subtotal_amount,'mmk_allowance'=>$mmk_allowance,'total_mmk_amount'=>$total_mmk_amount,'equivalent_usd'=>$sub_equsd,'amount_mmk'=>$sub_eqmmk]);
                  $dated_transactions->put('subtotal',$sub_total_collection);
                 }
 
@@ -967,7 +978,10 @@ class InwardTransactionController extends Controller
                  $subtotal_amount= $dated_transactions->where('currency_code',$currency_code)->sum('amount');
                  $sub_equsd= $dated_transactions->where('currency_code',$currency_code)->sum('equivalent_usd');
                  $sub_eqmmk= $dated_transactions->where('currency_code',$currency_code)->sum('amount_mmk');
-                 $sub_total_collection->put($currency_code,['amount'=>$subtotal_amount,'equivalent_usd'=>$sub_equsd,'amount_mmk'=>$sub_eqmmk]);
+                 $mmk_allowance= $dated_transactions->where('currency_code',$currency_code)->sum('mmk_allowance');
+                 $total_mmk_amount= $dated_transactions->where('currency_code',$currency_code)->sum('total_mmk_amount');
+                
+                 $sub_total_collection->put($currency_code,['amount'=>$subtotal_amount,'mmk_allowance'=>$mmk_allowance,'total_mmk_amount'=>$total_mmk_amount,'equivalent_usd'=>$sub_equsd,'amount_mmk'=>$sub_eqmmk]);
                  $dated_transactions->put('subtotal',$sub_total_collection);
                 }
 
@@ -1138,7 +1152,10 @@ class InwardTransactionController extends Controller
              $subtotal_amount= $dated_transactions->where('currency_code',$currency_code)->sum('amount');
              $sub_equsd= $dated_transactions->where('currency_code',$currency_code)->sum('equivalent_usd');
              $sub_eqmmk= $dated_transactions->where('currency_code',$currency_code)->sum('amount_mmk');
-             $sub_total_collection->put($currency_code,['amount'=>$subtotal_amount,'equivalent_usd'=>$sub_equsd,'amount_mmk'=>$sub_eqmmk]);
+             $mmk_allowance= $dated_transactions->where('currency_code',$currency_code)->sum('mmk_allowance');
+                 $total_mmk_amount= $dated_transactions->where('currency_code',$currency_code)->sum('total_mmk_amount');
+                
+                 $sub_total_collection->put($currency_code,['amount'=>$subtotal_amount,'mmk_allowance'=>$mmk_allowance,'total_mmk_amount'=>$total_mmk_amount,'equivalent_usd'=>$sub_equsd,'amount_mmk'=>$sub_eqmmk]);
              $dated_transactions->put('subtotal',$sub_total_collection);
             }
 
@@ -1278,7 +1295,8 @@ class InwardTransactionController extends Controller
                                            ->with('ttlamount',$ttlamount)
                                            ->with('ttlusd',$ttlusd)
                                            ->with('ttlmmk',$ttlmmk)
-                                           ->with('total_collection',$total_collection);
+                                           ->with('total_collection',$total_collection)
+                                           ->with('is_text30_valid',$this->isText30_valid($enddate));
 
 
     }
