@@ -236,8 +236,8 @@
 
   <div class="col-2"  >
     <label for="total_mmk" class="mr-sm-2">Total MMK</label>
-    <input type="text" class="form-control mb-2 mr-sm-2" id="total_mmk" name="total_mmk_amount" value="" readonly>
-  </div>  
+    <input type="text" class="form-control mb-2 mr-sm-2" id="total_mmk" name="total_mmk_amount" value="" oninput="changecurrencyvaluetotal_mmk({{$exchange_rates}})">
+  </div>
   @endif
     <div class="col-6">
       <label for="file" class="mr-sm-2">Upload File</label>
@@ -503,7 +503,7 @@
       }
 
       mmk_value= usd_value*mmk_to_usd;
-      mmk_input.value=mmk_value;
+      mmk_input.value=Math.round(mmk_value);
 
       // usd_value=mmk_value*(1/mmk_to_usd);
       // usd_input.value=usd_value;
@@ -575,7 +575,7 @@
       console.log('rate:'+  rate);
 
       mmk_value= amount_value*rate;
-      mmk_input.value=mmk_value;
+      mmk_input.value=Math.round(mmk_value);
 
       usd_value=mmk_value*(1/mmk_to_usd);
       usd_input.value=usd_value.toFixed(2);
@@ -593,6 +593,97 @@
 
     }
 
+    function changecurrencyvaluetotal_mmk(exchange_rates)
+    {
+
+
+      var currencyDropDown=document.getElementById('prefer_currency');
+
+      var mmk_input=document.getElementById("mmk");
+      var usd_input=document.getElementById("usd");
+      var amount_input=document.getElementById("amount");
+      var total_mmk_input=document.getElementById("total_mmk");
+      var mmk_allowance_input=document.getElementById('mmk_allowance');
+
+
+      //mmk_input.value=0;
+      usd_input.value=0;
+      amount_input.value=0;
+      mmk_input.value=0;
+      mmk_allowance_input.value=0;
+
+      var mmk_to_usd;
+      var rate;
+
+      var amount_value;
+      var mmk_value;
+      var usd_value;
+      var total_mmk_value;
+      var mmk_allowance_value;
+      total_mmk_value= total_mmk_input.value;
+
+
+
+
+      //find usd rate
+      for(i=0;i<exchange_rates.length; i++)
+      {
+
+       if(exchange_rates[i].currency_code=='USD')
+       {
+        mmk_to_usd=exchange_rates[i].exchange_rate;
+        break;
+       }
+      }
+
+
+      //find rate
+      for(i=0;i<exchange_rates.length; i++)
+      {
+
+       if(exchange_rates[i].currency_code==currencyDropDown.value)
+       {
+        rate=exchange_rates[i].exchange_rate;
+        break;
+
+       }
+      }
+
+
+
+      usd_value=total_mmk_value*(1/(mmk_to_usd+30));
+      usd_input.value=usd_value.toFixed(2);
+
+
+      mmk_value=usd_value*mmk_to_usd;
+      mmk_input.value= Math.round(mmk_value);
+
+
+      
+      amount_value=mmk_value*(1/rate);
+      amount_input.value=amount_value.toFixed(2);
+
+      mmk_allowance_value=usd_value*30;
+
+      mmk_allowance_input.value=Math.round(mmk_allowance_value);
+
+     
+
+
+
+      // var mmk_allowance_input=document.getElementById('mmk_allowance');
+      // var total_mmk_input=document.getElementById('total_mmk');
+
+      // mmk_allowance_value=usd_value*30;
+      // mmk_allowance_input.value=Math.round(mmk_allowance_value);
+
+      //   int_mmk_value=Number(mmk_value);
+      // total_mmk_value=int_mmk_value+mmk_allowance_value;
+
+    
+      // total_mmk_input.value=Math.round(total_mmk_value);
+
+    }
 
 
     </script>
