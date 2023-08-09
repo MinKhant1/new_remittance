@@ -247,6 +247,7 @@
                         <td>0</td>
                     @endif
 
+                    @if ($is_text30_valid)
                     @if (array_key_exists('t_mmk_allowance',$item))
 
                     <td>{{ number_format($item['t_mmk_allowance'] /1000000,5)}}</td>
@@ -260,6 +261,8 @@
                     @else
                         <td>0</td>
                     @endif
+                    @endif
+                  
 
 
                     @if (array_key_exists('TotalBUSD',$item))
@@ -276,6 +279,9 @@
                     @endif
 
 
+                    @if ($is_text30_valid)
+                        
+                  
                     @if (array_key_exists('tb_mmk_allowance',$item))
 
                     <td>{{ number_format($item['tb_mmk_allowance'] /1000000,5)}}</td>
@@ -288,7 +294,7 @@
                     @else
                         <td>0</td>
                     @endif
-
+                    @endif
                   {{Form::hidden('', $increment = $increment + 1)}}
                 </tr>
 

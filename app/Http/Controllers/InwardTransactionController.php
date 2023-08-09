@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exports\ReportsExport;
 use App\Exports\ReportsExportText30;
 use App\Exports\ReportsExport_TotalInward;
+use App\Exports\ReportsExport_TotalInwardText30;
 use App\Exports\Total_inward;
 use App\Models\Branch;
 use App\Models\Dates;
@@ -1598,7 +1599,8 @@ foreach($dategp_array as &$array)
     }
 
 
-   $new_array = array('id' => $array['id'],'dates' => $array['dates'],'usd_amounts' => $array['usd_amounts'],'eur_amounts' => $array['eur_amounts'],'jpy_amounts' => $array['jpy_amounts'],'krw_amounts' => $array['krw_amounts'],'myr_amounts' => $array['myr_amounts'],'sgd_amounts' => $array['sgd_amounts'],'thb_amounts' => $array['thb_amounts'],'aed_amounts' => $array['aed_amounts'],'qar_amounts' => $array['other_amounts'],'other_amounts' => $array['qar_amounts'],'count' => $array['count'],'tusd' => $array['tusd'],'tmmk' => $array['tmmk'],'TotalBUSD' => $array['TotalBUSD'],'TotalBMMK' => $array['TotalBMMK']);
+   $new_array = array('id' => $array['id'],'dates' => $array['dates'],'usd_amounts' => $array['usd_amounts'],'eur_amounts' => $array['eur_amounts'],'jpy_amounts' => $array['jpy_amounts'],'krw_amounts' => $array['krw_amounts'],'myr_amounts' => $array['myr_amounts'],'sgd_amounts' => $array['sgd_amounts'],'thb_amounts' => $array['thb_amounts'],'aed_amounts' => $array['aed_amounts'],'qar_amounts' => $array['other_amounts'],'other_amounts' => $array['qar_amounts'],'count' => $array['count'],'tusd' => $array['tusd'],'tmmk' => $array['tmmk'],
+   'TotalBUSD' => $array['TotalBUSD'],'TotalBMMK' => $array['TotalBMMK']);
 
 
 
@@ -1625,7 +1627,7 @@ session()->put('query',collect($temp));
             ->with('T_usd_amount', $T_usd_amount)
             ->with('T_mmk_amount', $T_mmk_amount)
             ->with('branches',$branches)
-            ->with('is_text30_valid',$this->isText30_valid_today());;
+            ->with('is_text30_valid',$this->isText30_valid($enddate));;
     }
 
     function getMaxFromArray($arr)
@@ -1753,6 +1755,8 @@ session()->put('query',collect($temp));
         {
 
             $Total_amount = Inwards::select("id", DB::raw("(sum(equivalent_usd)) as tusd"), DB::raw("(sum(amount_mmk)) as tmmk"),
+            DB::raw("(sum(mmk_allowance)) as t_mmk_allowance"),
+            DB::raw("(sum(total_mmk_amount)) as t_mmk_amount"),
                 DB::raw("(DATE_FORMAT(created_at, '%Y-%m-%d')) as dates"), DB::raw("(count(*)) as count"))
                 ->whereDate('created_at', '>=', $startdate)
                 ->whereDate('created_at', '<=', $enddate)
@@ -1763,6 +1767,8 @@ session()->put('query',collect($temp));
         else
         {
             $Total_amount = Inwards::select("id", DB::raw("(sum(equivalent_usd)) as tusd"), DB::raw("(sum(amount_mmk)) as tmmk"),
+            DB::raw("(sum(mmk_allowance)) as t_mmk_allowance"),
+            DB::raw("(sum(total_mmk_amount)) as t_mmk_amount"),
             DB::raw("(DATE_FORMAT(created_at, '%Y-%m-%d')) as dates"), DB::raw("(count(*)) as count"))
             ->whereDate('created_at', '>=', $startdate)
             ->whereDate('created_at', '<=', $enddate)
@@ -1834,7 +1840,14 @@ session()->put('query',collect($temp));
 
     public function exportexceltotalinward(Request $request)
     {
-        return Excel::download(new ReportsExport_TotalInward(session()->get('query')), 'TotalInwardTransaction_Report.xlsx');
+        if ($this->isText30_valid_today()) {
+            return Excel::download(new ReportsExport_TotalInwardText30(session()->get('query')), 'TotalInwardTransaction_Report.xlsx');
+          
+        }
+        else
+        {
+            return Excel::download(new ReportsExport_TotalInward(session()->get('query')), 'TotalInwardTransaction_Report.xlsx');
+        }
     }
 
 
