@@ -592,7 +592,7 @@ class InwardTransactionController extends Controller
         $ttlmmk=Inwards::where('status',1)->where('branch_id',$branch_id)->where('state_division',$state_division)->whereBetween('created_at', [Carbon::parse($startdate)->toDateString(),Carbon::parse($enddate)->toDateString()])->sum('amount_mmk');
 
 
-        $excel_query=Inwards::select('sr_id','branch_id','receiver_name','state_division','receiver_nrc_passport','receiver_address_ph','purpose','withdraw_point','sender_name','sender_country_code','currency_code','amount','equivalent_usd','amount_mmk','mmk_allowance','total_mmk_amount','exchange_rate','exchange_rate_usd','txd_date_time','status','created_at')->get()->where('status',1)->where('branch_id',$branch_id)->where('state_division',$state_division)->where('created_at', '>=', $startdate)
+        $excel_query=Inwards::select('sr_id','branch_id','receiver_name','state_division','receiver_nrc_passport','receiver_address_ph','purpose','withdraw_point','sender_name','sender_country_code','currency_code','amount','equivalent_usd','amount_mmk','exchange_rate','exchange_rate_usd','txd_date_time','status','created_at')->get()->where('status',1)->where('branch_id',$branch_id)->where('state_division',$state_division)->where('created_at', '>=', $startdate)
         ->where('created_at', '<=', $enddate)->groupBy(function($data)
             {
                 return $data->created_at->format('Y-m-d');
@@ -628,10 +628,8 @@ class InwardTransactionController extends Controller
                  $subtotal_amount= $dated_transactions->where('currency_code',$currency_code)->sum('amount');
                  $sub_equsd= $dated_transactions->where('currency_code',$currency_code)->sum('equivalent_usd');
                  $sub_eqmmk= $dated_transactions->where('currency_code',$currency_code)->sum('amount_mmk');
-                 $mmk_allowance= $dated_transactions->where('currency_code',$currency_code)->sum('mmk_allowance');
-                 $total_mmk_amount= $dated_transactions->where('currency_code',$currency_code)->sum('total_mmk_amount');
-                
-                 $sub_total_collection->put($currency_code,['amount'=>$subtotal_amount,'mmk_allowance'=>$mmk_allowance,'total_mmk_amount'=>$total_mmk_amount,'equivalent_usd'=>$sub_equsd,'amount_mmk'=>$sub_eqmmk]);
+                 
+                 $sub_total_collection->put($currency_code,['amount'=>$subtotal_amount,'equivalent_usd'=>$sub_equsd,'amount_mmk'=>$sub_eqmmk]);
                  $dated_transactions->put('subtotal',$sub_total_collection);
                 }
 
@@ -767,7 +765,7 @@ class InwardTransactionController extends Controller
         $ttlmmk=Inwards::where('status',1)->where('branch_id',$branch_id)->whereBetween('created_at', [Carbon::parse($startdate)->toDateString(),Carbon::parse($enddate)->toDateString()])->sum('amount_mmk');
 
 
-        $excel_query=Inwards::select('sr_id','branch_id','receiver_name','state_division','receiver_nrc_passport','receiver_address_ph','purpose','withdraw_point','sender_name','sender_country_code','currency_code','amount','equivalent_usd','amount_mmk','mmk_allowance','total_mmk_amount','exchange_rate','exchange_rate_usd','txd_date_time','status','created_at')->get()->where('status',1)->where('branch_id',$branch_id)->where('created_at', '>=', $startdate)
+        $excel_query=Inwards::select('sr_id','branch_id','receiver_name','state_division','receiver_nrc_passport','receiver_address_ph','purpose','withdraw_point','sender_name','sender_country_code','currency_code','amount','equivalent_usd','amount_mmk','exchange_rate','exchange_rate_usd','txd_date_time','status','created_at')->get()->where('status',1)->where('branch_id',$branch_id)->where('created_at', '>=', $startdate)
         ->where('created_at', '<=', $enddate)->groupBy(function($data)
             {
                 return $data->created_at->format('Y-m-d');
@@ -803,10 +801,9 @@ class InwardTransactionController extends Controller
                  $subtotal_amount= $dated_transactions->where('currency_code',$currency_code)->sum('amount');
                  $sub_equsd= $dated_transactions->where('currency_code',$currency_code)->sum('equivalent_usd');
                  $sub_eqmmk= $dated_transactions->where('currency_code',$currency_code)->sum('amount_mmk');
-                 $mmk_allowance= $dated_transactions->where('currency_code',$currency_code)->sum('mmk_allowance');
-                 $total_mmk_amount= $dated_transactions->where('currency_code',$currency_code)->sum('total_mmk_amount');
                 
-                 $sub_total_collection->put($currency_code,['amount'=>$subtotal_amount,'mmk_allowance'=>$mmk_allowance,'total_mmk_amount'=>$total_mmk_amount,'equivalent_usd'=>$sub_equsd,'amount_mmk'=>$sub_eqmmk]);
+                
+                 $sub_total_collection->put($currency_code,['amount'=>$subtotal_amount,'equivalent_usd'=>$sub_equsd,'amount_mmk'=>$sub_eqmmk]);
                  $dated_transactions->put('subtotal',$sub_total_collection);
                 }
 
@@ -943,7 +940,7 @@ class InwardTransactionController extends Controller
                 $ttlmmk=Inwards::where('status',1)->where('state_division',$state_division)->whereBetween('created_at', [Carbon::parse($startdate)->toDateString(),Carbon::parse($enddate)->toDateString()])->sum('amount_mmk');
 
 
-        $excel_query=Inwards::select('sr_id','branch_id','receiver_name','state_division','receiver_nrc_passport','receiver_address_ph','purpose','withdraw_point','sender_name','sender_country_code','currency_code','amount','equivalent_usd','amount_mmk','mmk_allowance','total_mmk_amount','exchange_rate','exchange_rate_usd','txd_date_time','status','created_at')->get()->where('status',1)->where('state_division',$state_division)->where('created_at', '>=', $startdate)
+        $excel_query=Inwards::select('sr_id','branch_id','receiver_name','state_division','receiver_nrc_passport','receiver_address_ph','purpose','withdraw_point','sender_name','sender_country_code','currency_code','amount','equivalent_usd','amount_mmk','exchange_rate','exchange_rate_usd','txd_date_time','status','created_at')->get()->where('status',1)->where('state_division',$state_division)->where('created_at', '>=', $startdate)
         ->where('created_at', '<=', $enddate)->groupBy(function($data)
             {
                 return $data->created_at->format('Y-m-d');
@@ -979,10 +976,9 @@ class InwardTransactionController extends Controller
                  $subtotal_amount= $dated_transactions->where('currency_code',$currency_code)->sum('amount');
                  $sub_equsd= $dated_transactions->where('currency_code',$currency_code)->sum('equivalent_usd');
                  $sub_eqmmk= $dated_transactions->where('currency_code',$currency_code)->sum('amount_mmk');
-                 $mmk_allowance= $dated_transactions->where('currency_code',$currency_code)->sum('mmk_allowance');
-                 $total_mmk_amount= $dated_transactions->where('currency_code',$currency_code)->sum('total_mmk_amount');
+        
                 
-                 $sub_total_collection->put($currency_code,['amount'=>$subtotal_amount,'mmk_allowance'=>$mmk_allowance,'total_mmk_amount'=>$total_mmk_amount,'equivalent_usd'=>$sub_equsd,'amount_mmk'=>$sub_eqmmk]);
+                 $sub_total_collection->put($currency_code,['amount'=>$subtotal_amount,'equivalent_usd'=>$sub_equsd,'amount_mmk'=>$sub_eqmmk]);
                  $dated_transactions->put('subtotal',$sub_total_collection);
                 }
 
@@ -1117,7 +1113,7 @@ class InwardTransactionController extends Controller
                 $ttlmmk=Inwards::where('status',1)->whereBetween('created_at', [Carbon::parse($startdate)->toDateString(),Carbon::parse($enddate)->toDateString()])->sum('amount_mmk');
 
 
-       $excel_query=Inwards::select('sr_id','branch_id','receiver_name','state_division','receiver_nrc_passport','receiver_address_ph','purpose','withdraw_point','sender_name','sender_country_code','currency_code','amount','equivalent_usd','amount_mmk','mmk_allowance','total_mmk_amount','exchange_rate','exchange_rate_usd','txd_date_time','status','created_at')->get()->where('status',1)->where('created_at', '>=', $startdate)
+       $excel_query=Inwards::select('sr_id','branch_id','receiver_name','state_division','receiver_nrc_passport','receiver_address_ph','purpose','withdraw_point','sender_name','sender_country_code','currency_code','amount','equivalent_usd','amount_mmk','exchange_rate','exchange_rate_usd','txd_date_time','status','created_at')->get()->where('status',1)->where('created_at', '>=', $startdate)
        ->where('created_at', '<=', $enddate)->groupBy(function($data)
            {
                return $data->created_at->format('Y-m-d');
@@ -1153,10 +1149,9 @@ class InwardTransactionController extends Controller
              $subtotal_amount= $dated_transactions->where('currency_code',$currency_code)->sum('amount');
              $sub_equsd= $dated_transactions->where('currency_code',$currency_code)->sum('equivalent_usd');
              $sub_eqmmk= $dated_transactions->where('currency_code',$currency_code)->sum('amount_mmk');
-             $mmk_allowance= $dated_transactions->where('currency_code',$currency_code)->sum('mmk_allowance');
-                 $total_mmk_amount= $dated_transactions->where('currency_code',$currency_code)->sum('total_mmk_amount');
+            
                 
-                 $sub_total_collection->put($currency_code,['amount'=>$subtotal_amount,'mmk_allowance'=>$mmk_allowance,'total_mmk_amount'=>$total_mmk_amount,'equivalent_usd'=>$sub_equsd,'amount_mmk'=>$sub_eqmmk]);
+                 $sub_total_collection->put($currency_code,['amount'=>$subtotal_amount,'equivalent_usd'=>$sub_equsd,'amount_mmk'=>$sub_eqmmk]);
              $dated_transactions->put('subtotal',$sub_total_collection);
             }
 
@@ -1329,8 +1324,8 @@ class InwardTransactionController extends Controller
         $qar_amounts = DB::table('inwards')->whereDate('created_at', Carbon::today())->where('currency_code', 'QAR')->sum('amount');
 
         $T_amount = Inwards ::select("id", DB::raw("(sum(equivalent_usd)) as tusd"), DB::raw("(sum(amount_mmk)) as tmmk"),
-        DB::raw("(sum(mmk_allowance)) as t_mmk_allowance"),
-        DB::raw("(sum(total_mmk_amount)) as t_mmk_amount"),
+        // DB::raw("(sum(mmk_allowance)) as t_mmk_allowance"),
+        // DB::raw("(sum(total_mmk_amount)) as t_mmk_amount"),
             DB::raw("(DATE_FORMAT(created_at, '%Y-%m-%d')) as dates"))
             ->whereDate('created_at', '>=', $startdate)
             ->whereDate('created_at', '<=', $enddate)
@@ -1339,8 +1334,8 @@ class InwardTransactionController extends Controller
             ->first();
 
         $Tb_amount = Inwards ::select("id", DB::raw("(sum(equivalent_usd)) as tbusd"), DB::raw("(sum(amount_mmk)) as tbmmk"),
-        DB::raw("(sum(mmk_allowance)) as tb_mmk_allowance"),
-        DB::raw("(sum(total_mmk_amount)) as tb_mmk_amount")
+        // DB::raw("(sum(mmk_allowance)) as tb_mmk_allowance"),
+        // DB::raw("(sum(total_mmk_amount)) as tb_mmk_amount")
         
         
         )
@@ -1357,12 +1352,12 @@ class InwardTransactionController extends Controller
 
             $new_array = array('id' => 1,'dates' => $enddate,'usd_amounts' => $usd_amounts,'eur_amounts' => $eur_amounts,'jpy_amounts' => $jpy_amounts,'krw_amounts' => $krw_amounts,'myr_amounts' => $myr_amounts,'sgd_amounts' => $sgd_amounts,'thb_amounts' => $thb_amounts,'aed_amounts' => $aed_amounts,'qar_amounts' => $qar_amounts,'other_amounts' => $other_amount,'count' => 'total_num_trans','tusd' => $T_amount->tusd,
             
-            'tmmk' => $T_amount->tmmk /1000000 ,
-            't_mmk_allowance'=>$T_amount->t_mmk_allowance,
+            // 'tmmk' => $T_amount->tmmk /1000000 ,
+            // 't_mmk_allowance'=>$T_amount->t_mmk_allowance,
             't_mmk_amount'=>$T_amount->t_mmk_amount,
             'TotalBUSD' => $Tb_amount[0]->tbusd ,'TotalBMMK' => $Tb_amount[0]->tbmmk /1000000,
-            'tb_mmk_allowance'=>$Tb_amount[0]->tb_mmk_allowance,
-            'tb_mmk_amount'=>$Tb_amount[0]->tb_mmk_amount,
+            // 'tb_mmk_allowance'=>$Tb_amount[0]->tb_mmk_allowance,
+            // 'tb_mmk_amount'=>$Tb_amount[0]->tb_mmk_amount,
         
         
         );
@@ -1372,12 +1367,12 @@ class InwardTransactionController extends Controller
         {
 
             $new_array = array('id' => 1,'dates' => $enddate,'usd_amounts' => $usd_amounts,'eur_amounts' => $eur_amounts,'jpy_amounts' => $jpy_amounts,'krw_amounts' => $krw_amounts,'myr_amounts' => $myr_amounts,'sgd_amounts' => $sgd_amounts,'thb_amounts' => $thb_amounts,'aed_amounts' => $aed_amounts,'qar_amounts' => $qar_amounts,'other_amounts' => $other_amount,'count' => $total_num_trans,'tusd' => 0,'tmmk' => 0,
-            't_mmk_allowance'=>0,
-            't_mmk_amount'=>0,
+            // 't_mmk_allowance'=>0,
+            // 't_mmk_amount'=>0,
             
             'TotalBUSD' => $Tb_amount[0]->tbusd ,'TotalBMMK' => $Tb_amount[0]->tbmmk /1000000,
-            'tb_mmk_allowance'=>0,
-            'tb_mmk_amount'=>0,
+            // 'tb_mmk_allowance'=>0,
+            // 'tb_mmk_amount'=>0,
         
         );
         }
@@ -1755,8 +1750,8 @@ session()->put('query',collect($temp));
         {
 
             $Total_amount = Inwards::select("id", DB::raw("(sum(equivalent_usd)) as tusd"), DB::raw("(sum(amount_mmk)) as tmmk"),
-            DB::raw("(sum(mmk_allowance)) as t_mmk_allowance"),
-            DB::raw("(sum(total_mmk_amount)) as t_mmk_amount"),
+            // DB::raw("(sum(mmk_allowance)) as t_mmk_allowance"),
+            // DB::raw("(sum(total_mmk_amount)) as t_mmk_amount"),
                 DB::raw("(DATE_FORMAT(created_at, '%Y-%m-%d')) as dates"), DB::raw("(count(*)) as count"))
                 ->whereDate('created_at', '>=', $startdate)
                 ->whereDate('created_at', '<=', $enddate)
@@ -1767,8 +1762,8 @@ session()->put('query',collect($temp));
         else
         {
             $Total_amount = Inwards::select("id", DB::raw("(sum(equivalent_usd)) as tusd"), DB::raw("(sum(amount_mmk)) as tmmk"),
-            DB::raw("(sum(mmk_allowance)) as t_mmk_allowance"),
-            DB::raw("(sum(total_mmk_amount)) as t_mmk_amount"),
+            // DB::raw("(sum(mmk_allowance)) as t_mmk_allowance"),
+            // DB::raw("(sum(total_mmk_amount)) as t_mmk_amount"),
             DB::raw("(DATE_FORMAT(created_at, '%Y-%m-%d')) as dates"), DB::raw("(count(*)) as count"))
             ->whereDate('created_at', '>=', $startdate)
             ->whereDate('created_at', '<=', $enddate)
@@ -1828,26 +1823,28 @@ session()->put('query',collect($temp));
 
     public function exportexcelinward(Request $request)
     {
-        if ($this->isText30_valid_today()) {
+        return Excel::download(new ReportsExport(session()->get('query')), 'InwardTransaction_Report.xlsx');
+        // if ($this->isText30_valid_today()) {
            
-            return Excel::download(new ReportsExportText30(session()->get('query')), 'InwardTransaction_Report.xlsx');
-        }
-        else
-        {
-            return Excel::download(new ReportsExport(session()->get('query')), 'InwardTransaction_Report.xlsx');
-        }
+        //     return Excel::download(new ReportsExportText30(session()->get('query')), 'InwardTransaction_Report.xlsx');
+        // }
+        // else
+        // {
+        //     return Excel::download(new ReportsExport(session()->get('query')), 'InwardTransaction_Report.xlsx');
+        // }
     }
 
     public function exportexceltotalinward(Request $request)
     {
-        if ($this->isText30_valid_today()) {
-            return Excel::download(new ReportsExport_TotalInwardText30(session()->get('query')), 'TotalInwardTransaction_Report.xlsx');
+        return Excel::download(new ReportsExport_TotalInward(session()->get('query')), 'TotalInwardTransaction_Report.xlsx');
+        // if ($this->isText30_valid_today()) {
+        //     return Excel::download(new ReportsExport_TotalInwardText30(session()->get('query')), 'TotalInwardTransaction_Report.xlsx');
           
-        }
-        else
-        {
-            return Excel::download(new ReportsExport_TotalInward(session()->get('query')), 'TotalInwardTransaction_Report.xlsx');
-        }
+        // }
+        // else
+        // {
+        //     return Excel::download(new ReportsExport_TotalInward(session()->get('query')), 'TotalInwardTransaction_Report.xlsx');
+        // }
     }
 
 

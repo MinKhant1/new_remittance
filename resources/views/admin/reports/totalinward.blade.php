@@ -82,25 +82,25 @@
                     <th rowspan="2">QAR</th>
                     <th rowspan="2">Others Country</th>
                     <th rowspan="2" >Total No.of Trans</th>
-                    <th colspan="4">Total Inward Remittance Amount
-                    <th colspan="4">Total Inward Remittance Amount From the date of Starting from the Business
+                    <th colspan="2">Total Inward Remittance Amount
+                    <th colspan="2">Total Inward Remittance Amount From the date of Starting from the Business
                     </tr>
                     </th>
 
 
                     <th>USD</th>
                     <th>MMK(in Million)</th>
-                    @if ($is_text30_valid)
+                    {{-- @if ($is_text30_valid)
                     <th>MMK Allowance</th>
                     <th>Total MMK Amount</th>
-                    @endif
+                    @endif --}}
                   
                     <th>USD</th>
                     <th>MMK(in Million)</th>
-                    @if ($is_text30_valid)
+                    {{-- @if ($is_text30_valid)
                     <th>MMK Allowance</th>
                     <th>Total MMK Amount</th>
-                    @endif
+                    @endif --}}
                   
                   </thead>
                   <tbody>
@@ -136,7 +136,7 @@
                     <td>0</td>
                     @endif
 
-                    @if ($is_text30_valid)
+                    {{-- @if ($is_text30_valid)
                         @if (!empty($T_amount->t_mmk_allowance))
                         <td>{{ number_format($T_amount->t_mmk_allowance,2) }}</td> 
                         @else
@@ -147,11 +147,11 @@
                         @else
                         <td>0</td>
                         @endif
-                    @endif
+                    @endif --}}
                     <td>{{ number_format($Tb_amount[0]->tbusd,2) }}</td>
                     <td>{{ number_format($Tb_amount[0]->tbmmk /1000000,10 )}}</td>
 
-                    @if ($is_text30_valid)
+                    {{-- @if ($is_text30_valid)
                     @if (!empty($Tb_amount[0]->tb_mmk_allowance))
                     <td>{{ number_format($Tb_amount[0]->tb_mmk_allowance,2) }}</td> 
                     @else
@@ -163,7 +163,7 @@
                     <td>0</td>
                     @endif
               
-                    @endif
+                    @endif --}}
              
                   </tr>
                   @endif
@@ -247,7 +247,7 @@
                         <td>0</td>
                     @endif
 
-                    @if ($is_text30_valid)
+                    {{-- @if ($is_text30_valid)
                     @if (array_key_exists('t_mmk_allowance',$item))
 
                     <td>{{ number_format($item['t_mmk_allowance'] /1000000,5)}}</td>
@@ -261,7 +261,7 @@
                     @else
                         <td>0</td>
                     @endif
-                    @endif
+                    @endif --}}
                   
 
 
@@ -279,7 +279,7 @@
                     @endif
 
 
-                    @if ($is_text30_valid)
+                    {{-- @if ($is_text30_valid)
                         
                   
                     @if (array_key_exists('tb_mmk_allowance',$item))
@@ -294,7 +294,7 @@
                     @else
                         <td>0</td>
                     @endif
-                    @endif
+                    @endif --}}
                   {{Form::hidden('', $increment = $increment + 1)}}
                 </tr>
 
