@@ -1780,6 +1780,7 @@ session()->put('query',collect($temp));
     public function approveinward($id)
     {
         $inwardtransaction = Inwards::find($id);
+        $total_mmk=$inwardtransaction->amount_mmk+$inwardtransaction->mmk_allowance;
 
         DB::connection('mysql2')->table('inwards')->insert(
             array(
@@ -1797,7 +1798,7 @@ session()->put('query',collect($temp));
                    'amount'     =>   $inwardtransaction->amount,
                    'equivalent_usd'     =>   $inwardtransaction->equivalent_usd,
                    'txd_date_time'     =>   $inwardtransaction->txd_date_time,
-                   'amount_mmk'     =>   $inwardtransaction->amount_mmk,
+                   'amount_mmk'     =>   $total_mmk,
                    'exchange_rate' => $inwardtransaction->exchange_rate,
                    'exchange_rate_usd'=>$inwardtransaction->exchange_rate_usd,
                    'created_at'     =>   $inwardtransaction->created_at,
