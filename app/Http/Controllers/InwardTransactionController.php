@@ -335,7 +335,7 @@ class InwardTransactionController extends Controller
 
             if ($this->isText30_valid(Carbon::today())) {
 
-                $excel_query=Inwards::select('sr_id','branch_id','receiver_name','receiver_nrc_passport','receiver_address_ph','purpose','withdraw_point','sender_name','sender_country_code','currency_code','amount','equivalent_usd','amount_mmk','mmk_allowance','total_mmk_amount','exchange_rate','exchange_rate_usd','txd_date_time','status','created_at')->get()->where('status',1)->groupBy(function($data)
+                $excel_query=Inwards::select('sr_id','branch_id','receiver_name','receiver_nrc_passport','receiver_address_ph','purpose','withdraw_point','sender_name','sender_country_code','currency_code','amount','equivalent_usd','amount_mmk','exchange_rate','exchange_rate_usd','txd_date_time','status','created_at')->get()->where('status',1)->groupBy(function($data)
                 {
                     return $data->created_at->format('Y-m-d');
                 });
@@ -387,10 +387,9 @@ class InwardTransactionController extends Controller
                  $sub_equsd= $dated_transactions->where('currency_code',$currency_code)->sum('equivalent_usd');
                  $sub_eqmmk= $dated_transactions->where('currency_code',$currency_code)->sum('amount_mmk');
 
-                 $mmk_allowance= $dated_transactions->where('currency_code',$currency_code)->sum('mmk_allowance');
-                 $total_mmk_amount= $dated_transactions->where('currency_code',$currency_code)->sum('total_mmk_amount');
+               
                 
-                 $sub_total_collection->put($currency_code,['amount'=>$subtotal_amount,'mmk_allowance'=>$mmk_allowance,'total_mmk_amount'=>$total_mmk_amount,'equivalent_usd'=>$sub_equsd,'amount_mmk'=>$sub_eqmmk]);
+                 $sub_total_collection->put($currency_code,['amount'=>$subtotal_amount,'equivalent_usd'=>$sub_equsd,'amount_mmk'=>$sub_eqmmk]);
                  $dated_transactions->put('subtotal',$sub_total_collection);
                 }
 
