@@ -592,7 +592,7 @@ class InwardTransactionController extends Controller
         $ttlmmk=Inwards::where('status',1)->where('branch_id',$branch_id)->where('state_division',$state_division)->whereBetween('created_at', [Carbon::parse($startdate)->toDateString(),Carbon::parse($enddate)->toDateString()])->sum('amount_mmk');
 
 
-        $excel_query=Inwards::select('sr_id','branch_id','receiver_name','state_division','receiver_nrc_passport','receiver_address_ph','purpose','withdraw_point','sender_name','sender_country_code','currency_code','amount','equivalent_usd','amount_mmk','exchange_rate','exchange_rate_usd','txd_date_time','status','created_at')->get()->where('status',1)->where('branch_id',$branch_id)->where('state_division',$state_division)->where('created_at', '>=', $startdate)
+        $excel_query=Inwards::select('sr_id','branch_id','receiver_name','state_division','receiver_nrc_passport','receiver_address_ph','purpose','withdraw_point','sender_name','sender_country_code','currency_code','amount','equivalent_usd','amount_mmk','mmk_allowance','total_mmk_amount','exchange_rate','exchange_rate_usd','txd_date_time','status','created_at')->get()->where('status',1)->where('branch_id',$branch_id)->where('state_division',$state_division)->where('created_at', '>=', $startdate)
         ->where('created_at', '<=', $enddate)->groupBy(function($data)
             {
                 return $data->created_at->format('Y-m-d');
@@ -767,7 +767,7 @@ class InwardTransactionController extends Controller
         $ttlmmk=Inwards::where('status',1)->where('branch_id',$branch_id)->whereBetween('created_at', [Carbon::parse($startdate)->toDateString(),Carbon::parse($enddate)->toDateString()])->sum('amount_mmk');
 
 
-        $excel_query=Inwards::select('sr_id','branch_id','receiver_name','state_division','receiver_nrc_passport','receiver_address_ph','purpose','withdraw_point','sender_name','sender_country_code','currency_code','amount','equivalent_usd','amount_mmk','exchange_rate','exchange_rate_usd','txd_date_time','status','created_at')->get()->where('status',1)->where('branch_id',$branch_id)->where('created_at', '>=', $startdate)
+        $excel_query=Inwards::select('sr_id','branch_id','receiver_name','state_division','receiver_nrc_passport','receiver_address_ph','purpose','withdraw_point','sender_name','sender_country_code','currency_code','amount','equivalent_usd','amount_mmk','mmk_allowance','total_mmk_amount','exchange_rate','exchange_rate_usd','txd_date_time','status','created_at')->get()->where('status',1)->where('branch_id',$branch_id)->where('created_at', '>=', $startdate)
         ->where('created_at', '<=', $enddate)->groupBy(function($data)
             {
                 return $data->created_at->format('Y-m-d');
@@ -943,7 +943,7 @@ class InwardTransactionController extends Controller
                 $ttlmmk=Inwards::where('status',1)->where('state_division',$state_division)->whereBetween('created_at', [Carbon::parse($startdate)->toDateString(),Carbon::parse($enddate)->toDateString()])->sum('amount_mmk');
 
 
-        $excel_query=Inwards::select('sr_id','branch_id','receiver_name','state_division','receiver_nrc_passport','receiver_address_ph','purpose','withdraw_point','sender_name','sender_country_code','currency_code','amount','equivalent_usd','amount_mmk','exchange_rate','exchange_rate_usd','txd_date_time','status','created_at')->get()->where('status',1)->where('state_division',$state_division)->where('created_at', '>=', $startdate)
+        $excel_query=Inwards::select('sr_id','branch_id','receiver_name','state_division','receiver_nrc_passport','receiver_address_ph','purpose','withdraw_point','sender_name','sender_country_code','currency_code','amount','equivalent_usd','amount_mmk','mmk_allowance','total_mmk_amount','exchange_rate','exchange_rate_usd','txd_date_time','status','created_at')->get()->where('status',1)->where('state_division',$state_division)->where('created_at', '>=', $startdate)
         ->where('created_at', '<=', $enddate)->groupBy(function($data)
             {
                 return $data->created_at->format('Y-m-d');
@@ -1117,7 +1117,7 @@ class InwardTransactionController extends Controller
                 $ttlmmk=Inwards::where('status',1)->whereBetween('created_at', [Carbon::parse($startdate)->toDateString(),Carbon::parse($enddate)->toDateString()])->sum('amount_mmk');
 
 
-       $excel_query=Inwards::select('sr_id','branch_id','receiver_name','state_division','receiver_nrc_passport','receiver_address_ph','purpose','withdraw_point','sender_name','sender_country_code','currency_code','amount','equivalent_usd','amount_mmk','exchange_rate','exchange_rate_usd','txd_date_time','status','created_at')->get()->where('status',1)->where('created_at', '>=', $startdate)
+       $excel_query=Inwards::select('sr_id','branch_id','receiver_name','state_division','receiver_nrc_passport','receiver_address_ph','purpose','withdraw_point','sender_name','sender_country_code','currency_code','amount','equivalent_usd','amount_mmk','mmk_allowance','total_mmk_amount','exchange_rate','exchange_rate_usd','txd_date_time','status','created_at')->get()->where('status',1)->where('created_at', '>=', $startdate)
        ->where('created_at', '<=', $enddate)->groupBy(function($data)
            {
                return $data->created_at->format('Y-m-d');
