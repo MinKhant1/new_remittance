@@ -82,17 +82,26 @@
                     <th rowspan="2">QAR</th>
                     <th rowspan="2">Others Country</th>
                     <th rowspan="2" >Total No.of Trans</th>
-                    <th colspan="2">Total Inward Remittance Amount
-                    <th colspan="2">Total Inward Remittance Amount From the date of Starting from the Business
+                    <th colspan="4">Total Inward Remittance Amount
+                    <th colspan="4">Total Inward Remittance Amount From the date of Starting from the Business
                     </tr>
                     </th>
 
 
                     <th>USD</th>
                     <th>MMK(in Million)</th>
+                    @if ($is_text30_valid)
+                    <th>MMK Allowance</th>
+                    <th>Total MMK Amount</th>
+                    @endif
+                  
                     <th>USD</th>
                     <th>MMK(in Million)</th>
-
+                    @if ($is_text30_valid)
+                    <th>MMK Allowance</th>
+                    <th>Total MMK Amount</th>
+                    @endif
+                  
                   </thead>
                   <tbody>
 
@@ -126,21 +135,36 @@
                     <td>0</td>
                     <td>0</td>
                     @endif
+
+                    @if ($is_text30_valid)
+                        @if (!empty($T_amount->t_mmk_allowance))
+                        <td>{{ number_format($T_amount->t_mmk_allowance,2) }}</td> 
+                        @else
+                        <td>0</td>
+                        @endif
+                        @if (!empty($T_amount->t_mmk_amount))
+                        <td>{{ number_format($T_amount->t_mmk_amount /1000000,10) }}</td>
+                        @else
+                        <td>0</td>
+                        @endif
+                    @endif
                     <td>{{ number_format($Tb_amount[0]->tbusd,2) }}</td>
                     <td>{{ number_format($Tb_amount[0]->tbmmk /1000000,10 )}}</td>
 
-                    {{-- <td>{{$total_data->counts}}</td>                   --}}
-                    {{-- <td>{{$usd_amount}}</td>
-                    <td>{{$mmk->mmk_amounts}}</td>                                    --}}
-
-
-                    {{-- <td>{{$transaction->country_code}}</td>
-                    <td>{{$transaction->country_name}}</td>
-                    <td>
-                      <a href="{{url('/editcountry/' . $country->id)}}" class="btn btn-primary"><i class="nav-icon fas fa-edit"></i></a></td>
-                    <td>
-                      <a href="{{url('/deletecountry/'. $country->id)}}" id="delete" class="btn btn-danger" ><i class="nav-icon fas fa-trash"></i></a>
-                    </td> --}}
+                    @if ($is_text30_valid)
+                    @if (!empty($Tb_amount[0]->tb_mmk_allowance))
+                    <td>{{ number_format($Tb_amount[0]->tb_mmk_allowance,2) }}</td> 
+                    @else
+                    <td>0</td>
+                    @endif
+                    @if (!empty($Tb_amount[0]->tb_mmk_amount))
+                    <td>{{ number_format($Tb_amount[0]->tb_mmk_amount /1000000,10) }}</td>
+                    @else
+                    <td>0</td>
+                    @endif
+              
+                    @endif
+             
                   </tr>
                   @endif
 
@@ -222,6 +246,22 @@
                     @else
                         <td>0</td>
                     @endif
+
+                    @if (array_key_exists('t_mmk_allowance',$item))
+
+                    <td>{{ number_format($item['t_mmk_allowance'] /1000000,5)}}</td>
+                    @else
+                        <td>0</td>
+                    @endif
+                    
+                    @if (array_key_exists('t_mmk_amount',$item))
+
+                    <td>{{ number_format($item['t_mmk_amount'] /1000000,5)}}</td>
+                    @else
+                        <td>0</td>
+                    @endif
+
+
                     @if (array_key_exists('TotalBUSD',$item))
 
                     <td>{{ number_format($item['TotalBUSD'],2)}}</td>
@@ -231,6 +271,20 @@
                     @if (array_key_exists('TotalBMMK',$item))
 
                     <td>{{ number_format($item['TotalBMMK'] /1000000,5)}}</td>
+                    @else
+                        <td>0</td>
+                    @endif
+
+
+                    @if (array_key_exists('tb_mmk_allowance',$item))
+
+                    <td>{{ number_format($item['tb_mmk_allowance'] /1000000,5)}}</td>
+                    @else
+                        <td>0</td>
+                    @endif
+                    @if (array_key_exists('tb_mmk_amount',$item))
+
+                    <td>{{ number_format($item['tb_mmk_amount'] /1000000,5)}}</td>
                     @else
                         <td>0</td>
                     @endif
@@ -251,8 +305,7 @@
                     <td style="font-weight: bold">{{$count}}</td>
                     <td style="font-weight: bold">{{number_format($tusd,2)}}</td>
                     <td style="font-weight: bold">{{number_format($mmk,5)}}</td>
-                    {{-- <td style="font-weight: bold">{{number_format($tbusd,2)}}</td>
-                    <td style="font-weight: bold">{{number_format($tbmmk,5)}}</td> --}}
+                  
 
                 </tr>
 

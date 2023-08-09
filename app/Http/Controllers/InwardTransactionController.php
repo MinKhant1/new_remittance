@@ -1328,6 +1328,8 @@ class InwardTransactionController extends Controller
         $qar_amounts = DB::table('inwards')->whereDate('created_at', Carbon::today())->where('currency_code', 'QAR')->sum('amount');
 
         $T_amount = Inwards ::select("id", DB::raw("(sum(equivalent_usd)) as tusd"), DB::raw("(sum(amount_mmk)) as tmmk"),
+        DB::raw("(sum(mmk_allowance)) as t_mmk_allowance"),
+        DB::raw("(sum(total_mmk_amount)) as t_mmk_amount"),
             DB::raw("(DATE_FORMAT(created_at, '%Y-%m-%d')) as dates"))
             ->whereDate('created_at', '>=', $startdate)
             ->whereDate('created_at', '<=', $enddate)
@@ -1335,7 +1337,12 @@ class InwardTransactionController extends Controller
             ->groupBy(DB::raw("DATE_FORMAT(created_at, '%d-%m-%Y')"))
             ->first();
 
-        $Tb_amount = Inwards ::select("id", DB::raw("(sum(equivalent_usd)) as tbusd"), DB::raw("(sum(amount_mmk)) as tbmmk"))
+        $Tb_amount = Inwards ::select("id", DB::raw("(sum(equivalent_usd)) as tbusd"), DB::raw("(sum(amount_mmk)) as tbmmk"),
+        DB::raw("(sum(mmk_allowance)) as tb_mmk_allowance"),
+        DB::raw("(sum(total_mmk_amount)) as tb_mmk_amount")
+        
+        
+        )
             ->whereDate('created_at', '>=', $startdatebusiness)
             ->whereDate('created_at', '<=', $enddate)
             ->get();
@@ -1347,12 +1354,31 @@ class InwardTransactionController extends Controller
         if($T_amount != null && $Tb_amount != null)
         {
 
-            $new_array = array('id' => 1,'dates' => $enddate,'usd_amounts' => $usd_amounts,'eur_amounts' => $eur_amounts,'jpy_amounts' => $jpy_amounts,'krw_amounts' => $krw_amounts,'myr_amounts' => $myr_amounts,'sgd_amounts' => $sgd_amounts,'thb_amounts' => $thb_amounts,'aed_amounts' => $aed_amounts,'qar_amounts' => $qar_amounts,'other_amounts' => $other_amount,'count' => 'total_num_trans','tusd' => $T_amount->tusd,'tmmk' => $T_amount->tmmk /1000000 ,'TotalBUSD' => $Tb_amount[0]->tbusd ,'TotalBMMK' => $Tb_amount[0]->tbmmk /1000000);
+            $new_array = array('id' => 1,'dates' => $enddate,'usd_amounts' => $usd_amounts,'eur_amounts' => $eur_amounts,'jpy_amounts' => $jpy_amounts,'krw_amounts' => $krw_amounts,'myr_amounts' => $myr_amounts,'sgd_amounts' => $sgd_amounts,'thb_amounts' => $thb_amounts,'aed_amounts' => $aed_amounts,'qar_amounts' => $qar_amounts,'other_amounts' => $other_amount,'count' => 'total_num_trans','tusd' => $T_amount->tusd,
+            
+            'tmmk' => $T_amount->tmmk /1000000 ,
+            't_mmk_allowance'=>$T_amount->t_mmk_allowance,
+            't_mmk_amount'=>$T_amount->t_mmk_amount,
+            'TotalBUSD' => $Tb_amount[0]->tbusd ,'TotalBMMK' => $Tb_amount[0]->tbmmk /1000000,
+            'tb_mmk_allowance'=>$Tb_amount[0]->tb_mmk_allowance,
+            'tb_mmk_amount'=>$Tb_amount[0]->tb_mmk_amount,
+        
+        
+        );
+            
         }
         else
         {
 
-            $new_array = array('id' => 1,'dates' => $enddate,'usd_amounts' => $usd_amounts,'eur_amounts' => $eur_amounts,'jpy_amounts' => $jpy_amounts,'krw_amounts' => $krw_amounts,'myr_amounts' => $myr_amounts,'sgd_amounts' => $sgd_amounts,'thb_amounts' => $thb_amounts,'aed_amounts' => $aed_amounts,'qar_amounts' => $qar_amounts,'other_amounts' => $other_amount,'count' => $total_num_trans,'tusd' => 0,'tmmk' => 0,'TotalBUSD' => $Tb_amount[0]->tbusd ,'TotalBMMK' => $Tb_amount[0]->tbmmk /1000000);
+            $new_array = array('id' => 1,'dates' => $enddate,'usd_amounts' => $usd_amounts,'eur_amounts' => $eur_amounts,'jpy_amounts' => $jpy_amounts,'krw_amounts' => $krw_amounts,'myr_amounts' => $myr_amounts,'sgd_amounts' => $sgd_amounts,'thb_amounts' => $thb_amounts,'aed_amounts' => $aed_amounts,'qar_amounts' => $qar_amounts,'other_amounts' => $other_amount,'count' => $total_num_trans,'tusd' => 0,'tmmk' => 0,
+            't_mmk_allowance'=>0,
+            't_mmk_amount'=>0,
+            
+            'TotalBUSD' => $Tb_amount[0]->tbusd ,'TotalBMMK' => $Tb_amount[0]->tbmmk /1000000,
+            'tb_mmk_allowance'=>0,
+            'tb_mmk_amount'=>0,
+        
+        );
         }
 
         $excel_inoutward[0]=$new_array;
@@ -1377,7 +1403,8 @@ class InwardTransactionController extends Controller
             ->with('ed', $enddate)
             ->with('T_amount', $T_amount)
             ->with('Tb_amount', $Tb_amount)
-            ->with('branches',$branches);
+            ->with('branches',$branches)
+            ->with('is_text30_valid',$this->isText30_valid_today());
       }
       else
       {
@@ -1597,7 +1624,8 @@ session()->put('query',collect($temp));
             ->with('mmk_amount_nodate', $mmk_amount_nodate)
             ->with('T_usd_amount', $T_usd_amount)
             ->with('T_mmk_amount', $T_mmk_amount)
-            ->with('branches',$branches);
+            ->with('branches',$branches)
+            ->with('is_text30_valid',$this->isText30_valid_today());;
     }
 
     function getMaxFromArray($arr)
