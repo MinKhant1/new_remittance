@@ -316,7 +316,7 @@ class PdfController extends Controller
             </tr>
               <tr style="border: 2px solid black;">
               <td  style="border: 2px solid black;font-size: 10px;height: 20px;padding-left: 10px;width:50%;font-weight: bold;">Purpose of Transaction:<span style="font-weight: normal;"> '.$data->purpose.'</span></td>
-              <td  style="border: 2px solid black;font-size: 10px;height: 20px;padding-left: 10px;width:50%;font-weight: bold;"">MMK:<span style="font-weight: normal;"> '.$data->amount_mmk.'</span></td>
+              <td  style="border: 2px solid black;font-size: 10px;height: 20px;padding-left: 10px;width:50%;font-weight: bold;"">MMK:<span style="font-weight: normal;"> '.$data->total_mmk_amount.'</span></td>
               </tr>
               <tr style="border: 2px solid black;">
               <td  style="border: 2px solid black;font-size: 10px;height: 20px;padding-left: 10px;width:50%;font-weight: bold;">Withdraw Point:<span style="font-weight: normal;"> '.$data->withdraw_point.'</span></td>
@@ -379,7 +379,7 @@ class PdfController extends Controller
             </tr>
               <tr style="border: 2px solid black;">
               <td  style="border: 2px solid black;font-size: 10px;height: 20px;padding-left: 10px;width:50%;font-weight: bold;">Purpose of Transaction:<span style="font-weight: normal;"> '.$data->purpose.'</span></td>
-              <td  style="border: 2px solid black;font-size: 10px;height: 20px;padding-left: 10px;width:50%;font-weight: bold;"">MMK:<span style="font-weight: normal;"> '.$data->amount_mmk.'</span></td>
+              <td  style="border: 2px solid black;font-size: 10px;height: 20px;padding-left: 10px;width:50%;font-weight: bold;"">MMK:<span style="font-weight: normal;"> '.$data->total_mmk_amount.'</span></td>
               </tr>
               <tr style="border: 2px solid black;">
               <td  style="border: 2px solid black;font-size: 10px;height: 20px;padding-left: 10px;width:50%;font-weight: bold;">Withdraw Point:<span style="font-weight: normal;"> '.$data->withdraw_point.'</span></td>

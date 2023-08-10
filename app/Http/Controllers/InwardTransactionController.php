@@ -1797,7 +1797,7 @@ session()->put('query',collect($temp));
                    'amount'     =>   $inwardtransaction->amount,
                    'equivalent_usd'     =>   $inwardtransaction->equivalent_usd,
                    'txd_date_time'     =>   $inwardtransaction->txd_date_time,
-                   'amount_mmk'     =>   $total_mmk,
+                   'amount_mmk'     =>   $inwardtransaction->amount_mmk,
                    'exchange_rate' => $inwardtransaction->exchange_rate,
                    'exchange_rate_usd'=>$inwardtransaction->exchange_rate_usd,
                    'created_at'     =>   $inwardtransaction->created_at,
